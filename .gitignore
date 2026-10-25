@@ -1,0 +1,6 @@
+# Entorno y caches de Python
+.venv/
+__pycache__/
+
+# Originales demasiado grandes para GitHub (se regeneran con los scripts)
+data/raw/ine_56944_*.csv

@@ -3,7 +3,7 @@
 Proyecto de la asignatura **Adquisición y preparación de datos**
 Grado en Ingeniería en Inteligencia Artificial · Escuela Politécnica Superior · Universidad de Alicante · Curso 2026-27
 
-**Autores:** _(nombre y apellidos de los 4 integrantes del grupo)_
+**Autores:** _(J, S, P, I)_
 **Fecha de entrega:** 11 de diciembre de 2026
 
 ---
@@ -71,7 +71,7 @@ No existe una visión integrada, actualizada y comparable de cómo se distribuye
 - Grado de ocupación (%) por CCAA y tipo de alojamiento.
 - % de viajeros residentes en España frente a residentes en el extranjero, por CCAA.
 - Nº de Bienes de Interés Cultural (BIC) por CCAA, como indicador de oferta cultural.
-- Pernoctaciones per cápita (con la población de cada CCAA).
+- Pernoctaciones por habitante (con la población de referencia de cada CCAA).
 - % de registros sin valores perdidos tras la limpieza (métrica de calidad del ETL).
 
 ---
@@ -86,7 +86,7 @@ No existe una visión integrada, actualizada y comparable de cómo se distribuye
 | Procedencia del viajero: residente en España o en el extranjero (P2) | Categórico | CSV / JSON |
 | Tipo de alojamiento (P1) | Categórico (determinado por la encuesta de origen) | CSV / JSON |
 | Patrimonio cultural por CCAA (P3) | Conteo de entidades enlazadas | SPARQL → JSON/CSV |
-| Población por CCAA (normalización per cápita) | Cuantitativo anual | CSV |
+| Población por CCAA (normalización por habitante) | Cuantitativo (valor de referencia más reciente) | CSV |
 | Geometría de las CCAA (mapa) | Geoespacial | Shapefile / GeoJSON |
 
 ### Requisitos de calidad
@@ -116,33 +116,85 @@ No existe una visión integrada, actualizada y comparable de cómo se distribuye
 | ID | Dataset | Pregunta | Enlace |
 |---|---|---|---|
 | D1 | Encuesta de Ocupación Hotelera (EOH): viajeros y pernoctaciones por CCAA y provincias · API 67190 | P1, P2 | [INE t=67190](https://www.ine.es/jaxiT3/Tabla.htm?t=67190) · [catálogo datos.gob.es](https://datos.gob.es/es/catalogo/ea0042823-viajeros-y-pernoctaciones-por-comunidades-autonomas-y-provincias-eoh-identificador-api-67190) |
-| D2 | Encuesta de Ocupación en Apartamentos Turísticos (EOAP): viajeros y pernoctaciones por CCAA · API 67191 | P1 | [INE t=67191](https://www.ine.es/jaxiT3/Tabla.htm?t=67191) · [catálogo](https://datos.gob.es/gl/catalogo/ea0042823-viajeros-y-pernoctaciones-por-comunidades-autonomas-eoap-identificador-api-67191) |
-| D3 | Encuesta de Ocupación en Campings (EOAC): viajeros y pernoctaciones por CCAA · API 67192 | P1 | [INE t=67192](https://www.ine.es/jaxiT3/Tabla.htm?t=67192) · [catálogo](https://datos.gob.es/gl/catalogo/ea0042823-viajeros-y-pernoctaciones-por-comunidades-autonomas-eoac-identificador-api-67192) |
-| D4 | Encuesta de Ocupación en Alojamientos de Turismo Rural (EOTR): viajeros y pernoctaciones por CCAA · API 67193 | P1 | [INE t=67193](https://www.ine.es/jaxiT3/Tabla.htm?t=67193) · [catálogo](https://datos.gob.es/es/catalogo/ea0042823-viajeros-y-pernoctaciones-por-comunidades-y-ciudades-autonomas-eotr-identificador-api-67193) |
-| D5 | EOH: pernoctaciones por CCAA, país de residencia y mes · API 67179 | P2 | [INE t=67179](https://www.ine.es/jaxiT3/Tabla.htm?t=67179) · [catálogo](https://datos.gob.es/es/catalogo/ea0042823-pernoctaciones-de-los-viajeros-por-comunidades-y-ciudades-autonomas-pais-de-residencia-y-meses-eoh-identificador-api-67179) |
-| D5b | Complementos de origen: EOAP por país de residencia (API 59162) y EOTR por procedencia (API 67180) | P2 | [INE t=59162](https://www.ine.es/jaxiT3/Tabla.htm?t=59162) · [INE t=67180](https://www.ine.es/jaxiT3/Tabla.htm?t=67180) |
-| D6 | Cifras de Población por CCAA (INE) | per cápita | [Operación Cifras de Población](https://www.ine.es/dynt3/metadatos/es/RespuestaDatos.html?oe=30321) |
-| D7 | Límites administrativos de las CCAA (CNIG/IGN) | mapa | [Centro de Descargas CNIG](https://centrodedescargas.cnig.es/CentroDescargas/index.jsp) · [WFS INSPIRE](https://www.ign.es/wfs-inspire/unidades-administrativas?request=GetCapabilities&service=WFS) |
-| D8 | CCAA y Bienes de Interés Cultural en Wikidata | P3 | [Wikidata Query Service](https://query.wikidata.org/) · [endpoint SPARQL](https://query.wikidata.org/sparql) |
+| D2 | Encuesta de Ocupación en Apartamentos Turísticos (EOAP): viajeros y pernoctaciones por CCAA · API 67191 | P1, P2 | [INE t=67191](https://www.ine.es/jaxiT3/Tabla.htm?t=67191) · [catálogo](https://datos.gob.es/gl/catalogo/ea0042823-viajeros-y-pernoctaciones-por-comunidades-autonomas-eoap-identificador-api-67191) |
+| D3 | Encuesta de Ocupación en Campings (EOAC): viajeros y pernoctaciones por CCAA · API 67192 | P1, P2 | [INE t=67192](https://www.ine.es/jaxiT3/Tabla.htm?t=67192) · [catálogo](https://datos.gob.es/gl/catalogo/ea0042823-viajeros-y-pernoctaciones-por-comunidades-autonomas-eoac-identificador-api-67192) |
+| D4 | Encuesta de Ocupación en Alojamientos de Turismo Rural (EOTR): viajeros y pernoctaciones por CCAA · API 67193 | P1, P2 | [INE t=67193](https://www.ine.es/jaxiT3/Tabla.htm?t=67193) · [catálogo](https://datos.gob.es/es/catalogo/ea0042823-viajeros-y-pernoctaciones-por-comunidades-y-ciudades-autonomas-eotr-identificador-api-67193) |
+| D5 | Estadística Continua de Población (ECP): población residente por fecha, sexo, nacionalidad y lugar de nacimiento, CCAA y ciudades autónomas · API 56944 (alternativa: API 59238, por fecha, sexo y edad) | per cápita | [Catálogo datos.gob.es](https://datos.gob.es/en/catalogo/ea0042823-poblacion-residente-por-fecha-sexo-nacionalidad-agrupacion-de-paises-y-lugar-de-nacimiento-agrupacion-de-paises-ecp-identificador-api-56944) · [Metadatos de la operación](https://ine.es/dynt3/metadatos/es/RespuestaDatos.html?oe=30282) |
+| D6 | Límites administrativos de las CCAA (CNIG/IGN) | mapa | [Centro de Descargas CNIG](https://centrodedescargas.cnig.es/CentroDescargas/index.jsp) · [WFS INSPIRE](https://www.ign.es/wfs-inspire/unidades-administrativas?request=GetCapabilities&service=WFS) |
+| D7 | CCAA y Bienes de Interés Cultural en Wikidata | P3 | [Wikidata Query Service](https://query.wikidata.org/) · [endpoint SPARQL](https://query.wikidata.org/sparql) |
 
 Punto de entrada a todas las estadísticas de turismo del INE: [INEbase, Hostelería y turismo](https://www.ine.es/dyngs/INEbase/es/categoria.htm?c=Estadistica_P&cid=1254735576863).
 
 ### Cómo obtener los datos
 
-**INE (D1 a D6).** Cada tabla se descarga desde su página (botón *Descargar*, CSV separado por `;`) o por URL directa:
+Los ficheros descargados se guardan en `data/raw/`. Las descargas automáticas (INE y Wikidata) se hacen con un único script y dejan un registro con URL, fecha, tamaño y huella SHA-256 en `data/raw/_descargas.log.csv`:
+
+```bash
+python scripts/descargar_fuentes.py              # ocupación y población (INE) + Wikidata
+python scripts/descargar_fuentes.py --solo ine   # también: poblacion, ccaa, bic
+python scripts/descargar_fuentes.py --dry-run    # solo muestra las URL y consultas
+```
+
+El script no repite lo que ya está descargado (`--forzar` para repetirlo). Wikidata limita las peticiones, así que la consulta de patrimonio se hace por lotes con una pausa de un minuto entre ellos y, si se interrumpe, al volver a ejecutarla continúa donde lo dejó.
+
+**INE (D1 a D4).** Cada tabla se descarga por su identificador de API. Formato: CSV separado por `;`, decimales con coma, UTF-8 (con BOM al inicio) y una fila por valor.
 
 | Acceso | Patrón |
 |---|---|
-| CSV | `https://ine.es/wstempus/csv_sc/es/DATOS_TABLA/{ID}` |
-| API JSON | `https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/{ID}` |
+| CSV (API de INEbase) | `https://ine.es/wstempus/csv_sc/es/DATOS_TABLA/{ID}` |
+| CSV (descarga de la tabla) | `https://www.ine.es/jaxiT3/files/t/csv_bdsc/{ID}.csv` |
+| JSON | `https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/{ID}` |
+| Vista web | `https://www.ine.es/jaxiT3/Tabla.htm?t={ID}` o, para tablas del sistema anterior, `https://www.ine.es/jaxi/Tabla.htm?tpx={ID}` |
 
-Ejemplo: `https://ine.es/wstempus/csv_sc/es/DATOS_TABLA/67190`. Los ficheros descargados se guardan en `data/raw/` con la fecha de descarga.
+**INE, población (D5).** La tabla 56944 se descarga con el script (`--solo poblacion`) y se guarda comprimida en `.zip` (unos 82 MB sin comprimir). Columnas: `Sexo; Comunidades y ciudades autónomas; Nacionalidad; País de Nacimiento; Periodo; Total`. Los periodos son trimestrales y están escritos en texto (`1 de enero de 2025`, `1 de octubre de 2024`). La población total de cada territorio es la fila con Sexo, Nacionalidad y País de Nacimiento iguales a "Total"; de ellas se conserva la de **1 de enero más reciente** como población de referencia. En Pentaho, *Text file input* lee el fichero comprimido (pestaña *Content*, desplegable *Compression*). Para descomprimirlo a mano: `unzip data/raw/ine_56944_*.zip -d data/raw/`. Alternativa manual: la tabla 59238 (por sexo y edad) desde la vista web (`https://www.ine.es/jaxiT3/Tabla.htm?t=59238`), seleccionando todas las CCAA, sexo **Total**, edad **Todas las edades** y los periodos de 1 de enero, en formato **CSV separado por ;**.
 
-**CNIG (D7).** *Información geográfica de referencia → Límites administrativos → Comunidades Autónomas*, formato Shapefile.
+**CNIG (D6).** En el [Centro de Descargas](https://centrodedescargas.cnig.es/CentroDescargas/index.jsp), producto *Límites municipales, provinciales y autonómicos*, se descarga **Límites y Unidades Administrativas Actuales (Shapefile)**, que contiene la Base de Datos de Divisiones Administrativas de España. Del zip solo se usan las dos capas de recintos autonómicos, que se copian a `data/raw/cnig/`:
 
-**Wikidata (D8).** Consultas SPARQL, exportadas a CSV/JSON o llamadas desde Pentaho con el paso *REST client*.
+| Carpeta del zip | Cobertura | Sistema |
+|---|---|---|
+| `SHP_ETRS89/recintos_autonomicas_inspire_peninbal_etrs89` | Península, Baleares, Ceuta y Melilla | ETRS89, coordenadas geográficas |
+| `SHP_WGS84/recintos_autonomicas_inspire_canarias_wgs84` | Canarias | REGCAN95 (compatible con WGS84), coordenadas geográficas |
 
-CCAA con su código INE y su código ISO 3166-2 (clave de conciliación entre fuentes):
+Atributos relevantes: `NAMEUNIT` (nombre), `NATCODE` (código nacional), `CODNUT1`-`CODNUT3` (regiones NUTS) y `NATLEVNAME`. Ambas capas están en longitud/latitud compatibles con WGS84, por lo que no se reproyectan. El zip original (unos 157 MB) no se incluye en el repositorio por superar el límite de GitHub. El script `scripts/preparar_geometrias.py` (requiere `pip install pyshp shapely`) une las dos capas, asigna a cada CCAA su código INE, simplifica la geometría y genera `data/clean/ccaa.geojson`, que usan el ETL y las visualizaciones. El shapefile incluye un recinto adicional (*Territorios no asociados a ninguna autonomía*) que el script descarta; el GeoJSON resultante tiene 19 entidades y pesa 1,1 MB.
+
+**Wikidata (D7).** Las dos consultas siguientes se ejecutan en el [Wikidata Query Service](https://query.wikidata.org/) (botón *Download → CSV file* sobre los resultados) o con el script. Se identifican las CCAA por su código ISO 3166-2, de modo que incluyen también Ceuta y Melilla.
+
+```sparql
+# CCAA con QID, código ISO y coordenadas (19 filas)
+SELECT ?ccaa ?ccaaLabel ?iso ?coord WHERE {
+  VALUES ?iso { "ES-AN" "ES-AR" "ES-AS" "ES-IB" "ES-CN" "ES-CB" "ES-CL" "ES-CM" "ES-CT" "ES-VC"
+                "ES-EX" "ES-GA" "ES-MD" "ES-MC" "ES-NC" "ES-PV" "ES-RI" "ES-CE" "ES-ML" }
+  ?ccaa wdt:P300 ?iso ;
+        wdt:P17 wd:Q29 .
+  OPTIONAL { ?ccaa wdt:P625 ?coord . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "es,en". }
+}
+ORDER BY ?iso
+```
+
+```sparql
+# Nº de Bienes de Interés Cultural por CCAA (se ejecuta por lotes de pocas CCAA para evitar el tiempo máximo de consulta)
+SELECT ?iso ?ccaaLabel (COUNT(DISTINCT ?bien) AS ?n_bic) WHERE {
+  VALUES ?iso { "ES-AN" "ES-AR" "ES-AS" "ES-IB" }
+  ?ccaa wdt:P300 ?iso ;
+        wdt:P17 wd:Q29 .
+  ?bien wdt:P808 ?codigo_bic ;
+        wdt:P131/wdt:P131?/wdt:P131?/wdt:P131? ?ccaa .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "es,en". }
+}
+GROUP BY ?iso ?ccaaLabel
+ORDER BY ?iso
+```
+
+**Qué contienen los ficheros de Wikidata.**
+- `wikidata_ccaa.csv` (19 filas) es la ficha de identidad de cada territorio: URI de Wikidata, etiqueta, código ISO y coordenadas de un punto representativo. Enriquece `dim_ccaa` y permite enlazar cada CCAA con `owl:sameAs` en el apartado 5.
+- `wikidata_bic_por_ccaa.csv` (19 filas) es un recuento agregado: nº de elementos de Wikidata con código BIC en cada CCAA (12.967 en total). Es un indicador, no el listado de bienes, y depende de la cobertura de Wikidata en cada región; por eso se interpreta como indicador relativo entre territorios y no como registro oficial. No se ha encontrado una fuente nacional abierta y homogénea del registro de BIC por CCAA; los portales autonómicos publican cada uno su propio formato.
+
+Las coordenadas llegan en formato WKT, `Point(longitud latitud)`, y se separan en el ETL. Alternativa para el patrimonio: OpenStreetMap con la etiqueta [`ref:bic`](https://wiki.openstreetmap.org/wiki/Key:ref:bic) mediante [Overpass Turbo](https://overpass-turbo.eu/).
+
+**Tabla de códigos de CCAA.** `data/raw/ccaa_codigos.csv` contiene el código INE, el código ISO, el nombre oficial y el nombre tal y como lo escribe el INE en sus tablas (por ejemplo `Madrid, Comunidad de`). Es la tabla de conciliación entre fuentes que usa el ETL.
+
+CCAA con su código INE y su código ISO 3166-2:
 
 | INE | CCAA | ISO | INE | CCAA | ISO |
 |---|---|---|---|---|---|
@@ -157,39 +209,31 @@ CCAA con su código INE y su código ISO 3166-2 (clave de conciliación entre fu
 | 09 | Cataluña | ES-CT | 19 | Melilla | ES-ML |
 | 10 | Comunitat Valenciana | ES-VC | | | |
 
-Consultas SPARQL de referencia:
+### Inventario de datos descargados (`data/raw/` y `data/clean/`)
 
-```sparql
-# CCAA con QID, código ISO y coordenadas
-SELECT ?ccaa ?ccaaLabel ?iso ?coord WHERE {
-  ?ccaa wdt:P31 wd:Q5852411 .
-  OPTIONAL { ?ccaa wdt:P300 ?iso }
-  OPTIONAL { ?ccaa wdt:P625 ?coord }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "es,en". }
-}
-```
-
-```sparql
-# Nº de Bienes de Interés Cultural por CCAA
-SELECT ?ccaaLabel (COUNT(?bien) AS ?n_bic) WHERE {
-  ?ccaa wdt:P31 wd:Q5852411 .
-  ?bien wdt:P808 ?codigoBIC ; wdt:P131+ ?ccaa .
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "es,en". }
-} GROUP BY ?ccaaLabel
-```
-
-Alternativa para el patrimonio: OpenStreetMap con la etiqueta [`ref:bic`](https://wiki.openstreetmap.org/wiki/Key:ref:bic) mediante [Overpass Turbo](https://overpass-turbo.eu/).
+| Fichero | Contenido | Tamaño |
+|---|---|---|
+| `ine_67190_eoh_…csv` | EOH: 70 territorios (nacional, 19 CCAA y 50 provincias) × 2 conceptos × 3 tipos de residencia × 333 meses (1999M01–2026M09) | 139.860 filas, 13 MB |
+| `ine_67191_eoap_…csv` | EOAP: apartamentos turísticos, misma estructura sin provincias (hasta 2026M08) | 38.400 filas, 3 MB |
+| `ine_67192_eoac_…csv`, `ine_67193_eotr_…csv` | EOAC (campings) y EOTR (turismo rural), misma estructura | 3 MB cada uno |
+| `ine_56944_ecp_…zip` | Población residente por CCAA, sexo, nacionalidad y país de nacimiento, trimestral | 82 MB sin comprimir |
+| `wikidata_ccaa.csv` | Identidad y coordenadas de las 19 CCAA | 19 filas |
+| `wikidata_bic_por_ccaa.csv` | Nº de BIC en Wikidata por CCAA | 19 filas |
+| `ccaa_codigos.csv` | Códigos INE e ISO y nombre de cada CCAA tal y como lo escribe el INE | 19 filas |
+| `cnig/…recintos_autonomicas…` | Shapefiles de CCAA (Península y Baleares, Ceuta y Melilla; Canarias) | pocos MB |
+| `data/clean/ccaa.geojson` | Geometría de las 19 CCAA, simplificada | 1,1 MB |
 
 ---
 
 ## 4. Apartado 3: Diseño del almacén de datos
 
-Modelo en **constelación de hechos**: tres tablas de hechos que comparten la dimensión territorial.
+Modelo en **estrella**: una única tabla de hechos (`fact_ocupacion`) que contiene solo claves ajenas y medidas numéricas, rodeada de seis dimensiones con los atributos descriptivos y categóricos.
 
 ### Diseño conceptual
-- **Hecho principal:** ocupación turística (viajeros, pernoctaciones, estancia media).
-- **Dimensiones:** Tiempo, Territorio (CCAA), Tipo de alojamiento, Origen del viajero.
-- **Hechos de contexto del territorio:** población y patrimonio cultural.
+- **Hecho:** ocupación turística, observada cada mes para un territorio, un tipo de alojamiento y un origen del viajero.
+- **Medidas:** viajeros, pernoctaciones y estancia media.
+- **Dimensiones:** Tiempo, Territorio (CCAA), Tipo de alojamiento, Origen del viajero, Nivel de estancia y Calidad del dato.
+- **Contexto del territorio:** la población y el patrimonio cultural describen a cada CCAA y forman parte de la dimensión Territorio.
 
 ### Diseño lógico
 
@@ -201,9 +245,20 @@ erDiagram
     DIM_CCAA ||--o{ FACT_OCUPACION : ccaa_key
     DIM_TIPO_ALOJAMIENTO ||--o{ FACT_OCUPACION : tipo_key
     DIM_ORIGEN ||--o{ FACT_OCUPACION : origen_key
-    DIM_CCAA ||--o{ FACT_POBLACION : ccaa_key
-    DIM_CCAA ||--o{ FACT_PATRIMONIO : ccaa_key
+    DIM_NIVEL_ESTANCIA ||--o{ FACT_OCUPACION : nivel_key
+    DIM_CALIDAD_DATO ||--o{ FACT_OCUPACION : calidad_key
 
+    FACT_OCUPACION {
+        int tiempo_key PK, FK
+        int ccaa_key PK, FK
+        int tipo_key PK, FK
+        int origen_key PK, FK
+        int nivel_key FK
+        int calidad_key FK
+        int viajeros
+        int pernoctaciones
+        decimal estancia_media
+    }
     DIM_TIEMPO {
         int tiempo_key PK
         int anio
@@ -220,6 +275,12 @@ erDiagram
         string wikidata_qid
         decimal latitud
         decimal longitud
+        int habitantes_ref
+        date poblacion_fecha_ref
+        string nivel_poblacion
+        int n_bic
+        string nivel_patrimonio
+        date patrimonio_fecha_extraccion
     }
     DIM_TIPO_ALOJAMIENTO {
         int tipo_key PK
@@ -233,54 +294,97 @@ erDiagram
         string codigo UK
         string nombre
     }
-    FACT_OCUPACION {
-        int tiempo_key PK, FK
-        int ccaa_key PK, FK
-        int tipo_key PK, FK
-        int origen_key PK, FK
-        int viajeros
-        int pernoctaciones
-        decimal estancia_media
-        string nivel_estancia
+    DIM_NIVEL_ESTANCIA {
+        int nivel_key PK
+        string nombre UK
+        decimal min_dias
+        decimal max_dias
+    }
+    DIM_CALIDAD_DATO {
+        int calidad_key PK
+        string descripcion UK
         boolean dato_imputado
         boolean es_atipico
     }
-    FACT_POBLACION {
-        int ccaa_key PK, FK
-        int anio PK
-        int habitantes
-    }
-    FACT_PATRIMONIO {
-        int ccaa_key PK, FK
-        date fecha_extraccion PK
-        int n_bic
-    }
 ```
 
-| Tabla | Grano | Medidas / atributos |
+| Tabla | Grano | Contenido |
 |---|---|---|
-| `fact_ocupacion` | mes × CCAA × tipo de alojamiento × origen | viajeros, pernoctaciones, estancia_media (derivada), nivel_estancia (discretizada), indicadores de calidad |
-| `fact_poblacion` | CCAA × año | habitantes (a 1 de enero) |
-| `fact_patrimonio` | CCAA × fecha de extracción | n_bic (instantánea de Wikidata) |
-| `dim_tiempo` | mes | año, mes, trimestre, temporada |
-| `dim_ccaa` | CCAA (19 filas) | códigos INE e ISO, QID de Wikidata, latitud, longitud |
+| `fact_ocupacion` | mes × CCAA × tipo de alojamiento × origen | Claves ajenas a las seis dimensiones y tres medidas: `viajeros`, `pernoctaciones` y `estancia_media` (derivada) |
+| `dim_tiempo` | mes | Año, mes, trimestre y temporada |
+| `dim_ccaa` | CCAA (19 filas) | Códigos INE e ISO, QID de Wikidata, coordenadas, población de referencia y su categoría, nº de BIC y su categoría |
 | `dim_tipo_alojamiento` | tipo | Hotel, Apartamento, Camping, Turismo rural (con su encuesta INE y grupo hotelero/extrahotelero) |
-| `dim_origen` | origen | Residentes en España, Residentes en el extranjero, Total (sin desglose) |
+| `dim_origen` | origen | Residentes en España y Residentes en el extranjero |
+| `dim_nivel_estancia` | nivel | Corta, Media, Larga y Sin dato, con sus rangos en días |
+| `dim_calidad_dato` | combinación de marcas | Dato original, Dato imputado, Valor atípico, Imputado y atípico |
 
 ### Diseño físico
 Script de creación: [`sql/01_crear_almacen_turismo.sql`](sql/01_crear_almacen_turismo.sql). Modelo de MySQL Workbench: `docs/almacen_turismo.mwb`.
 
 - Motor InnoDB, codificación `utf8mb4`.
-- Claves primarias compuestas en las tablas de hechos y claves foráneas hacia todas las dimensiones.
+- Clave primaria compuesta en la tabla de hechos y claves foráneas hacia las seis dimensiones.
 - Claves naturales únicas (`codigo_ine`, `codigo`, `anio + mes`) para que el ETL pueda localizar las claves de cada dimensión.
-- Vista `v_ocupacion_total`: suma de viajeros y pernoctaciones por mes, CCAA y tipo, sin doble conteo entre desglose por origen y total.
+- Las dimensiones pequeñas (tipo de alojamiento, origen, nivel de estancia y calidad del dato) se cargan en el propio script; `dim_tiempo` y `dim_ccaa` se cargan desde Pentaho.
+- Miembro "Sin dato" en `dim_nivel_estancia` (clave 4, valor por defecto) para que la tabla de hechos no tenga claves nulas.
+- Vista `v_ocupacion_total`: viajeros y pernoctaciones totales por mes, CCAA y tipo (suma de residentes en España y en el extranjero).
+- Vista `v_ocupacion_anual_ccaa`: pernoctaciones por habitante y año.
+
+### Justificación del diseño: por qué una única tabla de hechos
+
+**1. Criterio para separar medidas y atributos.** Una medida es un valor numérico que cambia con la frecuencia con la que se observa el hecho (aquí, cada mes). Lo demás describe a las entidades y va en dimensiones.
+
+| Dato | ¿Cambia cada mes? | Clasificación |
+|---|---|---|
+| Viajeros, pernoctaciones, estancia media | Sí | **Medidas** de la tabla de hechos |
+| Población de la CCAA | No: se actualiza una vez al año y describe al territorio | Atributo de `dim_ccaa` (valor de referencia + categoría) |
+| Nº de BIC | No: es una instantánea que casi no varía | Atributo de `dim_ccaa` (valor + categoría) |
+| Nivel de estancia, calidad del dato, temporada, tipo de alojamiento, origen | No: son categorías | Dimensiones |
+
+**2. Evita mezclar granos.** La ocupación es mensual, la población anual y el patrimonio una instantánea. Guardar todo en la misma tabla de hechos obligaría a repetir la población y el patrimonio en cada fila, y cualquier suma daría resultados erróneos. Convertir esos datos en descriptores de la CCAA elimina el problema de raíz.
+
+**3. Esquema en estrella clásico, simple y rápido de consultar.** Las tres preguntas de investigación se responden con una sola tabla de hechos y joins directos contra sus dimensiones, sin combinar varias tablas de hechos entre sí:
+
+```sql
+-- P1: pernoctaciones por año, CCAA y tipo de alojamiento
+SELECT t.anio, c.nombre AS ccaa, a.nombre AS tipo, SUM(f.pernoctaciones) AS pernoctaciones
+FROM fact_ocupacion f
+JOIN dim_tiempo t ON t.tiempo_key = f.tiempo_key
+JOIN dim_ccaa c ON c.ccaa_key = f.ccaa_key
+JOIN dim_tipo_alojamiento a ON a.tipo_key = f.tipo_key
+GROUP BY t.anio, c.nombre, a.nombre;
+
+-- P2: % de pernoctaciones de residentes en el extranjero
+SELECT t.anio, c.nombre AS ccaa,
+       ROUND(100 * SUM(CASE WHEN o.codigo = 'EXT' THEN f.pernoctaciones END) / SUM(f.pernoctaciones), 1) AS pct_extranjero
+FROM fact_ocupacion f
+JOIN dim_tiempo t ON t.tiempo_key = f.tiempo_key
+JOIN dim_ccaa c ON c.ccaa_key = f.ccaa_key
+JOIN dim_origen o ON o.origen_key = f.origen_key
+WHERE o.codigo IN ('ESP', 'EXT')
+GROUP BY t.anio, c.nombre;
+
+-- P3: patrimonio frente a demanda
+SELECT c.nombre, c.n_bic, c.nivel_patrimonio, SUM(v.pernoctaciones) AS pernoctaciones
+FROM v_ocupacion_total v
+JOIN dim_ccaa c ON c.ccaa_key = v.ccaa_key
+GROUP BY c.nombre, c.n_bic, c.nivel_patrimonio;
+```
+
+**4. ETL más sencillo y robusto.** Hay una sola transformación de hechos, parametrizada y reutilizada para las cuatro encuestas. La población (82 MB en origen) y el patrimonio quedan reducidos a 19 valores que se incorporan a `dim_ccaa` en una única transformación.
+
+**5. La tabla de hechos solo contiene claves y números.** Las categorías derivadas de la limpieza (`nivel_estancia` y las marcas de imputación y atípicos) se llevan a dimensiones pequeñas, de modo que los hechos quedan limpios y la discretización se hace una sola vez.
+
+**Alternativa estudiada y descartada: constelación de hechos.** Consistía en añadir `fact_poblacion` y `fact_patrimonio`. Es un modelo válido cuando hay procesos con granos distintos, pero aquí aportaba poco: el patrimonio no es un hecho (no varía con el tiempo) y la población solo añadiría unas 500 filas, a costa de más tablas, más transformaciones de carga y consultas que combinan varias tablas de hechos.
+
+**Limitación asumida.** El indicador por habitante usa la población de referencia más reciente. Esto hace comparables a los territorios y evita que el cambio demográfico se mezcle con la evolución del turismo, pero no usa la población exacta de cada año. Si hiciera falta, se añadiría una tabla de hechos de población anual sin modificar el resto del modelo, porque las dimensiones ya son compartibles.
 
 ### Decisiones de diseño
 - **Clave de tiempo `AAAAMM`:** sencilla, legible y ordenable.
-- **Tipo de alojamiento como dimensión:** el tipo lo determina la encuesta de origen (EOH, EOAP, EOAC, EOTR), por lo que se añade como columna durante el ETL.
-- **Origen del viajero:** cuando una fuente desglosa por residencia se cargan solo los valores `ESP` y `EXT`; cuando no, se carga `TOT`. Nunca ambos, para evitar duplicidades.
-- **Marcar en lugar de borrar:** los indicadores `dato_imputado` y `es_atipico` conservan la trazabilidad de cada valor dudoso.
-- **Hechos separados por grano:** población anual y patrimonio (instantánea) tienen un grano distinto del mensual y no se mezclan en la misma tabla.
+- **Tipo de alojamiento como dimensión:** lo determina la encuesta de origen (EOH, EOAP, EOAC, EOTR), por lo que se añade como columna durante el ETL.
+- **Origen del viajero:** las tablas del INE traen tres combinaciones de residencia (total, residentes en España y residentes en el extranjero). Se cargan solo `ESP` y `EXT`, el nivel más bajo, para que las medidas sean aditivas. El total del INE no se almacena: se usa como control en el ETL (total = ESP + EXT) y para recuperar un componente ausente.
+- **Patrimonio (BIC):** `n_bic` cuenta los elementos de Wikidata con código BIC situados en cada CCAA (a través de su cadena de localización administrativa, de hasta cuatro niveles). Depende de la cobertura de Wikidata, por lo que no coincide con el registro oficial y se interpreta como indicador relativo entre territorios.
+- **Marcar en lugar de borrar:** `dim_calidad_dato` conserva la trazabilidad de cada valor imputado o atípico.
+- **Categorías por discretización:** `nivel_estancia` (Corta, Media o Larga; cortes iniciales en 2 y 4 días), `nivel_poblacion` (Muy grande, Grande, Mediana o Pequeña; umbrales de 5, 2 y 1 millón de habitantes) y `nivel_patrimonio` (Alto, Medio o Bajo, por terciles del nº de BIC). Todos son criterios iniciales, revisables con la distribución real.
 - **Temporada** (criterio inicial, parametrizable): Alta de junio a septiembre, Media de marzo a mayo y octubre, Baja el resto.
 
 ---
@@ -307,13 +411,11 @@ flowchart LR
 | Fichero | Función | Pasos principales de PDI |
 |---|---|---|
 | `T01_dim_tiempo.ktr` | Genera la dimensión tiempo (meses 1999-2030) | Generate rows, Add sequence, Calculator, Value Mapper, Table output |
-| `T02_dim_ccaa.ktr` | Dimensión CCAA enriquecida | Data grid (códigos INE/ISO), REST client + JSON input (Wikidata), Split Fields (coordenadas), ESRI shapefile reader, Stream lookup, Table output |
+| `T02_dim_ccaa.ktr` | Dimensión CCAA completa: códigos, Wikidata (QID, coordenadas, BIC) y población de referencia | Data grid (códigos INE/ISO), Text file input / REST client + JSON input (Wikidata), Text file input con compresión Zip (población), Filter rows (Sexo, Nacionalidad y País de Nacimiento = "Total"; periodo del 1 de enero), Split Fields (año), Sort rows y Unique rows (último año por CCAA), Split Fields (coordenadas), Stream lookup, Number range (`nivel_poblacion`, `nivel_patrimonio`), ESRI shapefile reader (contraste de nombres con el CNIG), Table output |
 | `T10_eoh.ktr` | Plantilla de carga de ocupación (hoteles) | Text file input (URL), Select values, Filter rows, Split Fields, Replace in string, Stream lookup, Row denormaliser, Calculator, Number range, Database lookup, Unique rows, Table output |
 | `T11_eoap.ktr`, `T12_eoac.ktr`, `T13_eotr.ktr` | Copias de T10 con distintos parámetros | `ID_TABLA` y `COD_TIPO` |
-| `T20_poblacion.ktr` | Población por CCAA y año | Text file input, Filter rows, Table output |
-| `T30_patrimonio.ktr` | Bienes de Interés Cultural por CCAA | REST client, JSON input, Group by, Table output |
 | `T40_validacion.ktr` | Controles de calidad sobre el almacén cargado | Table input, Data Validator, Abort |
-| `J00_carga.kjb` | Orquesta la carga completa | Start → Set variables → T01 y T02 → T10 a T13, T20 y T30 → T40 → Success |
+| `J00_carga.kjb` | Orquesta la carga completa | Start → Set variables → T01 y T02 → T10 a T13 → T40 → Success |
 
 **Orden de carga:** primero las dimensiones y después los hechos. PDI ejecuta en paralelo los pasos de una misma transformación y no garantiza el orden, de modo que la secuencia se impone desde el job. Cada tabla tiene un único paso *Table output*.
 
@@ -322,15 +424,17 @@ flowchart LR
 Parámetros de la transformación: `ID_TABLA` (por ejemplo `67190`) y `COD_TIPO` (`HOT`, `APT`, `CAM` o `RUR`).
 
 1. **Extracción:** *Text file input* con la URL del CSV del INE como nombre de fichero. Codificación UTF-8, separador `;`, configuración regional `es`, decimal `,` y agrupación `.`. El código `..` del INE se define como nulo en la columna *Null if*.
-2. **Selección y tipos:** *Select values* renombra columnas y convierte tipos.
-3. **Filtrado:** se conserva solo el nivel CCAA; se descartan los totales nacionales y las provincias, que son redundantes.
-4. **Splitting:** el periodo se separa en `anio` y `mes`.
-5. **Normalización de territorios:** los nombres de CCAA se concilian con `codigo_ine` mediante una tabla de variantes.
-6. **Pivotado:** *Row denormaliser* coloca viajeros y pernoctaciones en columnas.
-7. **Derivación:** *Calculator* obtiene `estancia_media = pernoctaciones / viajeros`, con control de división por cero.
-8. **Binning:** *Number range* genera `nivel_estancia` (Corta, Media o Larga; cortes iniciales en 2 y 4 días, a ajustar con la distribución real).
-9. **Claves:** *Database lookup* contra `dim_ccaa`, `dim_tipo_alojamiento` y `dim_origen`. Las filas sin clave se desvían a una salida de errores.
-10. **Carga:** *Unique rows* y *Table output* hacia `fact_ocupacion`.
+2. **Selección y tipos:** *Select values* renombra columnas y convierte tipos. El primer nombre de columna puede traer la marca BOM del fichero; se corrige aquí.
+3. **Filtrado:** se conserva solo el nivel CCAA; se descartan `Total Nacional` y, en la EOH, las provincias, que son redundantes.
+4. **Splitting:** el periodo (formato `2026M09`) se separa en `anio` y `mes`.
+5. **Normalización de territorios:** los nombres de CCAA tal y como los escribe el INE (`Madrid, Comunidad de`, `Balears, Illes`…) se concilian con `codigo_ine` mediante `ccaa_codigos.csv`.
+6. **Origen:** *Value Mapper* sobre `Residencia: Nivel 2`: `Residentes en España` → `ESP`, `Residentes en el Extranjero` → `EXT` y vacío → total (rama de control).
+7. **Pivotado:** *Row denormaliser* coloca viajeros y pernoctaciones en columnas.
+8. **Control y valores ausentes:** en la rama de control se compara el total con ESP + EXT (*Group by* y *Merge join*). Si un componente falta y el total es conocido, se calcula por diferencia (`calidad_key = 2`); las discrepancias se registran. Solo ESP y EXT continúan hacia la tabla de hechos.
+9. **Derivación:** *Calculator* obtiene `estancia_media = pernoctaciones / viajeros`, con control de división por cero.
+10. **Binning:** *Number range* clasifica `estancia_media` en Corta, Media o Larga (cortes iniciales en 2 y 4 días, a ajustar con la distribución real) y se obtiene `nivel_key`; si no hay dato, `nivel_key = 4` (Sin dato).
+11. **Claves:** *Database lookup* contra `dim_ccaa`, `dim_tipo_alojamiento` y `dim_origen`; `calidad_key` se asigna según el dato sea original, imputado o atípico. Las filas sin clave se desvían a una salida de errores.
+12. **Carga:** *Unique rows* y *Table output* hacia `fact_ocupacion`.
 
 ### Cumplimiento de las tareas del apartado
 
@@ -340,11 +444,11 @@ Parámetros de la transformación: `ID_TABLA` (por ejemplo `67190`) y `COD_TIPO`
 | Fusión de varias fuentes | Stream lookup y Merge join: CCAA + Wikidata; ocupación + población |
 | Seleccionar campos, filtrar filas, ordenar | Select values, Filter rows, Sort rows |
 | Corregir errores | Trim, Replace in string y normalización de nombres de CCAA |
-| Gestionar valores que faltan | `..` → NULL; hueco aislado imputado con la media de los meses vecinos (`dato_imputado = 1`); huecos largos se mantienen como NULL |
+| Gestionar valores que faltan | `..` → NULL; componente ausente recuperado como total − otro componente; hueco aislado imputado con la media de los meses vecinos (`calidad_key = 2`); huecos largos se mantienen como NULL |
 | Eliminar o minimizar la redundancia | Eliminación de totales y provincias, Unique rows y claves naturales únicas |
-| Ingeniería de características | **Splitting** (periodo → año y mes), variable derivada `estancia_media`, `temporada`, y **Binning** (`nivel_estancia`) |
+| Ingeniería de características | **Splitting** (periodo → año y mes), variable derivada `estancia_media`, `temporada`, y **Binning** (`nivel_estancia`, `nivel_poblacion`, `nivel_patrimonio`) |
 | Enriquecer datos | Wikidata (QID, coordenadas, BIC), shapefile del CNIG y población |
-| Detectar y tratar outliers | Media y desviación por CCAA × tipo (Group by) y z-score (Calculator); se marca `es_atipico` sin eliminar el registro |
+| Detectar y tratar outliers | Media y desviación por CCAA × tipo (Group by) y z-score (Calculator); se marca el registro (`calidad_key` = 3 o 4) sin eliminarlo |
 | Validar datos | Data Validator y comprobaciones SQL en T40 |
 | Flujo de trabajo completo | Job `J00_carga.kjb` |
 
@@ -352,6 +456,7 @@ Parámetros de la transformación: `ID_TABLA` (por ejemplo `67190`) y `COD_TIPO`
 
 **Validaciones (T40):**
 - Número de filas cargadas frente al origen.
+- Coherencia: total del INE = residentes en España + residentes en el extranjero.
 - Ausencia de claves huérfanas.
 - Valores no negativos.
 - `pernoctaciones ≥ viajeros`.
@@ -368,20 +473,21 @@ Parámetros de la transformación: `ID_TABLA` (por ejemplo `67190`) y `COD_TIPO`
 ├── README.md
 ├── LICENSE
 ├── data/
-│   ├── raw/             # descargas originales (con fecha)
+│   ├── raw/             # descargas originales + ccaa_codigos.csv + registro de descargas
 │   └── clean/           # CSV limpios generados por el ETL
 ├── docs/
 │   ├── diseno_logico.drawio
 │   ├── almacen_turismo.mwb
 │   └── memoria.pdf
+├── scripts/
+│   ├── descargar_fuentes.py   # descarga INE y Wikidata
+│   └── preparar_geometrias.py # shapefiles CNIG → data/clean/ccaa.geojson
 ├── sql/
 │   └── 01_crear_almacen_turismo.sql
 ├── kettle/
 │   ├── T01_dim_tiempo.ktr
 │   ├── T02_dim_ccaa.ktr
 │   ├── T10_eoh.ktr · T11_eoap.ktr · T12_eoac.ktr · T13_eotr.ktr
-│   ├── T20_poblacion.ktr
-│   ├── T30_patrimonio.ktr
 │   ├── T40_validacion.ktr
 │   └── J00_carga.kjb
 ├── rdf/                 # tripletas schema.org (apartado 5)
@@ -395,13 +501,14 @@ Parámetros de la transformación: `ID_TABLA` (por ejemplo `67190`) y `COD_TIPO`
 **Requisitos:**
 - [Pentaho Data Integration (Community Edition)](https://pentaho-public.atlassian.net/wiki/spaces/COM/overview?mode=global) y la versión de Java que exija.
 - MySQL 8 y MySQL Workbench.
+- Python 3.8 o superior. El script de descarga no tiene dependencias; el de geometrías necesita `pip install pyshp shapely`.
 - Conector JDBC de MySQL (`mysql-connector-j-*.jar`) copiado en `data-integration/lib` (reiniciar Spoon).
 
 **Pasos:**
 
 1. **Crear el almacén.** Ejecutar `sql/01_crear_almacen_turismo.sql` en MySQL Workbench.
 2. **Configurar la conexión en Pentaho.** *View → Database connections → New*: tipo MySQL, acceso Native (JDBC), host `localhost`, puerto `3306`, base de datos `turismo_dw`, usuario y contraseña. Pulsar **Test**.
-3. **Obtener los datos** (si se trabaja con ficheros locales): descargar las tablas del INE y el shapefile del CNIG en `data/raw/`, según la sección [Cómo obtener los datos](#cómo-obtener-los-datos).
+3. **Obtener los datos**: ejecutar `python scripts/descargar_fuentes.py`, descargar a mano el shapefile del CNIG (copiando las dos capas autonómicas a `data/raw/cnig/`) y ejecutar `python scripts/preparar_geometrias.py`, según la sección [Cómo obtener los datos](#cómo-obtener-los-datos).
 4. **Ejecutar el job completo**, desde Spoon o por línea de comandos:
 
 ```bash
@@ -424,8 +531,8 @@ ORDER BY t.anio, pernoctaciones DESC;
 ## 8. Estado del proyecto
 
 - [x] **Apartado 1:** temática, problema, 4W, objetivos, casos de uso y métricas
-- [x] **Apartado 2:** necesidades de datos y selección de datasets
-- [x] **Apartado 3:** diseño conceptual, lógico y físico; script de creación del almacén
+- [x] **Apartado 2:** necesidades de datos, selección y descarga de todos los datasets
+- [ ] **Apartado 3:** diseño en estrella y script SQL listos; pendientes el diagrama lógico (draw.io), el modelo de MySQL Workbench (`.mwb`) y la ejecución del script
 - [ ] **Apartado 4:** transformaciones y job de Pentaho _(diseño definido, implementación en curso)_
 - [ ] **Apartado 5:** transformación a tripletas schema.org y enlace con Wikidata
 - [ ] **Apartado 6:** dos visualizaciones (mapa coroplético y evolución temporal)
@@ -440,7 +547,7 @@ ORDER BY t.anio, pernoctaciones DESC;
 **Estadística oficial**
 - INE, [Hostelería y turismo (INEbase)](https://www.ine.es/dyngs/INEbase/es/categoria.htm?c=Estadistica_P&cid=1254735576863)
 - INE, [Encuesta de Ocupación Hotelera](https://www.ine.es/jaxiT3/Tabla.htm?t=67190) · [Apartamentos](https://www.ine.es/jaxiT3/Tabla.htm?t=67191) · [Campings](https://www.ine.es/jaxiT3/Tabla.htm?t=67192) · [Turismo rural](https://www.ine.es/jaxiT3/Tabla.htm?t=67193)
-- INE, [Cifras de Población](https://www.ine.es/dynt3/metadatos/es/RespuestaDatos.html?oe=30321)
+- INE, [Estadística Continua de Población](https://ine.es/dynt3/metadatos/es/RespuestaDatos.html?oe=30282)
 - [datos.gob.es](https://datos.gob.es/): catálogo nacional de datos abiertos
 
 **Cartografía**
