@@ -96,6 +96,9 @@ CREATE TABLE dim_calidad_dato (
 -- ---------------------------------------------------------------------
 -- TABLA DE HECHOS (solo claves ajenas + medidas numéricas)
 -- Grano: 1 fila por mes x CCAA x tipo de alojamiento x origen
+-- Clave primaria: compuesta por las claves de TODAS las dimensiones (convención
+-- de la asignatura). Como nivel_key y calidad_key dependen de las otras cuatro,
+-- el grano se garantiza además con una restricción UNIQUE sobre esas cuatro.
 -- ---------------------------------------------------------------------
 CREATE TABLE fact_ocupacion (
   tiempo_key      INT           NOT NULL,
@@ -107,7 +110,8 @@ CREATE TABLE fact_ocupacion (
   viajeros        INT UNSIGNED  NULL,
   pernoctaciones  INT UNSIGNED  NULL,
   estancia_media  DECIMAL(6,2)  NULL COMMENT 'Derivada: pernoctaciones / viajeros',
-  PRIMARY KEY (tiempo_key, ccaa_key, tipo_key, origen_key),
+  PRIMARY KEY (tiempo_key, ccaa_key, tipo_key, origen_key, nivel_key, calidad_key),
+  UNIQUE KEY uq_fo_grano (tiempo_key, ccaa_key, tipo_key, origen_key),
   KEY ix_fo_ccaa    (ccaa_key),
   KEY ix_fo_tipo    (tipo_key),
   KEY ix_fo_origen  (origen_key),

@@ -253,8 +253,8 @@ erDiagram
         int ccaa_key PK, FK
         int tipo_key PK, FK
         int origen_key PK, FK
-        int nivel_key FK
-        int calidad_key FK
+        int nivel_key PK, FK
+        int calidad_key PK, FK
         int viajeros
         int pernoctaciones
         decimal estancia_media
@@ -322,7 +322,7 @@ erDiagram
 Script de creación: [`sql/01_crear_almacen_turismo.sql`](sql/01_crear_almacen_turismo.sql). Modelo de MySQL Workbench: `docs/almacen_turismo.mwb`.
 
 - Motor InnoDB, codificación `utf8mb4`.
-- Clave primaria compuesta en la tabla de hechos y claves foráneas hacia las seis dimensiones.
+- Clave primaria de la tabla de hechos compuesta por las seis claves de dimensión (cada dimensión conectada aporta una PK/FK, como en la convención de clase), más una restricción `UNIQUE` sobre las cuatro claves que definen el grano (mes, CCAA, tipo y origen). `nivel_key` y `calidad_key` dependen de esas cuatro, así que el `UNIQUE` impide que un mismo grano se cargue dos veces con distinta categoría.
 - Claves naturales únicas (`codigo_ine`, `codigo`, `anio + mes`) para que el ETL pueda localizar las claves de cada dimensión.
 - Las dimensiones pequeñas (tipo de alojamiento, origen, nivel de estancia y calidad del dato) se cargan en el propio script; `dim_tiempo` y `dim_ccaa` se cargan desde Pentaho.
 - Miembro "Sin dato" en `dim_nivel_estancia` (clave 4, valor por defecto) para que la tabla de hechos no tenga claves nulas.
@@ -383,6 +383,7 @@ GROUP BY c.nombre, c.n_bic, c.nivel_patrimonio;
 - **Tipo de alojamiento como dimensión:** lo determina la encuesta de origen (EOH, EOAP, EOAC, EOTR), por lo que se añade como columna durante el ETL.
 - **Origen del viajero:** las tablas del INE traen tres combinaciones de residencia (total, residentes en España y residentes en el extranjero). Se cargan solo `ESP` y `EXT`, el nivel más bajo, para que las medidas sean aditivas. El total del INE no se almacena: se usa como control en el ETL (total = ESP + EXT) y para recuperar un componente ausente.
 - **Patrimonio (BIC):** `n_bic` cuenta los elementos de Wikidata con código BIC situados en cada CCAA (a través de su cadena de localización administrativa, de hasta cuatro niveles). Depende de la cobertura de Wikidata, por lo que no coincide con el registro oficial y se interpreta como indicador relativo entre territorios.
+- **Clave primaria de la tabla de hechos:** incluye las seis claves de dimensión. Estrictamente, la clave mínima sería la de las cuatro dimensiones que definen el grano, pero `nivel_key` y `calidad_key` son categorías derivadas del propio registro; incluirlas en la clave mantiene la convención de que toda clave ajena forma parte de la clave primaria, y el `UNIQUE` sobre el grano conserva la integridad. Las marcas de calidad y el nivel de estancia se calculan antes de la carga, por lo que no se modifican después.
 - **Marcar en lugar de borrar:** `dim_calidad_dato` conserva la trazabilidad de cada valor imputado o atípico.
 - **Categorías por discretización:** `nivel_estancia` (Corta, Media o Larga; cortes iniciales en 2 y 4 días), `nivel_poblacion` (Muy grande, Grande, Mediana o Pequeña; umbrales de 5, 2 y 1 millón de habitantes) y `nivel_patrimonio` (Alto, Medio o Bajo, por terciles del nº de BIC). Todos son criterios iniciales, revisables con la distribución real.
 - **Temporada** (criterio inicial, parametrizable): Alta de junio a septiembre, Media de marzo a mayo y octubre, Baja el resto.
