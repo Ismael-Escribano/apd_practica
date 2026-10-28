@@ -235,78 +235,15 @@ Modelo en **estrella**: una única tabla de hechos (`fact_ocupacion`) que contie
 - **Dimensiones:** Tiempo, Territorio (CCAA), Tipo de alojamiento, Origen del viajero, Nivel de estancia y Calidad del dato.
 - **Contexto del territorio:** la población y el patrimonio cultural describen a cada CCAA y forman parte de la dimensión Territorio.
 
+Diagrama editable: [`docs/diseno_conceptual.drawio`](docs/diseno_conceptual.drawio) (draw.io). Exportado como `.drawio.svg` y `.drawio.png`.
+
+![Diseño conceptual](docs/diseno_conceptual.drawio.svg)
+
 ### Diseño lógico
 
-Diagrama editable en `docs/diseno_logico.drawio` (draw.io).
+Diagrama editable: [`docs/diseno_logico.drawio`](docs/diseno_logico.drawio) (draw.io; exportado como `.drawio.svg` y `.drawio.png`). Muestra las siete tablas con sus tipos, claves primarias (PK), ajenas (FK) y únicas (UK), las medidas resaltadas y el grano.
 
-```mermaid
-erDiagram
-    DIM_TIEMPO ||--o{ FACT_OCUPACION : tiempo_key
-    DIM_CCAA ||--o{ FACT_OCUPACION : ccaa_key
-    DIM_TIPO_ALOJAMIENTO ||--o{ FACT_OCUPACION : tipo_key
-    DIM_ORIGEN ||--o{ FACT_OCUPACION : origen_key
-    DIM_NIVEL_ESTANCIA ||--o{ FACT_OCUPACION : nivel_key
-    DIM_CALIDAD_DATO ||--o{ FACT_OCUPACION : calidad_key
-
-    FACT_OCUPACION {
-        int tiempo_key PK, FK
-        int ccaa_key PK, FK
-        int tipo_key PK, FK
-        int origen_key PK, FK
-        int nivel_key PK, FK
-        int calidad_key PK, FK
-        int viajeros
-        int pernoctaciones
-        decimal estancia_media
-    }
-    DIM_TIEMPO {
-        int tiempo_key PK
-        int anio
-        int mes
-        string nombre_mes
-        int trimestre
-        string temporada
-    }
-    DIM_CCAA {
-        int ccaa_key PK
-        string codigo_ine UK
-        string codigo_iso
-        string nombre
-        string wikidata_qid
-        decimal latitud
-        decimal longitud
-        int habitantes_ref
-        date poblacion_fecha_ref
-        string nivel_poblacion
-        int n_bic
-        string nivel_patrimonio
-        date patrimonio_fecha_extraccion
-    }
-    DIM_TIPO_ALOJAMIENTO {
-        int tipo_key PK
-        string codigo UK
-        string nombre
-        string encuesta_ine
-        string grupo
-    }
-    DIM_ORIGEN {
-        int origen_key PK
-        string codigo UK
-        string nombre
-    }
-    DIM_NIVEL_ESTANCIA {
-        int nivel_key PK
-        string nombre UK
-        decimal min_dias
-        decimal max_dias
-    }
-    DIM_CALIDAD_DATO {
-        int calidad_key PK
-        string descripcion UK
-        boolean dato_imputado
-        boolean es_atipico
-    }
-```
+![Diseño lógico](docs/diseno_logico.drawio.svg)
 
 | Tabla | Grano | Contenido |
 |---|---|---|
@@ -319,7 +256,14 @@ erDiagram
 | `dim_calidad_dato` | combinación de marcas | Dato original, Dato imputado, Valor atípico, Imputado y atípico |
 
 ### Diseño físico
-Script de creación: [`sql/01_crear_almacen_turismo.sql`](sql/01_crear_almacen_turismo.sql). Modelo de MySQL Workbench: `docs/almacen_turismo.mwb`.
+Script de creación: [`sql/01_crear_almacen_turismo.sql`](sql/01_crear_almacen_turismo.sql). Modelo de MySQL Workbench (obtenido por ingeniería inversa del esquema creado): [`docs/almacen_turismo.mwb`](docs/almacen_turismo.mwb). Diagrama EER exportado: `docs/almacen_turismo_fisico.png` (también en `.svg` y `.pdf`).
+
+![Diseño físico (MySQL Workbench)](docs/almacen_turismo_fisico.png)
+
+**Verificación de la implementación** (MySQL 8, MySQL Workbench):
+- El script se ejecuta completo sin errores y crea 7 tablas (`fact_ocupacion` y 6 dimensiones) y 2 vistas. Solo emite avisos informativos: la base de datos no existía antes del `DROP` y la anchura de entero de `TINYINT(1)` está obsoleta en MySQL 8.
+- Las dimensiones pequeñas quedan cargadas: 4 tipos de alojamiento, 2 orígenes, 4 niveles de estancia y 4 marcas de calidad.
+- `SHOW CREATE TABLE fact_ocupacion` confirma la clave primaria de seis columnas, el `UNIQUE` del grano (cuatro columnas) y las seis claves ajenas.
 
 - Motor InnoDB, codificación `utf8mb4`.
 - Clave primaria de la tabla de hechos compuesta por las seis claves de dimensión (cada dimensión conectada aporta una PK/FK, como en la convención de clase), más una restricción `UNIQUE` sobre las cuatro claves que definen el grano (mes, CCAA, tipo y origen). `nivel_key` y `calidad_key` dependen de esas cuatro, así que el `UNIQUE` impide que un mismo grano se cargue dos veces con distinta categoría.
@@ -331,18 +275,28 @@ Script de creación: [`sql/01_crear_almacen_turismo.sql`](sql/01_crear_almacen_t
 
 ### Justificación del diseño: por qué una única tabla de hechos
 
-**1. Criterio para separar medidas y atributos.** Una medida es un valor numérico que cambia con la frecuencia con la que se observa el hecho (aquí, cada mes). Lo demás describe a las entidades y va en dimensiones.
+**Idea en una frase.** Solo hay una cosa que se mide todos los meses (la ocupación de los alojamientos), así que hay una sola tabla de hechos. Todo lo demás describe esa medición (cuándo, dónde, qué tipo de alojamiento, de qué origen) y va en tablas de dimensiones.
 
-| Dato | ¿Cambia cada mes? | Clasificación |
+| Término | Qué significa aquí |
+|---|---|
+| Tabla de hechos | Guarda las mediciones: una fila por cada observación mensual (`fact_ocupacion`) |
+| Dimensión | Tabla que describe el contexto de una medición: cuándo, dónde, qué tipo, de quién |
+| Medida | Número que se mide y que cambia cada mes (viajeros, pernoctaciones) |
+| Atributo | Dato descriptivo de una dimensión (el nombre de una CCAA, su población, etc.) |
+| Grano | Lo que representa exactamente cada fila de la tabla de hechos. Aquí: un mes, una CCAA, un tipo de alojamiento y un origen del viajero |
+
+**1. Cómo decidimos qué es una medida y qué es un atributo.** Es una medida lo que el INE vuelve a medir cada mes y cambia de un mes a otro. Lo que describe a un territorio o es una etiqueta es un atributo y va en una dimensión.
+
+| Dato | ¿Se mide cada mes? | Dónde va |
 |---|---|---|
-| Viajeros, pernoctaciones, estancia media | Sí | **Medidas** de la tabla de hechos |
-| Población de la CCAA | No: se actualiza una vez al año y describe al territorio | Atributo de `dim_ccaa` (valor de referencia + categoría) |
-| Nº de BIC | No: es una instantánea que casi no varía | Atributo de `dim_ccaa` (valor + categoría) |
-| Nivel de estancia, calidad del dato, temporada, tipo de alojamiento, origen | No: son categorías | Dimensiones |
+| Viajeros, pernoctaciones, estancia media | Sí: el INE publica un valor nuevo cada mes | Medidas de `fact_ocupacion` |
+| Población de la CCAA | No: usamos una sola cifra por CCAA (la del 1 de enero más reciente) | Atributo de `dim_ccaa` |
+| Nº de BIC (bienes culturales) | No: es un recuento que sacamos una sola vez de Wikidata, en una fecha concreta | Atributo de `dim_ccaa`, con su fecha de extracción |
+| Tipo de alojamiento, origen, temporada, nivel de estancia, calidad del dato | No: son etiquetas | Dimensiones |
 
-**2. Evita mezclar granos.** La ocupación es mensual, la población anual y el patrimonio una instantánea. Guardar todo en la misma tabla de hechos obligaría a repetir la población y el patrimonio en cada fila, y cualquier suma daría resultados erróneos. Convertir esos datos en descriptores de la CCAA elimina el problema de raíz.
+**2. Por qué la población y el patrimonio no son hechos.** Hay un valor de ocupación por cada mes, CCAA, tipo y origen, pero solo una población y un recuento de BIC por CCAA. Si los pusiéramos en la tabla de hechos, el mismo número se repetiría en cada fila mensual y, al sumar, saldrían resultados sin sentido. Ejemplo: un territorio con 8 millones de habitantes tiene 96 filas al año (12 meses × 4 tipos × 2 orígenes); al sumar un año completo, su población saldría como 768 millones. Como atributos de `dim_ccaa`, cada dato aparece una sola vez.
 
-**3. Esquema en estrella clásico, simple y rápido de consultar.** Las tres preguntas de investigación se responden con una sola tabla de hechos y joins directos contra sus dimensiones, sin combinar varias tablas de hechos entre sí:
+**3. Las tres preguntas se responden de forma directa.** Cada consulta usa la tabla de hechos y une (`JOIN`) las dimensiones que necesita, sin combinar varias tablas de hechos:
 
 ```sql
 -- P1: pernoctaciones por año, CCAA y tipo de alojamiento
@@ -370,23 +324,37 @@ JOIN dim_ccaa c ON c.ccaa_key = v.ccaa_key
 GROUP BY c.nombre, c.n_bic, c.nivel_patrimonio;
 ```
 
-**4. ETL más sencillo y robusto.** Hay una sola transformación de hechos, parametrizada y reutilizada para las cuatro encuestas. La población (82 MB en origen) y el patrimonio quedan reducidos a 19 valores que se incorporan a `dim_ccaa` en una única transformación.
+**4. La carga (ETL) es más sencilla.** Hay una sola transformación de hechos, con parámetros, que se reutiliza para las cuatro encuestas. La población (82 MB en origen) y el patrimonio se reducen a 19 filas, una por CCAA, que se cargan en `dim_ccaa` en una única transformación.
 
-**5. La tabla de hechos solo contiene claves y números.** Las categorías derivadas de la limpieza (`nivel_estancia` y las marcas de imputación y atípicos) se llevan a dimensiones pequeñas, de modo que los hechos quedan limpios y la discretización se hace una sola vez.
+**5. La tabla de hechos queda limpia.** Solo guarda claves y números. Las etiquetas que calcula el ETL (el nivel de estancia: corta, media o larga; y la marca de si un dato es original, imputado o atípico) van a dimensiones pequeñas.
 
-**Alternativa estudiada y descartada: constelación de hechos.** Consistía en añadir `fact_poblacion` y `fact_patrimonio`. Es un modelo válido cuando hay procesos con granos distintos, pero aquí aportaba poco: el patrimonio no es un hecho (no varía con el tiempo) y la población solo añadiría unas 500 filas, a costa de más tablas, más transformaciones de carga y consultas que combinan varias tablas de hechos.
+**Alternativa descartada: añadir `fact_poblacion` y `fact_patrimonio`.** Tendría sentido si la población y el patrimonio se midieran con su propia frecuencia, pero aquí no es así: el patrimonio es un único recuento por CCAA y la población solo añadiría unas 500 filas. A cambio, habría más tablas, más transformaciones de carga y consultas más complicadas, porque habría que combinar varias tablas de hechos.
 
-**Limitación asumida.** El indicador por habitante usa la población de referencia más reciente. Esto hace comparables a los territorios y evita que el cambio demográfico se mezcle con la evolución del turismo, pero no usa la población exacta de cada año. Si hiciera falta, se añadiría una tabla de hechos de población anual sin modificar el resto del modelo, porque las dimensiones ya son compartibles.
+**Limitación asumida.** Para calcular las pernoctaciones por habitante usamos siempre la misma población, la más reciente, y no la de cada año. Ventaja: los territorios son comparables y el cambio de población no se mezcla con la evolución del turismo. Inconveniente: no es la población exacta de cada año. Si hiciera falta, se añadiría una tabla de hechos de población anual sin tocar el resto del modelo.
 
 ### Decisiones de diseño
-- **Clave de tiempo `AAAAMM`:** sencilla, legible y ordenable.
-- **Tipo de alojamiento como dimensión:** lo determina la encuesta de origen (EOH, EOAP, EOAC, EOTR), por lo que se añade como columna durante el ETL.
-- **Origen del viajero:** las tablas del INE traen tres combinaciones de residencia (total, residentes en España y residentes en el extranjero). Se cargan solo `ESP` y `EXT`, el nivel más bajo, para que las medidas sean aditivas. El total del INE no se almacena: se usa como control en el ETL (total = ESP + EXT) y para recuperar un componente ausente.
-- **Patrimonio (BIC):** `n_bic` cuenta los elementos de Wikidata con código BIC situados en cada CCAA (a través de su cadena de localización administrativa, de hasta cuatro niveles). Depende de la cobertura de Wikidata, por lo que no coincide con el registro oficial y se interpreta como indicador relativo entre territorios.
-- **Clave primaria de la tabla de hechos:** incluye las seis claves de dimensión. Estrictamente, la clave mínima sería la de las cuatro dimensiones que definen el grano, pero `nivel_key` y `calidad_key` son categorías derivadas del propio registro; incluirlas en la clave mantiene la convención de que toda clave ajena forma parte de la clave primaria, y el `UNIQUE` sobre el grano conserva la integridad. Las marcas de calidad y el nivel de estancia se calculan antes de la carga, por lo que no se modifican después.
-- **Marcar en lugar de borrar:** `dim_calidad_dato` conserva la trazabilidad de cada valor imputado o atípico.
-- **Categorías por discretización:** `nivel_estancia` (Corta, Media o Larga; cortes iniciales en 2 y 4 días), `nivel_poblacion` (Muy grande, Grande, Mediana o Pequeña; umbrales de 5, 2 y 1 millón de habitantes) y `nivel_patrimonio` (Alto, Medio o Bajo, por terciles del nº de BIC). Todos son criterios iniciales, revisables con la distribución real.
-- **Temporada** (criterio inicial, parametrizable): Alta de junio a septiembre, Media de marzo a mayo y octubre, Baja el resto.
+
+- **Clave de tiempo `AAAAMM`** (por ejemplo, `202403` para marzo de 2024): es fácil de leer y se ordena sola.
+- **Tipo de alojamiento como dimensión:** cada encuesta del INE trata un solo tipo (hoteles, apartamentos, campings o turismo rural), así que el ETL añade el tipo como una columna más.
+- **Origen del viajero:** el INE da tres cifras de residencia: total, residentes en España y residentes en el extranjero. Guardamos solo las dos últimas, porque el total es su suma y guardarlo también haría que al sumar se contara todo dos veces. El total sirve para comprobar el ETL (total = España + extranjero) y para calcular por diferencia una cifra que falte.
+- **Patrimonio (BIC):** `n_bic` cuenta los elementos de Wikidata con código BIC que están dentro de cada CCAA. Depende de lo completo que esté Wikidata, así que no coincide con el registro oficial. Sirve para comparar territorios entre sí, no como cifra exacta.
+- **Clave primaria de la tabla de hechos:** incluye las seis claves de dimensión, como pide la convención de clase (toda clave ajena forma parte de la clave primaria). Lo que identifica de verdad cada fila son solo cuatro: mes, CCAA, tipo y origen. Por eso hay además una restricción `UNIQUE` sobre esas cuatro, que impide cargar dos veces el mismo mes, CCAA, tipo y origen. `nivel_key` y `calidad_key` se calculan a partir de la propia fila antes de cargarla y no cambian después.
+- **Marcar en lugar de borrar:** los datos imputados (rellenados por el ETL) o atípicos (muy distintos de lo normal) no se eliminan, se marcan en `dim_calidad_dato`. Así se sabe qué valores son originales y cuáles no.
+- **Categorías a partir de números:** para facilitar el análisis, tres números se convierten en etiquetas. Los límites son iniciales y se ajustarán cuando veamos los datos reales.
+  - `nivel_estancia`: Corta (menos de 2 días), Media (de 2 a 4) o Larga (más de 4).
+  - `nivel_poblacion`: Muy grande (5 millones o más), Grande (de 2 a 5), Mediana (de 1 a 2) o Pequeña (menos de 1 millón).
+  - `nivel_patrimonio`: Alto, Medio o Bajo. Se reparte las CCAA en tres grupos del mismo tamaño según su nº de BIC.
+- **Temporada** (criterio inicial, se puede cambiar): Alta de junio a septiembre, Media de marzo a mayo y octubre, y Baja el resto.
+
+### Cumplimiento de las tareas del apartado
+
+| Tarea del enunciado | Entregable |
+|---|---|
+| Diseño conceptual | `docs/diseno_conceptual.drawio` y exportaciones `.drawio.svg` / `.drawio.png` |
+| Diseño lógico: hechos, dimensiones, medidas y granularidad | `docs/diseno_logico.drawio` y exportaciones `.drawio.svg` / `.drawio.png`; tabla de grano de esta sección |
+| Diseño físico en el SGBD elegido | `sql/01_crear_almacen_turismo.sql`; `docs/almacen_turismo.mwb` y diagrama EER |
+| Implementar el almacén y proporcionar los scripts de creación | Script ejecutado en MySQL 8 (verificación descrita arriba) |
+| Justificar las decisiones de diseño | Secciones *Justificación del diseño* y *Decisiones de diseño* |
 
 ---
 
@@ -477,8 +445,10 @@ Parámetros de la transformación: `ID_TABLA` (por ejemplo `67190`) y `COD_TIPO`
 │   ├── raw/             # descargas originales + ccaa_codigos.csv + registro de descargas
 │   └── clean/           # CSV limpios generados por el ETL
 ├── docs/
-│   ├── diseno_logico.drawio
-│   ├── almacen_turismo.mwb
+│   ├── diseno_conceptual.drawio · .drawio.svg · .drawio.png
+│   ├── diseno_logico.drawio · .drawio.svg · .drawio.png
+│   ├── almacen_turismo.mwb                       # modelo de MySQL Workbench
+│   ├── almacen_turismo_fisico.png · .svg · .pdf  # diagrama EER exportado
 │   └── memoria.pdf
 ├── scripts/
 │   ├── descargar_fuentes.py   # descarga INE y Wikidata
@@ -533,7 +503,7 @@ ORDER BY t.anio, pernoctaciones DESC;
 
 - [x] **Apartado 1:** temática, problema, 4W, objetivos, casos de uso y métricas
 - [x] **Apartado 2:** necesidades de datos, selección y descarga de todos los datasets
-- [ ] **Apartado 3:** diseño en estrella y script SQL listos; pendientes el diagrama lógico (draw.io), el modelo de MySQL Workbench (`.mwb`) y la ejecución del script
+- [x] **Apartado 3:** diseño conceptual, lógico (draw.io) y físico (MySQL Workbench), script SQL ejecutado en MySQL 8 y justificación
 - [ ] **Apartado 4:** transformaciones y job de Pentaho _(diseño definido, implementación en curso)_
 - [ ] **Apartado 5:** transformación a tripletas schema.org y enlace con Wikidata
 - [ ] **Apartado 6:** dos visualizaciones (mapa coroplético y evolución temporal)
@@ -570,6 +540,6 @@ ORDER BY t.anio, pernoctaciones DESC;
 
 ## 10. Licencia
 
-_(Pendiente de elegir. Por ejemplo, MIT para el código y CC BY 4.0 para la documentación.)_
+El código y la documentación del proyecto se distribuyen bajo licencia **MIT** (véase el fichero [`LICENSE`](LICENSE)).
 
 Los datos proceden de las fuentes citadas en la sección anterior y mantienen las condiciones de uso de cada organismo (INE, CNIG/IGN, Wikidata). Se cita siempre la fuente original.

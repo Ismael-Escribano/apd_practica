@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" agent="Claude" version="24.0.0">
+  <diagram name="Diseño conceptual" id="conceptual">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="760" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="titulo" value="&lt;b&gt;Diseño conceptual: ocupación turística en España por Comunidad Autónoma&lt;/b&gt;" style="text;html=1;align=left;verticalAlign=middle;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="40" y="10" width="900" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="hecho" value="&lt;b&gt;OCUPACIÓN TURÍSTICA&lt;/b&gt;&lt;br&gt;(hecho)&lt;br&gt;viajeros · pernoctaciones · estancia media" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=center;verticalAlign=middle;fontSize=13;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="460" y="300" width="280" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="tiempo" value="&lt;b&gt;Tiempo&lt;/b&gt;&lt;br&gt;mes, año, trimestre, temporada" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=middle;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="40" y="70" width="280" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_tiempo" value="ocurre en (N : 1)" style="endArrow=none;html=1;rounded=0;labelBackgroundColor=#ffffff;fontSize=11;" parent="1" source="hecho" target="tiempo" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="tipo" value="&lt;b&gt;Tipo de alojamiento&lt;/b&gt;&lt;br&gt;hotel, apartamento, camping, turismo rural" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=middle;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="460" y="70" width="280" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_tipo" value="se aloja en (N : 1)" style="endArrow=none;html=1;rounded=0;labelBackgroundColor=#ffffff;fontSize=11;" parent="1" source="hecho" target="tipo" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="origen" value="&lt;b&gt;Origen del viajero&lt;/b&gt;&lt;br&gt;residente en España / en el extranjero" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=middle;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="880" y="70" width="280" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_origen" value="procede de (N : 1)" style="endArrow=none;html=1;rounded=0;labelBackgroundColor=#ffffff;fontSize=11;" parent="1" source="hecho" target="origen" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="territorio" value="&lt;b&gt;Territorio (CCAA)&lt;/b&gt;&lt;br&gt;nombre, códigos, ubicación&lt;br&gt;población · patrimonio cultural (BIC)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=middle;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="40" y="560" width="280" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_territorio" value="se registra en (N : 1)" style="endArrow=none;html=1;rounded=0;labelBackgroundColor=#ffffff;fontSize=11;" parent="1" source="hecho" target="territorio" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="nivel" value="&lt;b&gt;Nivel de estancia&lt;/b&gt;&lt;br&gt;corta, media, larga" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=middle;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="460" y="560" width="280" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_nivel" value="se clasifica en (N : 1)" style="endArrow=none;html=1;rounded=0;labelBackgroundColor=#ffffff;fontSize=11;" parent="1" source="hecho" target="nivel" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="calidad" value="&lt;b&gt;Calidad del dato&lt;/b&gt;&lt;br&gt;original, imputado, atípico" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=middle;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="880" y="560" width="280" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="rel_calidad" value="se califica como (N : 1)" style="endArrow=none;html=1;rounded=0;labelBackgroundColor=#ffffff;fontSize=11;" parent="1" source="hecho" target="calidad" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="preguntas" value="&lt;b&gt;Preguntas de investigación&lt;/b&gt;&lt;br&gt;P1: Territorio × Tipo × Tiempo → distribución de la demanda&lt;br&gt;P2: Origen × Tiempo × Territorio → composición residentes/extranjeros&lt;br&gt;P3: Territorio (patrimonio) × hecho → patrimonio frente a demanda" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="880" y="290" width="280" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="nota" value="El &lt;b&gt;hecho&lt;/b&gt; recoge lo que se mide cada mes. Las &lt;b&gt;dimensiones&lt;/b&gt; describen cuándo, dónde, qué tipo, de quién y con qué calidad. La población (anual) y el patrimonio (instantánea) describen al territorio, no al mes, y por eso son atributos de Territorio." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="40" y="290" width="280" height="140" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
