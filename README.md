@@ -397,78 +397,238 @@ GROUP BY c.nombre, c.n_bic, c.nivel_patrimonio;
 
 ## 5. Apartado 4: Extracción, limpieza y carga (Pentaho)
 
-Herramienta: **Pentaho Data Integration (Kettle)**, edición Community. Las transformaciones (`.ktr`) se orquestan desde un job (`.kjb`).
+Herramienta: **Pentaho Data Integration (PDI, Kettle) 10.2 Community**. El ETL son seis transformaciones (`.ktr`) y un job (`.kjb`) que las ejecuta en orden y carga las siete tablas de `turismo_dw`. Todo se hace en PDI; no se usa Python en el ETL.
 
-### Arquitectura del flujo
+### 5.1 Decisiones de diseño y su motivo
+
+| Decisión | Motivo |
+|---|---|
+| Todo el ETL en PDI | El enunciado exige PDI y solo admite Python si se justifica; aquí no hace falta |
+| **Alcance temporal: 2016 a 2025** | Diez años naturales completos. 2026 se excluye porque el INE publica hasta agosto (septiembre en hoteles) y un año incompleto distorsiona la comparación anual y el porcentaje de extranjeros. Incluye 2020 y 2021 (pandemia) |
+| Dimensiones antes que hechos | Cada hecho lleva claves ajenas; MySQL rechaza una fila si la clave no existe. PDI ejecuta en paralelo los pasos de una transformación, así que el orden solo se puede imponer desde el job |
+| Una plantilla para las encuestas del INE | Las cuatro tienen la misma estructura (la EOH con una columna más, `Provincias`). Un solo flujo que mantener y justificar |
+| Los CSV del INE se leen de `data/raw/`, no por URL | Ya están descargados y verificados, y el ETL no depende de que la API del INE responda |
+| Rutas relativas (`${Internal.Entry.Current.Directory}/..`) | El repositorio funciona en cualquier ordenador y sistema operativo |
+| Credenciales de MySQL en variables | El repositorio es público; usuario y contraseña no se guardan en los `.ktr` |
+| Se marca, no se borra | Los valores imputados o atípicos se señalan en `dim_calidad_dato`; los datos de 2020 y 2021 son reales |
+
+### 5.2 Preparación del entorno (una sola vez)
+
+1. **Conector JDBC.** Copiar `mysql-connector-j-*.jar` en `data-integration\lib` y reiniciar Spoon.
+2. **Variables con las credenciales.** Editar `C:\Users\<usuario>\.kettle\kettle.properties` (se puede abrir desde Spoon, menú *Edit*, o a mano con el Bloc de notas; si no existe, se crea) y añadir al final, sin comillas ni espacios:
+   ```
+   DB_USER=tu_usuario
+   DB_PASSWORD=tu_contraseña
+   ```
+   Spoon solo lee el fichero al arrancar: hay que cerrarlo y volver a abrirlo.
+3. **Conexión `turismo_dw`.** En la pestaña *View*, *Database connections*, nueva conexión: tipo MySQL, acceso Native (JDBC), host `localhost`, puerto `3306`, base `turismo_dw`, usuario `${DB_USER}` y contraseña `${DB_PASSWORD}`. Pulsar *Test*. Clic derecho, *Share*, para que la vean todas las transformaciones.
+4. **Carpeta `kettle/`** en la raíz del repositorio. Todas las transformaciones se guardan ahí.
+
+**Cómo se trabaja en Spoon.** Los pasos se arrastran desde la pestaña *Design* (hay buscador). Se unen con un salto: arrastrar de un paso a otro con **Shift** pulsado. El icono del ojo (*Preview*) muestra las filas que salen de un paso sin cargar nada: conviene usarlo tras añadir cada paso.
+
+### 5.3 Visión general
 
 ```mermaid
 flowchart LR
-    A[INE: CSV por URL] --> T[Transformaciones PDI]
-    B[Wikidata: REST/SPARQL] --> T
-    C[CNIG: Shapefile] --> T
-    D[INE: Población] --> T
-    T --> E[(data/clean: CSV limpios)]
-    T --> F[(MySQL: turismo_dw)]
-    F --> V[T40: Validación]
+    A[INE: CSV de ocupación] --> T10[T10 a T13: hechos]
+    P[INE: población] --> T02[T02: dim_ccaa]
+    W[Wikidata: identidad y BIC] --> T02
+    C[ccaa_codigos.csv] --> T02
+    C --> T10
+    T01[T01: dim_tiempo] --> DB[(MySQL turismo_dw)]
+    T02 --> DB
+    T10 --> DB
+    DB --> T40[T40: validación]
+    J[J00_carga.kjb] -. orquesta .-> T01
+    J -. orquesta .-> T02
+    J -. orquesta .-> T10
+    J -. orquesta .-> T40
 ```
 
-### Transformaciones y job
-
-| Fichero | Función | Pasos principales de PDI |
+| Fichero | Qué carga | Estado |
 |---|---|---|
-| `T01_dim_tiempo.ktr` | Genera la dimensión tiempo (meses 1999-2030) | Generate rows, Add sequence, Calculator, Value Mapper, Table output |
-| `T02_dim_ccaa.ktr` | Dimensión CCAA completa: códigos, Wikidata (QID, coordenadas, BIC) y población de referencia | Data grid (códigos INE/ISO), Text file input / REST client + JSON input (Wikidata), Text file input con compresión Zip (población), Filter rows (Sexo, Nacionalidad y País de Nacimiento = "Total"; periodo del 1 de enero), Split Fields (año), Sort rows y Unique rows (último año por CCAA), Split Fields (coordenadas), Stream lookup, Number range (`nivel_poblacion`, `nivel_patrimonio`), ESRI shapefile reader (contraste de nombres con el CNIG), Table output |
-| `T10_eoh.ktr` | Plantilla de carga de ocupación (hoteles) | Text file input (URL), Select values, Filter rows, Split Fields, Replace in string, Stream lookup, Row denormaliser, Calculator, Number range, Database lookup, Unique rows, Table output |
-| `T11_eoap.ktr`, `T12_eoac.ktr`, `T13_eotr.ktr` | Copias de T10 con distintos parámetros | `ID_TABLA` y `COD_TIPO` |
-| `T40_validacion.ktr` | Controles de calidad sobre el almacén cargado | Table input, Data Validator, Abort |
-| `J00_carga.kjb` | Orquesta la carga completa | Start → Set variables → T01 y T02 → T10 a T13 → T40 → Success |
+| `T01_dim_tiempo.ktr` | `dim_tiempo` (120 meses, 2016-2025) | Hecho y verificado |
+| `T02_dim_ccaa.ktr` | `dim_ccaa` (19 filas) | Pendiente |
+| `T10_eoh.ktr` | `fact_ocupacion`, hoteles | Pendiente |
+| `T11_eoap.ktr`, `T12_eoac.ktr`, `T13_eotr.ktr` | `fact_ocupacion`, apartamentos, campings y turismo rural | Pendiente |
+| `T40_validacion.ktr` | Controles sobre el almacén cargado | Pendiente |
+| `J00_carga.kjb` | Orquesta todo | Pendiente |
 
-**Orden de carga:** primero las dimensiones y después los hechos. PDI ejecuta en paralelo los pasos de una misma transformación y no garantiza el orden, de modo que la secuencia se impone desde el job. Cada tabla tiene un único paso *Table output*.
+**Orden de ejecución:** J00 limpia las tablas, ejecuta T01 y T02, después T10 a T13, y por último T40.
 
-### Flujo de la plantilla de ocupación (T10)
+### 5.4 T01_dim_tiempo
 
-Parámetros de la transformación: `ID_TABLA` (por ejemplo `67190`) y `COD_TIPO` (`HOT`, `APT`, `CAM` o `RUR`).
+**Sale:** 120 filas (`tiempo_key`, `anio`, `mes`, `nombre_mes`, `trimestre`, `temporada`). **Idea:** se genera un contador de 0 a 119 y de él se derivan año y mes.
 
-1. **Extracción:** *Text file input* con la URL del CSV del INE como nombre de fichero. Codificación UTF-8, separador `;`, configuración regional `es`, decimal `,` y agrupación `.`. El código `..` del INE se define como nulo en la columna *Null if*.
-2. **Selección y tipos:** *Select values* renombra columnas y convierte tipos. El primer nombre de columna puede traer la marca BOM del fichero; se corrige aquí.
-3. **Filtrado:** se conserva solo el nivel CCAA; se descartan `Total Nacional` y, en la EOH, las provincias, que son redundantes.
-4. **Splitting:** el periodo (formato `2026M09`) se separa en `anio` y `mes`.
-5. **Normalización de territorios:** los nombres de CCAA tal y como los escribe el INE (`Madrid, Comunidad de`, `Balears, Illes`…) se concilian con `codigo_ine` mediante `ccaa_codigos.csv`.
-6. **Origen:** *Value Mapper* sobre `Residencia: Nivel 2`: `Residentes en España` → `ESP`, `Residentes en el Extranjero` → `EXT` y vacío → total (rama de control).
-7. **Pivotado:** *Row denormaliser* coloca viajeros y pernoctaciones en columnas.
-8. **Control y valores ausentes:** en la rama de control se compara el total con ESP + EXT (*Group by* y *Merge join*). Si un componente falta y el total es conocido, se calcula por diferencia (`calidad_key = 2`); las discrepancias se registran. Solo ESP y EXT continúan hacia la tabla de hechos.
-9. **Derivación:** *Calculator* obtiene `estancia_media = pernoctaciones / viajeros`, con control de división por cero.
-10. **Binning:** *Number range* clasifica `estancia_media` en Corta, Media o Larga (cortes iniciales en 2 y 4 días, a ajustar con la distribución real) y se obtiene `nivel_key`; si no hay dato, `nivel_key = 4` (Sin dato).
-11. **Claves:** *Database lookup* contra `dim_ccaa`, `dim_tipo_alojamiento` y `dim_origen`; `calidad_key` se asigna según el dato sea original, imputado o atípico. Las filas sin clave se desvían a una salida de errores.
-12. **Carga:** *Unique rows* y *Table output* hacia `fact_ocupacion`.
+```
+Generate rows → Add sequence → Formula → Formula → Value Mapper ×3 → Select values → Table output
+```
 
-### Cumplimiento de las tareas del apartado
+| # | Paso (nombre) | Configuración |
+|---|---|---|
+| 1 | Generate rows (`Generar 120 filas`) | *Limit* = 120, sin campos |
+| 2 | Add sequence (`Contador`) | Campo `n`; desmarcar *Use DB* y *Use counter*; inicio 0, incremento 1, máximo 999999 |
+| 3 | Formula (`Año y mes`) | `anio` = `2016 + INT([n]/12)` y `mes` = `MOD([n];12) + 1`, ambos Integer |
+| 4 | Formula (`Clave AAAAMM`) | `tiempo_key` = `[anio]*100 + [mes]`, Integer. En un paso aparte porque una fórmula no puede usar un campo creado en el mismo paso |
+| 5 | Value Mapper (`Nombre mes`) | Campo `mes` a `nombre_mes`: 1 = Enero ... 12 = Diciembre |
+| 6 | Value Mapper (`Trimestre`) | Campo `mes` a `trimestre`: 1 a 3 = 1; 4 a 6 = 2; 7 a 9 = 3; 10 a 12 = 4 (una fila por mes) |
+| 7 | Value Mapper (`Temporada`) | Campo `mes` a `temporada`, valor por defecto `Baja`: 6, 7, 8, 9 = Alta; 3, 4, 5, 10 = Media |
+| 8 | Select values (`Columnas dim_tiempo`) | Pestaña *Select & Alter*: `tiempo_key, anio, mes, nombre_mes, trimestre, temporada` en ese orden. Pestaña *Meta-data*: solo `trimestre` con tipo Integer (no pulsar *Get fields to change*: incluiría `n`, que ya se ha descartado, y da error) |
+| 9 | Table output (`Carga dim_tiempo`) | Conexión `turismo_dw`, tabla `dim_tiempo`, *Commit size* 1000, **sin** *Truncate table* (MySQL no permite truncar tablas referenciadas por claves ajenas) |
+
+El Value Mapper compara cada valor con una sola entrada de la tabla: no admite listas como `1,2,3`.
+
+**Comprobación:**
+```sql
+SELECT COUNT(*), MIN(tiempo_key), MAX(tiempo_key) FROM turismo_dw.dim_tiempo;
+-- esperado: 120, 201601, 202512
+```
+
+Un *Table output* solo inserta: ejecutar dos veces sin vaciar la tabla da `Duplicate entry`. Lo resuelve el job (apartado 5.8).
+
+### 5.5 T02_dim_ccaa
+
+**Sale:** 19 filas con las columnas de `dim_ccaa` (la clave `ccaa_key` es autonumérica y no se informa).
+
+| Columna de `dim_ccaa` | Origen |
+|---|---|
+| `codigo_ine`, `codigo_iso`, `nombre` | `ccaa_codigos.csv` |
+| `wikidata_qid`, `latitud`, `longitud` | `wikidata_ccaa.csv` (URI, coordenadas WKT) |
+| `habitantes_ref`, `poblacion_fecha_ref` | Población INE 56944 |
+| `nivel_poblacion` | Derivada de `habitantes_ref` (binning) |
+| `n_bic`, `patrimonio_fecha_extraccion` | `wikidata_bic_por_ccaa.csv` y `_descargas.log.csv` |
+| `nivel_patrimonio` | Derivada de `n_bic` (binning) |
+
+**Flujos que se unen:**
+
+1. **Base.** *Text file input* sobre `ccaa_codigos.csv` (separador `;`, UTF-8). Cada CCAA con su código INE y su nombre.
+2. **Wikidata, identidad.** *Text file input* sobre `wikidata_ccaa.csv` (alternativamente, *REST client* y *JSON input* contra el servicio SPARQL, que cubre el requisito de servicio web; si el servicio no responde se usa el CSV descargado). Se une por código ISO.
+   - *Replace in string* (expresión regular) para dejar solo el QID: se elimina todo hasta la última `/` de la URI.
+   - *Replace in string* para quitar `Point(` y `)` de la coordenada, y *Split Fields* con separador espacio para obtener `longitud` y `latitud` (en WKT va primero la longitud).
+3. **Wikidata, patrimonio.** *Text file input* sobre `wikidata_bic_por_ccaa.csv`, unido por código ISO. La fecha de extracción se toma del registro `data/raw/_descargas.log.csv`.
+4. **Población.** *Text file input* sobre el `.zip` (pestaña *Content*, desplegable *Compression* = Zip). Formato numérico: grupo `.`, decimal `,`.
+   - *Filter rows*: `Sexo`, `Nacionalidad` y `País de Nacimiento` iguales a "Total", y `Periodo` que contenga "1 de enero".
+   - *Select values* (pestaña *Meta-data*): convertir `Periodo` a fecha (formato `d 'de' MMMM 'de' yyyy`, *Date Locale* `es`).
+   - *Sort rows* por CCAA y fecha descendente y *Unique rows* por CCAA: queda la población del 1 de enero más reciente.
+   - Los nombres de CCAA se concilian con la clave INE por el mismo criterio que en T10 (apartado 5.6, punto 4); comprobar con *Preview*.
+5. **Fusión.** *Stream lookup* o *Merge join* para añadir al flujo base la identidad, el patrimonio y la población por código ISO o INE.
+6. **Binning** (*Number range*; el límite inferior es inclusivo y el superior exclusivo):
+
+   | `habitantes_ref` | `nivel_poblacion` |
+   |---|---|
+   | menos de 1.000.000 | Pequeña |
+   | 1.000.000 a 2.000.000 | Mediana |
+   | 2.000.000 a 5.000.000 | Grande |
+   | 5.000.000 o más | Muy grande |
+
+   `nivel_patrimonio` (Alto, Medio, Bajo) divide las 19 CCAA en tres grupos de tamaño parecido por `n_bic`. Los cortes se fijan después de ordenar los 19 valores y se guardan en el paso.
+7. **Contraste (opcional).** *ESRI shapefile reader* sobre `data/raw/cnig/` para comprobar que los nombres y códigos de las 19 CCAA coinciden con los del CNIG.
+8. **Carga.** *Select values* con las columnas de `dim_ccaa` y *Table output* hacia `dim_ccaa`.
+
+**Comprobación:** `SELECT COUNT(*) FROM turismo_dw.dim_ccaa;` debe dar 19, sin nulos en `habitantes_ref`, `n_bic` ni los dos niveles.
+
+### 5.6 T10 a T13: plantillas de ocupación
+
+**Entra:** el CSV del INE de la encuesta (una fila por valor). **Sale:** filas de `fact_ocupacion` solo para origen ESP y EXT.
+
+**Parámetros** (*Transformation properties*, pestaña *Parameters*):
+
+| | `ID_TABLA` | `COD_TIPO` |
+|---|---|---|
+| T10 hoteles (EOH) | `67190` | `HOT` |
+| T11 apartamentos (EOAP) | `67191` | `APT` |
+| T12 campings (EOAC) | `67192` | `CAM` |
+| T13 turismo rural (EOTR) | `67193` | `RUR` |
+
+**Cómo se obtienen T11 a T13:** la EOH tiene 8 columnas (con `Provincias`) y las otras tres 7. T10 se hace primero y se prueba. T11 se obtiene duplicando T10 y quitando el campo `Provincias` del *Text file input* y su condición en el filtro. T12 y T13 son copias de T11 con otros parámetros.
+
+**Estructura de las filas de origen** (verificada sobre el contenido real): `Totales Territoriales` vale siempre `Total Nacional`; las CCAA son las filas con `Comunidades y Ciudades Autónomas` informada (`01 Andalucía`...); `Residencia: Nivel 2` vacío significa total; `Viajeros y pernoctaciones` vale `Viajero` o `Pernoctaciones`; `Periodo` tiene la forma `2026M08`.
+
+**Flujo, paso a paso:**
+
+| # | Paso | Qué se hace |
+|---|---|---|
+| 1 | Text file input (`Leer INE`) | Fichero: `${Internal.Entry.Current.Directory}/../data/raw`, expresión regular `ine_${ID_TABLA}_.*\.csv`. UTF-8, separador `;`, cabecera, *Date locale* `es`. Campo `Total`: Number, decimal `,`, grupo `.`, *Null if* `..` |
+| 2 | Select values | Renombra columnas a nombres simples (`ccaa`, `concepto`, `residencia`, `periodo`, `total`...). El primer nombre de columna puede traer el BOM del fichero: se corrige aquí |
+| 3 | Filter rows (`Solo CCAA`) | Se conservan las filas con `ccaa` no vacío. En la EOH, además, `Provincias` vacío (las provincias son redundantes con su CCAA). Se descarta así `Total Nacional` |
+| 4 | Concilar CCAA | Los dos primeros caracteres de `ccaa` son el `codigo_ine` (*Replace in string* o *Formula* con `LEFT`). Se contrasta con `ccaa_codigos.csv` mediante *Stream lookup*; las que no coincidan se desvían a una salida de errores |
+| 5 | Split Fields (`Año y mes`) | `2026M08` se separa en `anio` y `mes` con el separador `M` (**Splitting**, técnica obligatoria de ingeniería de características). Se pasan a Integer |
+| 6 | Filter rows (`Alcance`) | `anio >= 2016` y `anio <= 2025`. Evita claves ajenas huérfanas y reduce el volumen |
+| 7 | Value Mapper (`Origen`) | `Residentes en España` a `ESP`, `Residentes en el Extranjero` a `EXT`, valor por defecto `TOT` (el total, que va a la rama de control) |
+| 8 | Value Mapper (`Medida`) | `Viajero` a `viajeros`, `Pernoctaciones` a `pernoctaciones` |
+| 9 | Sort rows + Row denormaliser | Se ordena por `codigo_ine, anio, mes, origen`. *Row denormaliser* (clave: `medida`) coloca `viajeros` y `pernoctaciones` en columnas |
+| 10 | Control del total (rama TOT) | *Filter rows* separa `origen = TOT` de ESP y EXT. En la rama ESP y EXT, *Group by* suma por `codigo_ine, anio, mes`. *Merge join* con el total compara total frente a ESP + EXT; las diferencias van a una salida de registro |
+| 11 | Valores ausentes | `..` es NULL. Si falta un componente (ESP o EXT) y el total existe, se calcula por diferencia (total menos el otro) y `calidad_key = 2`. Un hueco aislado en una serie se imputa con la media de los meses vecinos (*Analytic Query*, funciones LAG y LEAD, sobre datos ordenados por CCAA, origen y mes) con `calidad_key = 2`. Los huecos largos se dejan en NULL |
+| 12 | Calculator (`Estancia media`) | `estancia_media = pernoctaciones / viajeros`, con NULL si `viajeros` es 0 o nulo |
+| 13 | Number range (`Binning`) | `estancia_media` a `nivel_key`: menos de 2 a 1 (Corta), de 2 a 4 a 2 (Media), más de 4 a 3 (Larga), sin dato a 4 (Sin dato). Cortes iniciales, revisables con la distribución real |
+| 14 | Outliers | *Group by* por `codigo_ine, tipo, origen` calcula media y desviación de `pernoctaciones`; *Merge join* o *Stream lookup* lo une a cada fila; *Calculator* obtiene el z-score `(x - media) / desviación`. Si `|z| > 3` (umbral inicial) la fila se marca como atípica. La marca se combina con la imputación para fijar `calidad_key`: 1 original, 2 imputado, 3 atípico, 4 imputado y atípico. **No se borra ninguna fila** |
+| 15 | Claves | *Constant* o `COD_TIPO` como campo; `tiempo_key = anio*100 + mes`; *Database lookup* en `dim_ccaa` (por `codigo_ine`), `dim_tipo_alojamiento` (por `codigo`) y `dim_origen` (por `codigo`). Las filas sin clave se desvían a una salida de errores |
+| 16 | Unique rows + Table output | Se eliminan duplicados del grano (`tiempo_key, ccaa_key, tipo_key, origen_key`) y se carga en `fact_ocupacion` (*Commit size* 1000, sin *Truncate table*) |
+
+**Comprobación tras cada carga:**
+```sql
+SELECT t.codigo, COUNT(*) AS filas, MIN(f.tiempo_key), MAX(f.tiempo_key)
+FROM turismo_dw.fact_ocupacion f
+JOIN turismo_dw.dim_tipo_alojamiento t ON t.tipo_key = f.tipo_key
+GROUP BY t.codigo;
+```
+El máximo no debe superar `202512` ni el mínimo bajar de `201601`.
+
+### 5.7 T40_validacion
+
+Un *Table input* por control, que devuelve el número de filas incorrectas. Después, *Filter rows* (`n > 0`) y *Abort* detienen el job si algún control falla:
+
+| Control | Consulta |
+|---|---|
+| Sin claves huérfanas | filas de `fact_ocupacion` sin fila en alguna dimensión |
+| Sin negativos | `viajeros < 0` o `pernoctaciones < 0` |
+| Coherencia | `pernoctaciones < viajeros` |
+| Estancia razonable | `estancia_media` fuera de un rango (por ejemplo, de 1 a 30 días) |
+| Grano único | duplicados de `(tiempo_key, ccaa_key, tipo_key, origen_key)` |
+| Volumen | filas cargadas frente a las filas de origen filtradas (se registra) |
+| Total = ESP + EXT | resultado de la rama de control de T10 a T13 |
+
+### 5.8 J00_carga.kjb
+
+```
+Start → SQL (limpieza) → T01 → T02 → T10 → T11 → T12 → T13 → T40 → Success
+```
+
+- **SQL** (entrada de job, conexión `turismo_dw`): `DELETE FROM fact_ocupacion; DELETE FROM dim_ccaa; DELETE FROM dim_tiempo;` (primero los hechos y después las dimensiones, por las claves ajenas). Así el job se puede repetir.
+- **Transformation** (una entrada por `.ktr`; en T10 a T13 se rellenan los parámetros `ID_TABLA` y `COD_TIPO` de la tabla del apartado 5.6).
+- Cada salto del job se marca *Follow when result is true*: si algo falla, no continúa.
+
+Ejecución:
+
+```bash
+./kitchen.sh -file=kettle/J00_carga.kjb -level:Basic          # Linux
+data-integration\Kitchen.bat /file:kettle\J00_carga.kjb /level:Basic   # Windows
+```
+
+### 5.9 Cumplimiento de los requisitos del apartado
 
 | Requisito | Cómo se cubre |
 |---|---|
-| Conectar con fuentes diversas (BD, ficheros, servicios web) | CSV por URL (INE), REST (Wikidata), Shapefile (CNIG), MySQL (lookups y validación) |
-| Fusión de varias fuentes | Stream lookup y Merge join: CCAA + Wikidata; ocupación + población |
-| Seleccionar campos, filtrar filas, ordenar | Select values, Filter rows, Sort rows |
-| Corregir errores | Trim, Replace in string y normalización de nombres de CCAA |
-| Gestionar valores que faltan | `..` → NULL; componente ausente recuperado como total − otro componente; hueco aislado imputado con la media de los meses vecinos (`calidad_key = 2`); huecos largos se mantienen como NULL |
-| Eliminar o minimizar la redundancia | Eliminación de totales y provincias, Unique rows y claves naturales únicas |
-| Ingeniería de características | **Splitting** (periodo → año y mes), variable derivada `estancia_media`, `temporada`, y **Binning** (`nivel_estancia`, `nivel_poblacion`, `nivel_patrimonio`) |
-| Enriquecer datos | Wikidata (QID, coordenadas, BIC), shapefile del CNIG y población |
-| Detectar y tratar outliers | Media y desviación por CCAA × tipo (Group by) y z-score (Calculator); se marca el registro (`calidad_key` = 3 o 4) sin eliminarlo |
-| Validar datos | Data Validator y comprobaciones SQL en T40 |
-| Flujo de trabajo completo | Job `J00_carga.kjb` |
+| Conectar con fuentes diversas | CSV y ZIP (INE), CSV de Wikidata (y REST client opcional contra SPARQL), shapefile (CNIG), MySQL (lookups y validación) |
+| Fusión de varias fuentes | *Stream lookup* y *Merge join*: códigos, Wikidata y población (T02); ocupación y control de totales (T10 a T13) |
+| Seleccionar, filtrar, ordenar | *Select values*, *Filter rows*, *Sort rows* |
+| Corregir errores | Eliminación del BOM, conciliación de nombres de CCAA con su código, `..` convertido en NULL, tipos y formatos numéricos |
+| Valores que faltan | Componente ausente recuperado por diferencia; hueco aislado imputado con la media de los vecinos; huecos largos en NULL; siempre marcado |
+| Reducir redundancia | Se descartan `Total Nacional`, las provincias y el total de residencia (se usa solo como control); *Unique rows* y claves únicas |
+| Ingeniería de características | **Splitting** (periodo a año y mes), variable derivada `estancia_media`, `temporada` y **Binning** (`nivel_estancia`, `nivel_poblacion`, `nivel_patrimonio`) |
+| Enriquecer | Wikidata (QID, coordenadas, BIC), población INE y shapefile del CNIG |
+| Outliers | z-score por CCAA, tipo y origen; se marca el registro y se conserva |
+| Validar | T40 y la rama de control de T10 a T13 |
+| Flujo de trabajo completo | `J00_carga.kjb` |
 
-**Tratamiento de outliers.** Los meses de 2020 y 2021 son atípicos por el impacto de la pandemia, pero son datos reales. Se marcan y se conservan.
+### 5.10 Reglas de PDI que condicionan el diseño
 
-**Validaciones (T40):**
-- Número de filas cargadas frente al origen.
-- Coherencia: total del INE = residentes en España + residentes en el extranjero.
-- Ausencia de claves huérfanas.
-- Valores no negativos.
-- `pernoctaciones ≥ viajeros`.
-- `estancia_media` dentro de un rango razonable.
-
-> Si alguna tarea resulta inviable en Pentaho, se implementará un script de apoyo en Python justificando la decisión en la memoria.
+- Los pasos de una transformación **se ejecutan en paralelo** y sin orden garantizado; el orden lo impone el job.
+- Todas las filas que llegan a un mismo paso deben tener la misma estructura (nombres, tipos y orden de campos).
+- Una cadena vacía se trata como NULL por defecto.
+- *Row denormaliser*, *Unique rows* y *Merge join* necesitan datos **ordenados** por las claves.
+- *Text file input* lee los campos **por posición**, por eso la EOH (8 columnas) y el resto (7) tienen transformaciones distintas.
+- Un único *Table output* por tabla de destino.
 
 ---
 
