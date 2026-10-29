@@ -255,6 +255,43 @@ Diagrama editable: [`docs/diseno_logico.drawio`](docs/diseno_logico.drawio) (dra
 | `dim_nivel_estancia` | nivel | Corta, Media, Larga y Sin dato, con sus rangos en días |
 | `dim_calidad_dato` | combinación de marcas | Dato original, Dato imputado, Valor atípico, Imputado y atípico |
 
+### Las dimensiones «nivel de estancia» y «calidad del dato»
+
+Estas dos dimensiones no vienen del INE: las crea el ETL para describir cada fila de la tabla de hechos. Es posible que causen confundisión, así que conviene explicarlas detenidamente:
+
+| | Nivel de estancia | Calidad del dato |
+|---|---|---|
+| Pregunta que responde | ¿Cómo de larga es la estancia media de esa fila? | ¿Cómo se ha obtenido ese valor? |
+| Se calcula a partir de | `estancia_media` (pernoctaciones / viajeros) | Lo que hizo el ETL con el dato: nada, rellenarlo o marcarlo como raro |
+| Valores | Corta, Media, Larga, Sin dato | Dato original, Dato imputado, Valor atípico, Imputado y atípico |
+| Para qué sirve | Agrupar y comparar (por ejemplo, ¿dónde predominan las estancias cortas?) | Saber qué cifras son originales y poder excluir las que no lo son |
+
+**Nivel de estancia (`dim_nivel_estancia`).** Convierte la estancia media, que es un número, en una etiqueta. Los límites iniciales son: **Corta** (menos de 2 días), **Media** (de 2 a 4) y **Larga** (más de 4). Si la fila no tiene estancia media (por ejemplo, porque no hay viajeros), recibe **Sin dato**, que es el valor por defecto de la clave. Ejemplo: una fila con 1.000 viajeros y 2.500 pernoctaciones tiene una estancia media de 2,5 días, así que su nivel es *Media*. Los límites se guardan una sola vez en la dimensión (`min_dias`, `max_dias`) y se ajustarán cuando se vea la distribución real.
+
+**Calidad del dato (`dim_calidad_dato`).** Registra qué tratamiento ha recibido el valor durante la limpieza. Nunca se borra nada: se marca.
+
+| Valor | Cuándo se asigna |
+|---|---|
+| Dato original | El valor es el que publicó el INE, sin cambios |
+| Dato imputado | Faltaba y lo ha calculado el ETL: o bien por diferencia (total − el otro componente), o bien como la media de los meses vecinos |
+| Valor atípico | Es el que publicó el INE, pero se aleja mucho de lo normal en esa CCAA y tipo de alojamiento (se detecta con la media y la desviación). No es un error: por ejemplo, los meses de 2020 y 2021 por la pandemia son datos reales |
+| Imputado y atípico | Cumple las dos condiciones a la vez |
+
+Hay cuatro filas porque las dos marcas (imputado, atípico) se pueden combinar, y así la tabla de hechos guarda una sola clave en lugar de dos columnas de «sí/no». Para analizar solo con datos originales basta con filtrar por esta dimensión:
+
+```sql
+-- Pernoctaciones por año y CCAA sin contar valores imputados
+SELECT t.anio, c.nombre AS ccaa, SUM(f.pernoctaciones) AS pernoctaciones
+FROM fact_ocupacion f
+JOIN dim_tiempo t       ON t.tiempo_key   = f.tiempo_key
+JOIN dim_ccaa c         ON c.ccaa_key     = f.ccaa_key
+JOIN dim_calidad_dato q ON q.calidad_key  = f.calidad_key
+WHERE q.dato_imputado = 0
+GROUP BY t.anio, c.nombre;
+```
+
+Ambas se asignan en el ETL antes de cargar la fila (`nivel_key` con *Number range* y `calidad_key` según el control, la imputación y la detección de atípicos), por lo que no cambian después.
+
 ### Diseño físico
 Script de creación: [`sql/01_crear_almacen_turismo.sql`](sql/01_crear_almacen_turismo.sql). Modelo de MySQL Workbench (obtenido por ingeniería inversa del esquema creado): [`docs/almacen_turismo.mwb`](docs/almacen_turismo.mwb). Diagrama EER exportado: `docs/almacen_turismo_fisico.png` (también en `.svg` y `.pdf`).
 
