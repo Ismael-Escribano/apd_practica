@@ -49,7 +49,7 @@
         <mxCell id="preguntas" value="&lt;b&gt;Preguntas de investigación&lt;/b&gt;&lt;br&gt;P1: Territorio × Tipo × Tiempo → distribución de la demanda&lt;br&gt;P2: Origen × Tiempo × Territorio → composición residentes/extranjeros&lt;br&gt;P3: Territorio (patrimonio) × hecho → patrimonio frente a demanda" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="880" y="290" width="280" height="140" as="geometry"/>
         </mxCell>
-        <mxCell id="nota" value="El &lt;b&gt;hecho&lt;/b&gt; recoge lo que se mide cada mes. Las &lt;b&gt;dimensiones&lt;/b&gt; describen cuándo, dónde, qué tipo, de quién y con qué calidad. La población (anual) y el patrimonio (instantánea) describen al territorio, no al mes, y por eso son atributos de Territorio." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+        <mxCell id="nota" value="El &lt;b&gt;hecho&lt;/b&gt; recoge lo que se mide cada mes. Las &lt;b&gt;dimensiones&lt;/b&gt; describen cuándo, dónde, qué tipo, de quién y con qué calidad. La población (una cifra por CCAA) y el patrimonio (un recuento de Wikidata) describen al territorio, no al mes, y por eso son atributos de Territorio." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="40" y="290" width="280" height="140" as="geometry"/>
         </mxCell>
       </root>
