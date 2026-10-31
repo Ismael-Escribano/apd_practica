@@ -448,7 +448,7 @@ flowchart LR
 | Fichero | Qué carga | Estado |
 |---|---|---|
 | `T01_dim_tiempo.ktr` | `dim_tiempo` (120 meses, 2016-2025) | Hecho y verificado |
-| `T02_dim_ccaa.ktr` | `dim_ccaa` (19 filas) | Pendiente |
+| `T02_dim_ccaa.ktr` | `dim_ccaa` (19 filas) | Hecho y verificado |
 | `T10_eoh.ktr` | `fact_ocupacion`, hoteles | Pendiente |
 | `T11_eoap.ktr`, `T12_eoac.ktr`, `T13_eotr.ktr` | `fact_ocupacion`, apartamentos, campings y turismo rural | Pendiente |
 | `T40_validacion.ktr` | Controles sobre el almacén cargado | Pendiente |
@@ -488,44 +488,113 @@ Un *Table output* solo inserta: ejecutar dos veces sin vaciar la tabla da `Dupli
 
 ### 5.5 T02_dim_ccaa
 
-**Sale:** 19 filas con las columnas de `dim_ccaa` (la clave `ccaa_key` es autonumérica y no se informa).
+**Sale:** 19 filas, una por CCAA, con las columnas de `dim_ccaa` salvo `ccaa_key`, que es autonumérica y no se informa.
+
+**Idea:** `ccaa_codigos.csv` es la tabla base de 19 filas. Las otras tres fuentes (Wikidata, patrimonio y población) se le pegan por una clave común con un paso *Stream lookup*. Después se crean dos etiquetas con *Number range* y se carga.
 
 | Columna de `dim_ccaa` | Origen |
 |---|---|
 | `codigo_ine`, `codigo_iso`, `nombre` | `ccaa_codigos.csv` |
-| `wikidata_qid`, `latitud`, `longitud` | `wikidata_ccaa.csv` (URI, coordenadas WKT) |
-| `habitantes_ref`, `poblacion_fecha_ref` | Población INE 56944 |
-| `nivel_poblacion` | Derivada de `habitantes_ref` (binning) |
-| `n_bic`, `patrimonio_fecha_extraccion` | `wikidata_bic_por_ccaa.csv` y `_descargas.log.csv` |
-| `nivel_patrimonio` | Derivada de `n_bic` (binning) |
+| `wikidata_qid`, `latitud`, `longitud` | `wikidata_ccaa.csv` |
+| `habitantes_ref`, `poblacion_fecha_ref` | Población INE 56944 (1 de enero más reciente) |
+| `n_bic` | `wikidata_bic_por_ccaa.csv` |
+| `nivel_poblacion`, `nivel_patrimonio` | Derivadas de `habitantes_ref` y `n_bic` (**Binning**) |
 
-**Flujos que se unen:**
+![Transformación T02_dim_ccaa en Spoon](docs/T02_dim_ccaa.png)
 
-1. **Base.** *Text file input* sobre `ccaa_codigos.csv` (separador `;`, UTF-8). Cada CCAA con su código INE y su nombre.
-2. **Wikidata, identidad.** *Text file input* sobre `wikidata_ccaa.csv` (alternativamente, *REST client* y *JSON input* contra el servicio SPARQL, que cubre el requisito de servicio web; si el servicio no responde se usa el CSV descargado). Se une por código ISO.
-   - *Replace in string* (expresión regular) para dejar solo el QID: se elimina todo hasta la última `/` de la URI.
-   - *Replace in string* para quitar `Point(` y `)` de la coordenada, y *Split Fields* con separador espacio para obtener `longitud` y `latitud` (en WKT va primero la longitud).
-3. **Wikidata, patrimonio.** *Text file input* sobre `wikidata_bic_por_ccaa.csv`, unido por código ISO. La fecha de extracción se toma del registro `data/raw/_descargas.log.csv`.
-4. **Población.** *Text file input* sobre el `.zip` (pestaña *Content*, desplegable *Compression* = Zip). Formato numérico: grupo `.`, decimal `,`.
-   - *Filter rows*: `Sexo`, `Nacionalidad` y `País de Nacimiento` iguales a "Total", y `Periodo` que contenga "1 de enero".
-   - *Select values* (pestaña *Meta-data*): convertir `Periodo` a fecha (formato `d 'de' MMMM 'de' yyyy`, *Date Locale* `es`).
-   - *Sort rows* por CCAA y fecha descendente y *Unique rows* por CCAA: queda la población del 1 de enero más reciente.
-   - Los nombres de CCAA se concilian con la clave INE por el mismo criterio que en T10 (apartado 5.6, punto 4); comprobar con *Preview*.
-5. **Fusión.** *Stream lookup* o *Merge join* para añadir al flujo base la identidad, el patrimonio y la población por código ISO o INE.
-6. **Binning** (*Number range*; el límite inferior es inclusivo y el superior exclusivo):
+**Cómo funciona un *Stream lookup*.** Recibe dos flujos: el **principal** (aquí, el que viene de `ccaa_codigos`) y uno de **consulta**, que se elige en *Lookup step*. Para cada fila del principal busca en el de consulta la fila con la misma clave y le añade las columnas indicadas en *Specify the fields to retrieve*. Si la clave no se encuentra, la fila no se pierde: las columnas añadidas quedan a NULL. Por eso, cuando una columna sale vacía, lo primero que hay que revisar es la clave.
 
-   | `habitantes_ref` | `nivel_poblacion` |
-   |---|---|
-   | menos de 1.000.000 | Pequeña |
-   | 1.000.000 a 2.000.000 | Mediana |
-   | 2.000.000 a 5.000.000 | Grande |
-   | 5.000.000 o más | Muy grande |
+**Rutas.** Todos los ficheros se leen con rutas relativas, por ejemplo `${Internal.Entry.Current.Directory}/../data/raw/ccaa_codigos.csv`, de modo que el repositorio funciona en cualquier ordenador. El botón *Show filename(s)...* comprueba que la ruta se resuelve.
 
-   `nivel_patrimonio` (Alto, Medio, Bajo) divide las 19 CCAA en tres grupos de tamaño parecido por `n_bic`. Los cortes se fijan después de ordenar los 19 valores y se guardan en el paso.
-7. **Contraste (opcional).** *ESRI shapefile reader* sobre `data/raw/cnig/` para comprobar que los nombres y códigos de las 19 CCAA coinciden con los del CNIG.
-8. **Carga.** *Select values* con las columnas de `dim_ccaa` y *Table output* hacia `dim_ccaa`.
+#### Pasos
 
-**Comprobación:** `SELECT COUNT(*) FROM turismo_dw.dim_ccaa;` debe dar 19, sin nulos en `habitantes_ref`, `n_bic` ni los dos niveles.
+| # | Paso (nombre) | Configuración |
+|---|---|---|
+| 1 | Text file input (`Leer ccaa_codigos`) | Separador `;`, UTF-8. `codigo_ine` debe ser **String** de longitud 2 y sin formato numérico: con formato `#` el código `01` se convertiría en `1` y no coincidiría con el prefijo `01 Andalucía` de las tablas del INE |
+| 2 | Text file input (`Leer wikidata_ccaa`) | Separador `,`, UTF-8. Campos: URI de Wikidata, etiqueta, `iso` y `coord` (formato WKT `Point(longitud latitud)`) |
+| 3 | Replace in string (`Limpiar QID y coordenada`) | Dos reemplazos con expresión regular: de la URI se conserva solo el QID (se elimina todo hasta la última `/`) y de la coordenada se quitan `Point(` y `)`, de modo que queda `longitud latitud` |
+| 4 | Split Fields (`Separar longitud y latitud`) | Separador: un espacio. Campos `longitud` y `latitud`, tipo Number, **símbolo decimal `.`** (el WKT usa punto; si se deja vacío PDI usa el del sistema, que en español es la coma) |
+| 5 | Text file input (`Leer wikidata_bic_por_ccaa`) | Separador `,`, **codificación UTF-8 indicada explícitamente** (si no, en Windows se usa la del sistema). Campos `iso`, etiqueta y `n_bic` (Integer) |
+| 6 | Text file input (`Leer población`) | Fichero `data/raw/ine_56944_*.zip`, pestaña *Content*, *Compression* = Zip. Separador `;`, UTF-8, decimal `,` y agrupación `.`. El primer campo se llama `Sexo` (el nombre lo pone el usuario en *Fields*; la cabecera del fichero se salta) |
+| 7 | Filter rows (`Solo totales, 1 de enero`) | `Sexo = Total` y `Nacionalidad = Total` y `País_de_Nacimiento = Total` y `Periodo CONTAINS "1 de enero"`. Reduce 1.015.560 filas a 480 |
+| 8 | Select values (`Periodo a fecha, Total a entero`) | Solo pestaña *Meta-data*: `Periodo` pasa a tipo Date con formato `d 'de' MMMM 'de' yyyy` y *Date Locale* `es`, y se renombra `periodo_formateado`; `Total` pasa a Integer y se renombra `habitantes_ref` |
+| 9 | Replace in string (`Código INE de la población`) | Campo de entrada `Comunidades_y_ciudades_autónomas` (valores como `01 Andalucía`, `04 Balears, Illes`), campo de salida **`codigo_ine_pob`**, expresión regular `^(\d{2}).*`, reemplazo `$1`. Los dos primeros caracteres son el código INE |
+| 10 | Sort rows (`Ordenar CCAA y fechas desc`) | Por `codigo_ine_pob` ascendente y `periodo_formateado` **descendente** |
+| 11 | Unique rows (`Última población por CCAA`) | Compara por `codigo_ine_pob`. Al venir ordenado por fecha descendente, conserva la fila del 1 de enero **más reciente** de cada CCAA |
+| 12 | Stream lookup (`Stream lookup (Wikidata)`) | *Lookup step*: `Separar longitud y latitud`. Clave: `codigo_iso` = `iso`. Recupera `qid`, `longitud` y `latitud` |
+| 13 | Stream lookup (`Stream lookup (BIC)`) | *Lookup step*: `Leer wikidata_bic_por_ccaa`. Clave: `codigo_iso` = `iso`. Recupera `n_bic` |
+| 14 | Stream lookup (`Stream lookup (población)`) | *Lookup step*: `Última población por CCAA`. Clave: **`codigo_ine`** = `codigo_ine_pob`. Recupera `habitantes_ref` y `periodo_formateado`. La clave es el código y **no el nombre**: `nombre_ine` (`Balears, Illes`) no coincide con el nombre del fichero de población (`04 Balears, Illes`) |
+| 15 | Number range (`Nivel de población`) | Campo `habitantes_ref`, salida `nivel_poblacion` (tabla siguiente) |
+| 16 | Number range (`Nivel de patrimonio`) | Campo `n_bic`, salida `nivel_patrimonio` (tabla siguiente) |
+| 17 | Select values (`Columnas dim_ccaa`) | Pestaña *Select & Alter*, solo estos 11 campos: `codigo_ine, codigo_iso, nombre, wikidata_qid` (renombrando `qid`), `latitud, longitud, habitantes_ref, poblacion_fecha_ref` (renombrando `periodo_formateado`), `nivel_poblacion, n_bic, nivel_patrimonio`. *Table output* inserta por **nombre de campo**: lo que falte queda a NULL y lo que sobre da error |
+| 18 | Table output (`Carga dim_ccaa`) | Conexión `turismo_dw`, tabla `dim_ccaa`, *Commit size* 100, sin *Truncate table* y sin *Specify database fields* |
+
+**Binning** (**Number range**). El límite inferior es inclusivo y el superior exclusivo; un límite vacío significa «sin límite».
+
+| `nivel_poblacion` (`habitantes_ref`) | Inferior | Superior |
+|---|---|---|
+| Pequeña | (vacío) | 1000000 |
+| Mediana | 1000000 | 2000000 |
+| Grande | 2000000 | 5000000 |
+| Muy grande | 5000000 | (vacío) |
+
+| `nivel_patrimonio` (`n_bic`) | Inferior | Superior | CCAA |
+|---|---|---|---|
+| Bajo | (vacío) | 240 | 6 |
+| Medio | 240 | 600 | 6 |
+| Alto | 600 | (vacío) | 7 |
+
+Los cortes de patrimonio reparten las 19 CCAA en 6, 6 y 7, un tercio cada grupo.
+
+#### Verificar la carga
+
+Previsualiza `Columnas dim_ccaa` antes de ejecutar: deben salir 19 filas. Tras ejecutar, en MySQL Workbench:
+
+```sql
+-- 1. Filas y nulos: esperado 19, 0, 0, 0, 0
+SELECT COUNT(*),
+       SUM(n_bic IS NULL),
+       SUM(habitantes_ref IS NULL),
+       SUM(nivel_poblacion IS NULL),
+       SUM(nivel_patrimonio IS NULL)
+FROM turismo_dw.dim_ccaa;
+
+-- 2. Contenido completo
+SELECT codigo_ine, nombre, habitantes_ref, nivel_poblacion, n_bic, nivel_patrimonio
+FROM turismo_dw.dim_ccaa
+ORDER BY codigo_ine;
+
+-- 3. Reparto de las etiquetas: patrimonio esperado Bajo 6, Medio 6, Alto 7
+SELECT nivel_patrimonio, COUNT(*) FROM turismo_dw.dim_ccaa GROUP BY nivel_patrimonio;
+SELECT nivel_poblacion,  COUNT(*) FROM turismo_dw.dim_ccaa GROUP BY nivel_poblacion;
+```
+
+Casos de control (población a 1 de enero de 2025, `n_bic` de Wikidata):
+
+| CCAA | `habitantes_ref` | `n_bic` | `nivel_poblacion` | `nivel_patrimonio` |
+|---|---|---|---|---|
+| Andalucía | 8.676.713 | 2448 | Muy grande | Alto |
+| Comunidad de Madrid | 7.113.886 | 375 | Muy grande | Medio |
+| Principado de Asturias | 1.015.128 | 236 | Mediana | Bajo |
+| Cantabria | 593.623 | 248 | Pequeña | Medio |
+
+Asturias comprueba el corte de 1.000.000 y Cantabria el de `n_bic` en 240.
+
+#### Vaciar las tablas para repetir una carga
+
+Un *Table output* solo inserta: ejecutar dos veces sin vaciar da `Duplicate entry`. Hay que borrar en este orden, primero los hechos y después las dimensiones, porque los hechos referencian a las dimensiones por claves ajenas:
+
+```sql
+DELETE FROM turismo_dw.fact_ocupacion WHERE tiempo_key > 0;
+DELETE FROM turismo_dw.dim_ccaa       WHERE ccaa_key   > 0;
+DELETE FROM turismo_dw.dim_tiempo     WHERE tiempo_key > 0;
+```
+
+- El `WHERE` sobre la clave evita el error 1175 del modo seguro de MySQL Workbench (*You are using safe update mode...*). La alternativa es desactivar *Safe Updates* en *Edit → Preferences → SQL Editor* y reconectar.
+- No se usa `TRUNCATE`: MySQL no permite truncar tablas referenciadas por claves ajenas.
+- Si se borra una dimensión antes de vaciar los hechos, MySQL rechaza el borrado (error 1451).
+- `dim_tipo_alojamiento`, `dim_origen`, `dim_nivel_estancia` y `dim_calidad_dato` no se vacían: las carga el script SQL.
+- El job `J00_carga.kjb` ejecuta estos borrados antes de cargar, por lo que no hay que hacerlos a mano.
 
 ### 5.6 T10 a T13: plantillas de ocupación
 
