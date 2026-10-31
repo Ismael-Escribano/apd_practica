@@ -778,22 +778,7 @@
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name/>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name>C:\Users\Jose\OneDrive\Documentos\GitHub\apd_practica\data\raw\ccaa_codigos.csv</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name/>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name/>
+      <name>${Internal.Entry.Current.Directory}/../data/raw/ccaa_codigos.csv</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -943,12 +928,7 @@
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>C:\Users\Jose\OneDrive\Documentos\GitHub\apd_practica\data\raw\ine_56944_ecp_poblacion_ccaa_sexo_nacionalidad_nacimiento.zip</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name/>
+      <name>${Internal.Entry.Current.Directory}/../data/raw/ine_56944_ecp_poblacion_ccaa_sexo_nacionalidad_nacimiento.zip</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -1128,7 +1108,7 @@
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>C:\Users\Jose\OneDrive\Documentos\GitHub\apd_practica\data\raw\wikidata_bic_por_ccaa.csv</name>
+      <name>${Internal.Entry.Current.Directory}/../data/raw/wikidata_bic_por_ccaa.csv</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -1263,7 +1243,12 @@
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>C:\Users\Jose\OneDrive\Documentos\GitHub\apd_practica\data\raw\wikidata_ccaa.csv</name>
+      <name>${Internal.Entry.Current.Directory}/../data/raw/wikidata_ccaa.csv</name>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+      <name/>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
