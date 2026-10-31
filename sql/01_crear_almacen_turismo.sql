@@ -46,7 +46,6 @@ CREATE TABLE dim_ccaa (
   nivel_poblacion              VARCHAR(10)  NULL     COMMENT 'Muy grande / Grande / Mediana / Pequeña',
   n_bic                        INT UNSIGNED NULL     COMMENT 'Bienes de Interés Cultural en Wikidata',
   nivel_patrimonio             VARCHAR(5)   NULL     COMMENT 'Alto / Medio / Bajo',
-  patrimonio_fecha_extraccion  DATE         NULL,
   PRIMARY KEY (ccaa_key),
   UNIQUE KEY uq_ccaa_codigo_ine (codigo_ine)
 ) ENGINE=InnoDB;
