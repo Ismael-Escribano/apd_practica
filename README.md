@@ -449,7 +449,7 @@ flowchart LR
 |---|---|---|
 | `T01_dim_tiempo.ktr` | `dim_tiempo` (120 meses, 2016-2025) | Hecho y verificado |
 | `T02_dim_ccaa.ktr` | `dim_ccaa` (19 filas) | Hecho y verificado |
-| `T10_eoh.ktr` | `fact_ocupacion`, hoteles | Pendiente |
+| `T10_eoh.ktr` | `fact_ocupacion`, hoteles | Hecho y verificado |
 | `T11_eoap.ktr`, `T12_eoac.ktr`, `T13_eotr.ktr` | `fact_ocupacion`, apartamentos, campings y turismo rural | Pendiente |
 | `T40_validacion.ktr` | Controles sobre el almacén cargado | Pendiente |
 | `J00_carga.kjb` | Orquesta todo | Pendiente |
@@ -596,52 +596,155 @@ DELETE FROM turismo_dw.dim_tiempo     WHERE tiempo_key > 0;
 - `dim_tipo_alojamiento`, `dim_origen`, `dim_nivel_estancia` y `dim_calidad_dato` no se vacían: las carga el script SQL.
 - El job `J00_carga.kjb` ejecuta estos borrados antes de cargar, por lo que no hay que hacerlos a mano.
 
-### 5.6 T10 a T13: plantillas de ocupación
+### 5.6 T10 a T13: ocupación (tabla de hechos)
 
-**Entra:** el CSV del INE de la encuesta (una fila por valor). **Sale:** filas de `fact_ocupacion` solo para origen ESP y EXT.
+#### Qué hacen y por qué
 
-**Parámetros** (*Transformation properties*, pestaña *Parameters*):
+El INE publica cada encuesta con **una fila por valor**: una CCAA, un mes, un origen del viajero y un concepto (viajeros o pernoctaciones). La tabla `fact_ocupacion` necesita otra forma: **una fila por mes, CCAA y origen**, con `viajeros` y `pernoctaciones` en columnas, más las claves de las dimensiones, la estancia media y la calidad del dato. Estas transformaciones realizan ese cambio.
 
-| | `ID_TABLA` | `COD_TIPO` |
+Las cuatro encuestas tienen la misma estructura, así que se usa un único diseño con dos parámetros:
+
+| Transformación | Encuesta | `ID_TABLA` | `COD_TIPO` |
+|---|---|---|---|
+| `T10_eoh.ktr` | Hoteles (EOH) | `67190` | `HOT` |
+| `T11_eoap.ktr` | Apartamentos turísticos (EOAP) | `67191` | `APT` |
+| `T12_eoac.ktr` | Campings (EOAC) | `67192` | `CAM` |
+| `T13_eotr.ktr` | Turismo rural (EOTR) | `67193` | `RUR` |
+
+`ID_TABLA` selecciona el fichero (`ine_<ID_TABLA>_*.csv`). `COD_TIPO` es el código de `dim_tipo_alojamiento` que se asigna a todas las filas, porque el CSV no indica el tipo de alojamiento: cada encuesta trata uno solo.
+
+**Diferencia entre T10 y el resto.** La EOH trae una columna más (`Provincias`) y las otras tres no. *Text file input* lee los campos por posición, así que T11 se obtiene duplicando T10, quitando el campo `Provincias` del paso de lectura y su condición en `Solo CCAA`. T12 y T13 son copias de T11 con otros parámetros.
+
+![Transformación T10_eoh en Spoon](docs/T10_eoh.png)
+
+**Cómo cambia el número de filas** (EOH):
+
+| Paso | Filas | Explicación |
 |---|---|---|
-| T10 hoteles (EOH) | `67190` | `HOT` |
-| T11 apartamentos (EOAP) | `67191` | `APT` |
-| T12 campings (EOAC) | `67192` | `CAM` |
-| T13 turismo rural (EOTR) | `67193` | `RUR` |
+| Leídas del CSV | 139.860 | 70 territorios × 2 conceptos × 3 residencias × 333 meses |
+| `Solo CCAA` | 37.962 | 19 CCAA × 333 meses × 6 combinaciones de concepto y residencia |
+| `Alcance 2016-2025` | 13.680 | 19 × 120 meses × 6 |
+| `Una fila por CCAA y mes` | 2.280 | 19 × 120 |
+| `Una fila por origen` | 4.560 | 2.280 × 2 (ESP y EXT) |
+| Cargadas en `fact_ocupacion` | 4.560 | |
 
-**Cómo se obtienen T11 a T13:** la EOH tiene 8 columnas (con `Provincias`) y las otras tres 7. T10 se hace primero y se prueba. T11 se obtiene duplicando T10 y quitando el campo `Provincias` del *Text file input* y su condición en el filtro. T12 y T13 son copias de T11 con otros parámetros.
+**Estructura del fichero de origen.** `Totales Territoriales` vale siempre `Total Nacional`. Las CCAA son las filas con `Comunidades y Ciudades Autónomas` informada (`01 Andalucía`) y, en la EOH, `Provincias` vacía. `Residencia: Nivel 2` vacío significa «total»; si no, vale `Residentes en España` o `Residentes en el Extranjero`. El concepto es `Viajero` o `Pernoctaciones`, y el periodo tiene la forma `2026M08`.
 
-**Estructura de las filas de origen** (verificada sobre el contenido real): `Totales Territoriales` vale siempre `Total Nacional`; las CCAA son las filas con `Comunidades y Ciudades Autónomas` informada (`01 Andalucía`...); `Residencia: Nivel 2` vacío significa total; `Viajeros y pernoctaciones` vale `Viajero` o `Pernoctaciones`; `Periodo` tiene la forma `2026M08`.
+#### Fase 1: leer y quedarse con las CCAA
 
-**Flujo, paso a paso:**
+| Paso | Configuración y motivo |
+|---|---|
+| `Leer INE` (Text file input) | Fichero: `${Internal.Entry.Current.Directory}/../data/raw`, con la expresión regular `ine_${ID_TABLA}_.*\.csv`. UTF-8, separador `;`, una línea de cabecera. Los 8 campos se nombran a mano (`Totales_Territoriales`, `Comunidades_y_Ciudades_Autónomas`, `Provincias`, `Viajeros_y_pernoctaciones`, `Residencia:_Nivel_1`, `Residencia:_Nivel_2`, `Periodo`, `Total`) y son String; se leen por posición, de modo que no se arrastra la marca BOM de la cabecera. `Total` se lee como **texto**: el INE marca los datos ausentes con `.` y con `..`, y un campo numérico fallaría al convertirlos |
+| `Solo CCAA` (Filter rows) | `Comunidades_y_Ciudades_Autónomas` no es nulo **y** `Provincias` es nulo. Descarta `Total Nacional` y las provincias, que son redundantes con su CCAA |
 
-| # | Paso | Qué se hace |
+#### Fase 2: preparar los campos
+
+| Paso | Configuración y motivo |
+|---|---|
+| `Año y mes` (Split Fields) | Campo `Periodo` (`2026M09`), separador `M`, nuevos campos `anio` y `mes` de tipo Integer. Es el **Splitting**: crear nuevas características a partir de un campo compuesto |
+| `Alcance 2016-2025` (Filter rows) | `anio >= 2016` y `anio <= 2025`. Son diez años naturales completos y coinciden con los 120 meses de `dim_tiempo`; sin este filtro, los años anteriores darían claves ajenas inexistentes |
+| `Nulos del INE` (Replace in string) | Campo `Total`, con expresión regular `^\.+$` reemplazada por una cadena vacía (*Set empty string*: Y). Los marcadores `.` y `..` pasan a NULL |
+| `Total a entero` (Select values, pestaña *Meta-data*) | `Total` se renombra `valor` y pasa a Integer, con formato `#,###`, decimal `,` y agrupación `.` (el INE escribe `1.019.782`) |
+| `Codigo INE` (Replace in string) | Entrada `Comunidades_y_Ciudades_Autónomas` (`01 Andalucía`), salida `codigo_ine`, expresión regular `^(\d{2}).*` y reemplazo `$1`. Los dos primeros caracteres son el código INE, la clave natural de `dim_ccaa` |
+| `Origen` (Value Mapper) | `Residencia:_Nivel_2` a `origen`: `Residentes en España` = `ESP`, `Residentes en el Extranjero` = `EXT` y la fila con valor de origen vacío = `TOT`. El total no se carga, pero se usa para controlar |
+
+#### Fase 3: una fila por CCAA y mes
+
+**Por qué.** Para comprobar que total = ESP + EXT, y para completar un componente que falte, hace falta tener las seis cifras de un mismo mes (viajeros y pernoctaciones de ESP, EXT y TOT) **en la misma fila**.
+
+| Paso | Configuración y motivo |
+|---|---|
+| `Clave origen-medida` (Formula) | `clave` (String) = `[origen]&"_"&[Viajeros_y_pernoctaciones]`, que da `ESP_Viajero`, `TOT_Pernoctaciones`, etc. Son seis valores distintos |
+| `Sort rows` | Por `codigo_ine`, `anio` y `mes` ascendente. El paso siguiente exige que las filas de un mismo grupo vengan seguidas |
+| `Una fila por CCAA y mes` (Row denormaliser) | Campo clave: `clave`. Agrupación: `codigo_ine`, `anio`, `mes`. Seis campos destino, todos Integer y con *Value fieldname* `valor`: `v_esp` (`ESP_Viajero`), `p_esp` (`ESP_Pernoctaciones`), `v_ext` (`EXT_Viajero`), `p_ext` (`EXT_Pernoctaciones`), `v_tot` (`TOT_Viajero`) y `p_tot` (`TOT_Pernoctaciones`) |
+| `Columnas útiles` (Select values) | Se conservan solo `codigo_ine, anio, mes, v_esp, p_esp, v_ext, p_ext, v_tot, p_tot`. El denormaliser arrastra además los campos de la última fila de cada grupo (por ejemplo, un `origen` que no corresponde) y hay que eliminarlos |
+
+#### Fase 4: completar y controlar el total
+
+`Faltantes y control` (Formula) crea 8 campos, todos de tipo Integer. Por simetría, las fórmulas de EXT son las de ESP intercambiando `esp` y `ext`, y las de pernoctaciones son las de viajeros cambiando `v_` por `p_`.
+
+| Campo | Fórmula | Qué hace |
 |---|---|---|
-| 1 | Text file input (`Leer INE`) | Fichero: `${Internal.Entry.Current.Directory}/../data/raw`, expresión regular `ine_${ID_TABLA}_.*\.csv`. UTF-8, separador `;`, cabecera, *Date locale* `es`. Campo `Total`: Number, decimal `,`, grupo `.`, *Null if* `..` |
-| 2 | Select values | Renombra columnas a nombres simples (`ccaa`, `concepto`, `residencia`, `periodo`, `total`...). El primer nombre de columna puede traer el BOM del fichero: se corrige aquí |
-| 3 | Filter rows (`Solo CCAA`) | Se conservan las filas con `ccaa` no vacío. En la EOH, además, `Provincias` vacío (las provincias son redundantes con su CCAA). Se descarta así `Total Nacional` |
-| 4 | Concilar CCAA | Los dos primeros caracteres de `ccaa` son el `codigo_ine` (*Replace in string* o *Formula* con `LEFT`). Se contrasta con `ccaa_codigos.csv` mediante *Stream lookup*; las que no coincidan se desvían a una salida de errores |
-| 5 | Split Fields (`Año y mes`) | `2026M08` se separa en `anio` y `mes` con el separador `M` (**Splitting**, técnica obligatoria de ingeniería de características). Se pasan a Integer |
-| 6 | Filter rows (`Alcance`) | `anio >= 2016` y `anio <= 2025`. Evita claves ajenas huérfanas y reduce el volumen |
-| 7 | Value Mapper (`Origen`) | `Residentes en España` a `ESP`, `Residentes en el Extranjero` a `EXT`, valor por defecto `TOT` (el total, que va a la rama de control) |
-| 8 | Value Mapper (`Medida`) | `Viajero` a `viajeros`, `Pernoctaciones` a `pernoctaciones` |
-| 9 | Sort rows + Row denormaliser | Se ordena por `codigo_ine, anio, mes, origen`. *Row denormaliser* (clave: `medida`) coloca `viajeros` y `pernoctaciones` en columnas |
-| 10 | Control del total (rama TOT) | *Filter rows* separa `origen = TOT` de ESP y EXT. En la rama ESP y EXT, *Group by* suma por `codigo_ine, anio, mes`. *Merge join* con el total compara total frente a ESP + EXT; las diferencias van a una salida de registro |
-| 11 | Valores ausentes | `..` es NULL. Si falta un componente (ESP o EXT) y el total existe, se calcula por diferencia (total menos el otro) y `calidad_key = 2`. Un hueco aislado en una serie se imputa con la media de los meses vecinos (*Analytic Query*, funciones LAG y LEAD, sobre datos ordenados por CCAA, origen y mes) con `calidad_key = 2`. Los huecos largos se dejan en NULL |
-| 12 | Calculator (`Estancia media`) | `estancia_media = pernoctaciones / viajeros`, con NULL si `viajeros` es 0 o nulo |
-| 13 | Number range (`Binning`) | `estancia_media` a `nivel_key`: menos de 2 a 1 (Corta), de 2 a 4 a 2 (Media), más de 4 a 3 (Larga), sin dato a 4 (Sin dato). Cortes iniciales, revisables con la distribución real |
-| 14 | Outliers | *Group by* por `codigo_ine, tipo, origen` calcula media y desviación de `pernoctaciones`; *Merge join* o *Stream lookup* lo une a cada fila; *Calculator* obtiene el z-score `(x - media) / desviación`. Si `|z| > 3` (umbral inicial) la fila se marca como atípica. La marca se combina con la imputación para fijar `calidad_key`: 1 original, 2 imputado, 3 atípico, 4 imputado y atípico. **No se borra ninguna fila** |
-| 15 | Claves | *Constant* o `COD_TIPO` como campo; `tiempo_key = anio*100 + mes`; *Database lookup* en `dim_ccaa` (por `codigo_ine`), `dim_tipo_alojamiento` (por `codigo`) y `dim_origen` (por `codigo`). Las filas sin clave se desvían a una salida de errores |
-| 16 | Unique rows + Table output | Se eliminan duplicados del grano (`tiempo_key, ccaa_key, tipo_key, origen_key`) y se carga en `fact_ocupacion` (*Commit size* 1000, sin *Truncate table*) |
+| `viajeros_esp` | `IF(AND(ISBLANK([v_esp]);NOT(ISBLANK([v_ext]));NOT(ISBLANK([v_tot])));[v_tot]-[v_ext];[v_esp])` | Si falta ESP pero existen el total y EXT, lo calcula por diferencia; si no, lo deja como está |
+| `pernoctaciones_esp`, `viajeros_ext`, `pernoctaciones_ext` | análogas | Igual para los otros tres valores |
+| `imp_esp`, `imp_ext` | `IF(OR(AND(ISBLANK([v_esp]);NOT(ISBLANK([v_ext]));NOT(ISBLANK([v_tot])));AND(ISBLANK([p_esp]);NOT(ISBLANK([p_ext]));NOT(ISBLANK([p_tot]))));1;0)` | Valen 1 si el origen se ha completado por diferencia |
+| `dif_viajeros` | `IF(AND(NOT(ISBLANK([v_tot]));NOT(ISBLANK([v_esp]));NOT(ISBLANK([v_ext])));IF(ABS([v_tot]-[v_esp]-[v_ext])>1;1;0);0)` | Vale 1 si el total no coincide con ESP + EXT. Se tolera una diferencia de 1 por redondeo del INE |
+| `dif_pernoctaciones` | análoga | Igual para pernoctaciones |
 
-**Comprobación tras cada carga:**
+Si falta un valor y no se puede reconstruir (por ejemplo, faltan a la vez el total y un componente), se deja en NULL y **no** se marca como imputado: no se inventa ningún dato.
+
+El flujo se bifurca en `Faltantes y control` (el paso copia las filas a las dos ramas):
+
+- **Rama de control:** `Hay diferencia` (Filter rows: `dif_viajeros = 1` o `dif_pernoctaciones = 1`) y `Informe de control` (Text file output), que escribe `data/clean/control_totales_${COD_TIPO}.csv` con las filas que no cuadran. En la EOH queda sin filas: en los 2.280 meses el total coincide con ESP + EXT.
+- **Rama principal:** continúa hacia la tabla de hechos. Las filas que no cuadran se registran, pero también se cargan.
+
+#### Fase 5: variables derivadas y calidad del dato
+
+| Paso | Configuración y motivo |
+|---|---|
+| `Una fila por origen` (Row Normaliser) | Deshace el pivotado, ahora solo para ESP y EXT. Campo tipo: `origen`. Correspondencias (*Fieldname*, *Type*, *New field*): `viajeros_esp` = `ESP` = `viajeros`; `pernoctaciones_esp` = `ESP` = `pernoctaciones`; `imp_esp` = `ESP` = `imputado`; y lo mismo con `ext`. El total desaparece: se usó para controlar, no se almacena |
+| `Estancia media` (Modified JavaScript Value) | Campo `estancia_media`, tipo Number: `var estancia_media = null; if (viajeros != null && pernoctaciones != null && viajeros > 0) { estancia_media = Math.round(pernoctaciones / viajeros * 100) / 100; }`. Es NULL si no hay viajeros: así no hay división por cero |
+| `Nivel estancia` (Number range) | **Binning**: `estancia_media` a `nivel_key`. Menos de 2 = `1` (Corta); de 2 a menos de 4 = `2` (Media); 4 o más = `3` (Larga); sin dato = `4` (valor por defecto). Los cortes coinciden con `dim_nivel_estancia` |
+
+**Detección de atípicos.** Se calcula, para cada CCAA y origen, la media y la desviación de las pernoctaciones, y se mide cuántas desviaciones se aleja cada mes de la media (el z-score). El flujo se copia en `Nivel estancia` hacia una rama auxiliar:
+
+| Paso | Configuración y motivo |
+|---|---|
+| `Ordenar para medias` (Sort rows) | Por `codigo_ine` y `origen` (requisito de *Group by*) |
+| `Media y desviación` (Group by) | Grupo `codigo_ine`, `origen`. Agregados sobre `pernoctaciones`: `media` (Average) y `desv` (Standard deviation, population). Devuelve 38 filas (19 CCAA × 2 orígenes) |
+| `Medias por CCAA y origen` (Stream lookup) | Une la media y la desviación a cada fila de la rama principal. Claves: `codigo_ine` y `origen`. Recupera `media` y `desv` |
+| `Marca atipico` (Formula, `atipico` Integer) | `IF(AND(NOT(ISBLANK([pernoctaciones]));NOT(ISBLANK([desv])));IF([desv]>0;IF(ABS(([pernoctaciones]-[media])/[desv])>3;1;0);0);0)`. Vale 1 si el valor se aleja más de 3 desviaciones. El umbral 3 es inicial y revisable |
+| `Calidad del dato` (Formula, `calidad_key` Integer) | `IF(AND([imputado]=1;[atipico]=1);4;IF([imputado]=1;2;IF([atipico]=1;3;1)))`: 1 dato original, 2 imputado, 3 atípico, 4 imputado y atípico |
+
+**No se elimina ninguna fila**: los atípicos solo se marcan. En la EOH se marcan 11 de 4.560, que corresponden a valores muy alejados de lo normal en su CCAA y origen; los meses de 2020 y 2021 son datos reales y se conservan.
+
+#### Fase 6: claves y carga
+
+| Paso | Configuración y motivo |
+|---|---|
+| `Clave tiempo` (Formula, Integer) | `[anio]*100+[mes]`, la clave `AAAAMM` de `dim_tiempo` |
+| `Tipo alojamiento` (Get Variables) | Campo `cod_tipo` (String) con el valor de `${COD_TIPO}` |
+| `Buscar tipo_key`, `Buscar origen_key`, `Buscar ccaa_key` (Database lookup, conexión `turismo_dw`) | Tres búsquedas **encadenadas en serie**, cada una con su clave: `dim_tipo_alojamiento` (`codigo` = `cod_tipo`, devuelve `tipo_key`), `dim_origen` (`codigo` = `origen`, devuelve `origen_key`) y `dim_ccaa` (`codigo_ine` = `codigo_ine`, devuelve `ccaa_key`). No se marca *Do not pass the row if the lookup fails*: si falta una clave, la carga debe fallar y no perder filas en silencio |
+| `Columnas fact_ocupacion` (Select values) | Se conservan `tiempo_key, ccaa_key, tipo_key, origen_key, nivel_key, calidad_key, viajeros, pernoctaciones, estancia_media`. En *Meta-data*, solo `nivel_key` pasa a Integer (el *Number range* lo entrega como texto) |
+| `Carga fact_ocupacion` (Table output) | Conexión `turismo_dw`, tabla `fact_ocupacion`, *Commit size* 1000, sin *Truncate table* y sin *Specify database fields*. La restricción `UNIQUE` del grano impide cargar dos veces el mismo mes, CCAA, tipo y origen |
+
+#### Comprobación de la carga
+
+En el panel *Step Metrics* de Spoon, todos los pasos deben acabar en `Finished` con `Errors = 0`; `Medias por CCAA y origen` lee 4.598 filas (4.560 más las 38 de consulta) y `Carga fact_ocupacion` escribe 4.560. T10 tarda unos 2 segundos. En MySQL:
+
 ```sql
-SELECT t.codigo, COUNT(*) AS filas, MIN(f.tiempo_key), MAX(f.tiempo_key)
+-- Filas y rango de meses: esperado 4560, 201601 y 202512 (EOH)
+SELECT COUNT(*) AS filas, MIN(tiempo_key), MAX(tiempo_key),
+       SUM(viajeros IS NULL) AS sin_viajeros,
+       SUM(pernoctaciones IS NULL) AS sin_pernoctaciones
+FROM turismo_dw.fact_ocupacion;
+
+-- Calidad del dato (EOH: 4549 originales y 11 atípicos)
+SELECT calidad_key, COUNT(*) FROM turismo_dw.fact_ocupacion GROUP BY calidad_key;
+
+-- Reparto de los niveles de estancia
+SELECT nivel_key, COUNT(*) FROM turismo_dw.fact_ocupacion GROUP BY nivel_key;
+
+-- Caso de control: Andalucía, enero de 2016
+SELECT o.codigo, f.viajeros, f.pernoctaciones, f.estancia_media, f.nivel_key
 FROM turismo_dw.fact_ocupacion f
-JOIN turismo_dw.dim_tipo_alojamiento t ON t.tipo_key = f.tipo_key
-GROUP BY t.codigo;
+JOIN turismo_dw.dim_origen o ON o.origen_key = f.origen_key
+WHERE f.tiempo_key = 201601
+  AND f.ccaa_key = (SELECT ccaa_key FROM turismo_dw.dim_ccaa WHERE codigo_ine = '01');
+-- ESP: 480886, 1015322, 2.11, nivel 2    EXT: 337184, 979799, 2.91, nivel 2
 ```
-El máximo no debe superar `202512` ni el mínimo bajar de `201601`.
+
+Para repetir una carga hay que vaciar primero la tabla de hechos (véase el apartado 5.5, *Vaciar las tablas para repetir una carga*).
+
+#### T11 a T13
+
+Siguen exactamente el mismo flujo que T10, con estas diferencias:
+
+- T11 a T13 no tienen la columna `Provincias`, así que el paso de lectura tiene 7 campos y `Solo CCAA` solo exige que la CCAA esté informada.
+- Se cambian los parámetros por defecto (`ID_TABLA` y `COD_TIPO`); el job los pasa a cada ejecución.
+- Las cuatro cargas escriben en la misma tabla `fact_ocupacion`, cada una con su `tipo_key`, y cada una deja su informe de control (`control_totales_APT.csv`, `_CAM.csv` y `_RUR.csv`).
+- Las encuestas extrahoteleras llegan hasta agosto de 2026, pero el alcance 2016-2025 deja ese año fuera.
+- En estas encuestas puede haber valores ausentes por secreto estadístico (por ejemplo, en Ceuta y Melilla), y es donde se utiliza la reconstrucción por diferencia de la fase 4 y los NULL de la fase 5.
 
 ### 5.7 T40_validacion
 
