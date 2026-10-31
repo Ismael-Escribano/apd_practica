@@ -478,6 +478,8 @@ Generate rows → Add sequence → Formula → Formula → Value Mapper ×3 → 
 
 El Value Mapper compara cada valor con una sola entrada de la tabla: no admite listas como `1,2,3`.
 
+![Transformación T01_dim_tiempo en Spoon](docs/T01_dim_tiempo.png)
+
 **Comprobación:**
 ```sql
 SELECT COUNT(*), MIN(tiempo_key), MAX(tiempo_key) FROM turismo_dw.dim_tiempo;

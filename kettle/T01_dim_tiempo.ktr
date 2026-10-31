@@ -430,7 +430,7 @@
     <created_date>2026/10/29 20:14:09.020</created_date>
     <modified_user>-</modified_user>
     <modified_date>2026/10/29 20:14:09.020</modified_date>
-    <key_for_session_key/>
+    <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -470,6 +470,10 @@
       </attribute>
       <attribute>
         <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
         <attribute>N</attribute>
       </attribute>
       <attribute>
@@ -545,8 +549,8 @@
     </hop>
   </order>
   <step>
-    <name>Generar 120 filas</name>
-    <type>RowGenerator</type>
+    <name>Año y mes</name>
+    <type>Formula</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -555,13 +559,22 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <fields>
-    </fields>
-    <limit>120</limit>
-    <never_ending>N</never_ending>
-    <interval_in_ms>5000</interval_in_ms>
-    <row_time_field>now</row_time_field>
-    <last_time_field>FiveSecondsAgo</last_time_field>
+    <formula>
+      <field_name>anio</field_name>
+      <formula_string>2016 + INT([n]/12)</formula_string>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
+    <formula>
+      <field_name>mes</field_name>
+      <formula_string>MOD([n];12) + 1</formula_string>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -571,8 +584,148 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>112</xloc>
+      <xloc>336</xloc>
       <yloc>144</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Carga dim_tiempo</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>turismo_dw</connection>
+    <schema/>
+    <table>dim_tiempo</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>208</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Clave AAAAMM</name>
+    <type>Formula</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <formula>
+      <field_name>tiempo_key</field_name>
+      <formula_string>[anio]*100 + [mes]</formula_string>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>448</xloc>
+      <yloc>144</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Columnas dim_tiempo</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>tiempo_key</name>
+      </field>
+      <field>
+        <name>anio</name>
+      </field>
+      <field>
+        <name>mes</name>
+      </field>
+      <field>
+        <name>nombre_mes</name>
+      </field>
+      <field>
+        <name>trimestre</name>
+      </field>
+      <field>
+        <name>temporada</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>trimestre</name>
+        <rename>trimestre</rename>
+        <type>Integer</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -612,8 +765,8 @@
     </GUI>
   </step>
   <step>
-    <name>Año y mes</name>
-    <type>Formula</type>
+    <name>Generar 120 filas</name>
+    <type>RowGenerator</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -622,22 +775,13 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <formula>
-      <field_name>anio</field_name>
-      <formula_string>2016 + INT([n]/12)</formula_string>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <replace_field/>
-    </formula>
-    <formula>
-      <field_name>mes</field_name>
-      <formula_string>MOD([n];12) + 1</formula_string>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <replace_field/>
-    </formula>
+    <fields>
+    </fields>
+    <limit>120</limit>
+    <never_ending>N</never_ending>
+    <interval_in_ms>5000</interval_in_ms>
+    <row_time_field>now</row_time_field>
+    <last_time_field>FiveSecondsAgo</last_time_field>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -647,40 +791,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>304</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Clave AAAAMM</name>
-    <type>Formula</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <formula>
-      <field_name>tiempo_key</field_name>
-      <formula_string>[anio]*100 + [mes]</formula_string>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <replace_field/>
-    </formula>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>400</xloc>
+      <xloc>112</xloc>
       <yloc>144</yloc>
       <draw>Y</draw>
     </GUI>
@@ -758,8 +869,70 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>496</xloc>
+      <xloc>544</xloc>
       <yloc>144</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Temporada</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <field_to_use>mes</field_to_use>
+    <target_field>temporada</target_field>
+    <non_match_default>Baja</non_match_default>
+    <fields>
+      <field>
+        <source_value>6</source_value>
+        <target_value>Alta</target_value>
+      </field>
+      <field>
+        <source_value>7</source_value>
+        <target_value>Alta</target_value>
+      </field>
+      <field>
+        <source_value>8</source_value>
+        <target_value>Alta</target_value>
+      </field>
+      <field>
+        <source_value>9</source_value>
+        <target_value>Alta</target_value>
+      </field>
+      <field>
+        <source_value>3</source_value>
+        <target_value>Media</target_value>
+      </field>
+      <field>
+        <source_value>4</source_value>
+        <target_value>Media</target_value>
+      </field>
+      <field>
+        <source_value>5</source_value>
+        <target_value>Media</target_value>
+      </field>
+      <field>
+        <source_value>10</source_value>
+        <target_value>Media</target_value>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>448</xloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -836,183 +1009,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>592</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Temporada</name>
-    <type>ValueMapper</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <field_to_use>mes</field_to_use>
-    <target_field>temporada</target_field>
-    <non_match_default>Baja</non_match_default>
-    <fields>
-      <field>
-        <source_value>6</source_value>
-        <target_value>Alta</target_value>
-      </field>
-      <field>
-        <source_value>7</source_value>
-        <target_value>Alta</target_value>
-      </field>
-      <field>
-        <source_value>8</source_value>
-        <target_value>Alta</target_value>
-      </field>
-      <field>
-        <source_value>9</source_value>
-        <target_value>Alta</target_value>
-      </field>
-      <field>
-        <source_value>3</source_value>
-        <target_value>Media</target_value>
-      </field>
-      <field>
-        <source_value>4</source_value>
-        <target_value>Media</target_value>
-      </field>
-      <field>
-        <source_value>5</source_value>
-        <target_value>Media</target_value>
-      </field>
-      <field>
-        <source_value>10</source_value>
-        <target_value>Media</target_value>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>688</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Columnas dim_tiempo</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>tiempo_key</name>
-        <rename/>
-      </field>
-      <field>
-        <name>anio</name>
-        <rename/>
-      </field>
-      <field>
-        <name>mes</name>
-        <rename/>
-      </field>
-      <field>
-        <name>nombre_mes</name>
-        <rename/>
-      </field>
-      <field>
-        <name>trimestre</name>
-        <rename/>
-      </field>
-      <field>
-        <name>temporada</name>
-        <rename/>
-      </field>
-      <select_unspecified>N</select_unspecified>
-      <meta>
-        <name>trimestre</name>
-        <rename>trimestre</rename>
-        <type>Integer</type>
-        <length>-2</length>
-        <precision>-2</precision>
-        <conversion_mask/>
-        <date_format_lenient>false</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type/>
-      </meta>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>800</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Carga dim_tiempo</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>turismo_dw</connection>
-    <schema/>
-    <table>dim_tiempo</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>928</xloc>
-      <yloc>144</yloc>
+      <xloc>544</xloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
