@@ -629,11 +629,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Una fila por origen</from>
-      <to>Estancia media</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Estancia media</from>
       <to>Nivel estancia</to>
       <enabled>Y</enabled>
@@ -666,6 +661,31 @@
     <hop>
       <from>Columnas útiles</from>
       <to>Faltantes y control</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Ordenar para imputar</from>
+      <to>Vecinos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Vecinos</from>
+      <to>Imputar con vecinos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Imputar con vecinos</from>
+      <to>Quitar vecinos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Una fila por origen</from>
+      <to>Ordenar para imputar</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Quitar vecinos</from>
+      <to>Estancia media</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -2508,6 +2528,241 @@
     <GUI>
       <xloc>624</xloc>
       <yloc>368</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Ordenar para imputar</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>codigo_ine</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>origen</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>anio</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>mes</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>496</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Vecinos</name>
+    <type>AnalyticQuery</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <group>
+      <field>
+        <name>codigo_ine</name>
+      </field>
+      <field>
+        <name>origen</name>
+      </field>
+    </group>
+    <fields>
+      <field>
+        <aggregate>v_ant</aggregate>
+        <subject>viajeros</subject>
+        <type>LAG</type>
+        <valuefield>1</valuefield>
+      </field>
+      <field>
+        <aggregate>v_sig</aggregate>
+        <subject>viajeros</subject>
+        <type>LEAD</type>
+        <valuefield>1</valuefield>
+      </field>
+      <field>
+        <aggregate>p_ant</aggregate>
+        <subject>pernoctaciones</subject>
+        <type>LAG</type>
+        <valuefield>1</valuefield>
+      </field>
+      <field>
+        <aggregate>p_sig</aggregate>
+        <subject>pernoctaciones</subject>
+        <type>LEAD</type>
+        <valuefield>1</valuefield>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>496</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Imputar con vecinos</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>   var covid = (anio == 2020 &amp;&amp; mes >= 3 &amp;&amp; mes &lt;= 6);
+   if (!covid) {
+     if (viajeros == null &amp;&amp; v_ant != null &amp;&amp; v_sig != null) {
+       viajeros = Math.round((v_ant + v_sig) / 2); imputado = 1;
+     }
+     if (pernoctaciones == null &amp;&amp; p_ant != null &amp;&amp; p_sig != null) {
+       pernoctaciones = Math.round((p_ant + p_sig) / 2); imputado = 1;
+     }
+   }
+
+</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>viajeros</name>
+        <rename>viajeros</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>Y</replace>
+      </field>
+      <field>
+        <name>pernoctaciones</name>
+        <rename>pernoctaciones</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>Y</replace>
+      </field>
+      <field>
+        <name>imputado</name>
+        <rename>imputado</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>Y</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>368</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Quitar vecinos</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>v_ant</name>
+      </remove>
+      <remove>
+        <name>v_sig</name>
+      </remove>
+      <remove>
+        <name>p_ant</name>
+      </remove>
+      <remove>
+        <name>p_sig</name>
+      </remove>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>368</xloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

@@ -629,11 +629,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Una fila por origen</from>
-      <to>Estancia media</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Estancia media</from>
       <to>Nivel estancia</to>
       <enabled>Y</enabled>
@@ -666,6 +661,31 @@
     <hop>
       <from>Columnas útiles</from>
       <to>Faltantes y control</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Una fila por origen</from>
+      <to>Ordenar para imputar</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Ordenar para imputar</from>
+      <to>Vecinos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Vecinos</from>
+      <to>Imputar con vecinos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Imputar con vecinos</from>
+      <to>Quitar vecinos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Quitar vecinos</from>
+      <to>Estancia media</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -795,6 +815,150 @@
     </GUI>
   </step>
   <step>
+    <name>Buscar ccaa_key</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>turismo_dw</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>dim_ccaa</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>codigo_ine</name>
+        <field>codigo_ine</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>ccaa_key</name>
+        <rename>ccaa_key</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>624</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Buscar origen_key</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>turismo_dw</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>dim_origen</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>origen</name>
+        <field>codigo</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>origen_key</name>
+        <rename>origen_key</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>496</xloc>
+      <yloc>624</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Buscar tipo_key</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>turismo_dw</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>dim_tipo_alojamiento</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>cod_tipo</name>
+        <field>codigo</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>tipo_key</name>
+        <rename>tipo_key</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>368</xloc>
+      <yloc>624</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
     <name>Calidad del dato</name>
     <type>Formula</type>
     <description/>
@@ -823,6 +987,50 @@
     </remotesteps>
     <GUI>
       <xloc>112</xloc>
+      <yloc>496</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Carga fact_ocupacion</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>turismo_dw</connection>
+    <schema/>
+    <table>fact_ocupacion</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>496</xloc>
       <yloc>496</yloc>
       <draw>Y</draw>
     </GUI>
@@ -857,6 +1065,39 @@
     <GUI>
       <xloc>768</xloc>
       <yloc>80</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Clave tiempo</name>
+    <type>Formula</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <formula>
+      <field_name>tiempo_key</field_name>
+      <formula_string>[anio]*100+[mes]</formula_string>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>112</xloc>
+      <yloc>624</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -896,6 +1137,180 @@
     <GUI>
       <xloc>624</xloc>
       <yloc>80</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Columnas fact_ocupacion</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>viajeros</name>
+      </field>
+      <field>
+        <name>nivel_key</name>
+      </field>
+      <field>
+        <name>calidad_key</name>
+      </field>
+      <field>
+        <name>tiempo_key</name>
+      </field>
+      <field>
+        <name>tipo_key</name>
+      </field>
+      <field>
+        <name>origen_key</name>
+      </field>
+      <field>
+        <name>ccaa_key</name>
+      </field>
+      <field>
+        <name>pernoctaciones</name>
+      </field>
+      <field>
+        <name>estancia_media</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>nivel_key</name>
+        <rename>nivel_key</rename>
+        <type>Integer</type>
+        <length>1</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>496</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Columnas útiles</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>codigo_ine</name>
+      </field>
+      <field>
+        <name>anio</name>
+      </field>
+      <field>
+        <name>mes</name>
+      </field>
+      <field>
+        <name>v_esp</name>
+      </field>
+      <field>
+        <name>p_esp</name>
+      </field>
+      <field>
+        <name>v_ext</name>
+      </field>
+      <field>
+        <name>p_ext</name>
+      </field>
+      <field>
+        <name>v_tot</name>
+      </field>
+      <field>
+        <name>p_tot</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>240</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Estancia media</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>   var estancia_media = null;
+   if (viajeros != null &amp;&amp; pernoctaciones != null &amp;&amp; viajeros > 0) {
+     estancia_media = Math.round(pernoctaciones / viajeros * 100) / 100;
+   }</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>estancia_media</name>
+        <rename>estancia_media</rename>
+        <type>Number</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>496</xloc>
+      <yloc>368</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1874,6 +2289,45 @@
     </GUI>
   </step>
   <step>
+    <name>Tipo alojamiento</name>
+    <type>GetVariable</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>cod_tipo</name>
+        <variable>${COD_TIPO}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>256</xloc>
+      <yloc>624</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
     <name>Total a entero</name>
     <type>SelectValues</type>
     <description/>
@@ -2045,7 +2499,7 @@
     <name>Una fila por origen</name>
     <type>Normaliser</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -2100,8 +2554,8 @@
     </GUI>
   </step>
   <step>
-    <name>Clave tiempo</name>
-    <type>Formula</type>
+    <name>Ordenar para imputar</name>
+    <type>SortRows</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -2110,321 +2564,46 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <formula>
-      <field_name>tiempo_key</field_name>
-      <formula_string>[anio]*100+[mes]</formula_string>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <replace_field/>
-    </formula>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>112</xloc>
-      <yloc>624</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Tipo alojamiento</name>
-    <type>GetVariable</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>cod_tipo</name>
-        <variable>${COD_TIPO}</variable>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>256</xloc>
-      <yloc>624</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Buscar ccaa_key</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>turismo_dw</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>dim_ccaa</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
         <name>codigo_ine</name>
-        <field>codigo_ine</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>ccaa_key</name>
-        <rename>ccaa_key</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>624</xloc>
-      <yloc>624</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Buscar tipo_key</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>turismo_dw</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>dim_tipo_alojamiento</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
-        <name>cod_tipo</name>
-        <field>codigo</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>tipo_key</name>
-        <rename>tipo_key</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>368</xloc>
-      <yloc>624</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Buscar origen_key</name>
-    <type>DBLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>turismo_dw</connection>
-    <cache>N</cache>
-    <cache_load_all>N</cache_load_all>
-    <cache_size>0</cache_size>
-    <lookup>
-      <schema/>
-      <table>dim_origen</table>
-      <orderby/>
-      <fail_on_multiple>N</fail_on_multiple>
-      <eat_row_on_failure>N</eat_row_on_failure>
-      <key>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+      <field>
         <name>origen</name>
-        <field>codigo</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>origen_key</name>
-        <rename>origen_key</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>496</xloc>
-      <yloc>624</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Columnas fact_ocupacion</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>viajeros</name>
-        <rename/>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
       </field>
       <field>
-        <name>nivel_key</name>
-        <rename/>
+        <name>anio</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
       </field>
       <field>
-        <name>calidad_key</name>
-        <rename/>
+        <name>mes</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
       </field>
-      <field>
-        <name>tiempo_key</name>
-        <rename/>
-      </field>
-      <field>
-        <name>tipo_key</name>
-        <rename/>
-      </field>
-      <field>
-        <name>origen_key</name>
-        <rename/>
-      </field>
-      <field>
-        <name>ccaa_key</name>
-        <rename/>
-      </field>
-      <field>
-        <name>pernoctaciones</name>
-        <rename/>
-      </field>
-      <field>
-        <name>estancia_media</name>
-        <rename/>
-      </field>
-      <select_unspecified>N</select_unspecified>
-      <meta>
-        <name>nivel_key</name>
-        <rename>nivel_key</rename>
-        <type>Integer</type>
-        <length>1</length>
-        <precision>-2</precision>
-        <conversion_mask/>
-        <date_format_lenient>false</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type/>
-      </meta>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>624</xloc>
-      <yloc>496</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Carga fact_ocupacion</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>turismo_dw</connection>
-    <schema/>
-    <table>fact_ocupacion</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -2436,15 +2615,74 @@
     </remotesteps>
     <GUI>
       <xloc>496</xloc>
-      <yloc>496</yloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Estancia media</name>
+    <name>Vecinos</name>
+    <type>AnalyticQuery</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <group>
+      <field>
+        <name>codigo_ine</name>
+      </field>
+      <field>
+        <name>origen</name>
+      </field>
+    </group>
+    <fields>
+      <field>
+        <aggregate>v_ant</aggregate>
+        <subject>viajeros</subject>
+        <type>LAG</type>
+        <valuefield>1</valuefield>
+      </field>
+      <field>
+        <aggregate>v_sig</aggregate>
+        <subject>viajeros</subject>
+        <type>LEAD</type>
+        <valuefield>1</valuefield>
+      </field>
+      <field>
+        <aggregate>p_ant</aggregate>
+        <subject>pernoctaciones</subject>
+        <type>LAG</type>
+        <valuefield>1</valuefield>
+      </field>
+      <field>
+        <aggregate>p_sig</aggregate>
+        <subject>pernoctaciones</subject>
+        <type>LEAD</type>
+        <valuefield>1</valuefield>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>496</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Imputar con vecinos</name>
     <type>ScriptValueMod</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -2457,20 +2695,43 @@
       <jsScript>
         <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>   var estancia_media = null;
-   if (viajeros != null &amp;&amp; pernoctaciones != null &amp;&amp; viajeros > 0) {
-     estancia_media = Math.round(pernoctaciones / viajeros * 100) / 100;
-   }</jsScript_script>
+        <jsScript_script>   var covid = (anio == 2020 &amp;&amp; mes >= 3 &amp;&amp; mes &lt;= 6);
+   if (!covid) {
+     if (viajeros == null &amp;&amp; v_ant != null &amp;&amp; v_sig != null) {
+       viajeros = Math.round((v_ant + v_sig) / 2); imputado = 1;
+     }
+     if (pernoctaciones == null &amp;&amp; p_ant != null &amp;&amp; p_sig != null) {
+       pernoctaciones = Math.round((p_ant + p_sig) / 2); imputado = 1;
+     }
+   }
+
+</jsScript_script>
       </jsScript>
     </jsScripts>
     <fields>
       <field>
-        <name>estancia_media</name>
-        <rename>estancia_media</rename>
-        <type>Number</type>
+        <name>viajeros</name>
+        <rename>viajeros</rename>
+        <type>Integer</type>
         <length>-1</length>
         <precision>-1</precision>
-        <replace>N</replace>
+        <replace>Y</replace>
+      </field>
+      <field>
+        <name>pernoctaciones</name>
+        <rename>pernoctaciones</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>Y</replace>
+      </field>
+      <field>
+        <name>imputado</name>
+        <rename>imputado</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>Y</replace>
       </field>
     </fields>
     <attributes/>
@@ -2482,13 +2743,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>496</xloc>
-      <yloc>368</yloc>
+      <xloc>368</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Columnas útiles</name>
+    <name>Quitar vecinos</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -2499,43 +2760,19 @@
       <schema_name/>
     </partitioning>
     <fields>
-      <field>
-        <name>codigo_ine</name>
-        <rename/>
-      </field>
-      <field>
-        <name>anio</name>
-        <rename/>
-      </field>
-      <field>
-        <name>mes</name>
-        <rename/>
-      </field>
-      <field>
-        <name>v_esp</name>
-        <rename/>
-      </field>
-      <field>
-        <name>p_esp</name>
-        <rename/>
-      </field>
-      <field>
-        <name>v_ext</name>
-        <rename/>
-      </field>
-      <field>
-        <name>p_ext</name>
-        <rename/>
-      </field>
-      <field>
-        <name>v_tot</name>
-        <rename/>
-      </field>
-      <field>
-        <name>p_tot</name>
-        <rename/>
-      </field>
       <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>v_ant</name>
+      </remove>
+      <remove>
+        <name>v_sig</name>
+      </remove>
+      <remove>
+        <name>p_ant</name>
+      </remove>
+      <remove>
+        <name>p_sig</name>
+      </remove>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -2546,7 +2783,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>624</xloc>
+      <xloc>368</xloc>
       <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>

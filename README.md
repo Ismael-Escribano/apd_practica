@@ -328,7 +328,7 @@ Script de creación: [`sql/01_crear_almacen_turismo.sql`](sql/01_crear_almacen_t
 |---|---|---|
 | Viajeros, pernoctaciones, estancia media | Sí: el INE publica un valor nuevo cada mes | Medidas de `fact_ocupacion` |
 | Población de la CCAA | No: usamos una sola cifra por CCAA (la del 1 de enero más reciente) | Atributo de `dim_ccaa` |
-| Nº de BIC (bienes culturales) | No: es un recuento que sacamos una sola vez de Wikidata, en una fecha concreta | Atributo de `dim_ccaa`, con su fecha de extracción |
+| Nº de BIC (bienes culturales) | No: es un recuento que sacamos una sola vez de Wikidata | Atributo de `dim_ccaa` |
 | Tipo de alojamiento, origen, temporada, nivel de estancia, calidad del dato | No: son etiquetas | Dimensiones |
 
 **2. Por qué la población y el patrimonio no son hechos.** Hay un valor de ocupación por cada mes, CCAA, tipo y origen, pero solo una población y un recuento de BIC por CCAA. Si los pusiéramos en la tabla de hechos, el mismo número se repetiría en cada fila mensual y, al sumar, saldrían resultados sin sentido. Ejemplo: un territorio con 8 millones de habitantes tiene 96 filas al año (12 meses × 4 tipos × 2 orígenes); al sumar un año completo, su población saldría como 768 millones. Como atributos de `dim_ccaa`, cada dato aparece una sola vez.
@@ -407,7 +407,7 @@ Herramienta: **Pentaho Data Integration (PDI, Kettle) 10.2 Community**. El ETL s
 | **Alcance temporal: 2016 a 2025** | Diez años naturales completos. 2026 se excluye porque el INE publica hasta agosto (septiembre en hoteles) y un año incompleto distorsiona la comparación anual y el porcentaje de extranjeros. Incluye 2020 y 2021 (pandemia) |
 | Dimensiones antes que hechos | Cada hecho lleva claves ajenas; MySQL rechaza una fila si la clave no existe. PDI ejecuta en paralelo los pasos de una transformación, así que el orden solo se puede imponer desde el job |
 | Una plantilla para las encuestas del INE | Las cuatro tienen la misma estructura (la EOH con una columna más, `Provincias`). Un solo flujo que mantener y justificar |
-| Los CSV del INE se leen de `data/raw/`, no por URL | Ya están descargados y verificados, y el ETL no depende de que la API del INE responda |
+| Descargas con `scripts/descargar_fuentes.py` y lectura local en PDI | INE y Wikidata son servicios web y se descargan con un script, porque Wikidata limita a una consulta por minuto y la consulta de BIC se hace por lotes reanudables. PDI lee los ficheros descargados (`data/raw/`), con lo que el ETL es reproducible sin depender de la red |
 | Rutas relativas (`${Internal.Entry.Current.Directory}/..`) | El repositorio funciona en cualquier ordenador y sistema operativo |
 | Credenciales de MySQL en variables | El repositorio es público; usuario y contraseña no se guardan en los `.ktr` |
 | Se marca, no se borra | Los valores imputados o atípicos se señalan en `dim_calidad_dato`; los datos de 2020 y 2021 son reales |
@@ -673,18 +673,22 @@ Las cuatro encuestas tienen la misma estructura, así que se usa un único dise�
 | `dif_viajeros` | `IF(AND(NOT(ISBLANK([v_tot]));NOT(ISBLANK([v_esp]));NOT(ISBLANK([v_ext])));IF(ABS([v_tot]-[v_esp]-[v_ext])>1;1;0);0)` | Vale 1 si el total no coincide con ESP + EXT. Se tolera una diferencia de 1 por redondeo del INE |
 | `dif_pernoctaciones` | análoga | Igual para pernoctaciones |
 
-Si falta un valor y no se puede reconstruir (por ejemplo, faltan a la vez el total y un componente), se deja en NULL y **no** se marca como imputado: no se inventa ningún dato.
+Si falta un valor y no se puede reconstruir (por ejemplo, faltan a la vez el total y un componente), se deja en NULL y **no** se marca como imputado: no se inventa ningún dato. Los huecos aislados se tratan en la fase 5.
 
 El flujo se bifurca en `Faltantes y control` (el paso copia las filas a las dos ramas):
 
 - **Rama de control:** `Hay diferencia` (Filter rows: `dif_viajeros = 1` o `dif_pernoctaciones = 1`) y `Informe de control` (Text file output), que escribe `data/clean/control_totales_${COD_TIPO}.csv` con las filas que no cuadran. En la EOH queda sin filas: en los 2.280 meses el total coincide con ESP + EXT.
 - **Rama principal:** continúa hacia la tabla de hechos. Las filas que no cuadran se registran, pero también se cargan.
 
-#### Fase 5: variables derivadas y calidad del dato
+#### Fase 5: completar huecos, variables derivadas y calidad del dato
 
 | Paso | Configuración y motivo |
 |---|---|
 | `Una fila por origen` (Row Normaliser) | Deshace el pivotado, ahora solo para ESP y EXT. Campo tipo: `origen`. Correspondencias (*Fieldname*, *Type*, *New field*): `viajeros_esp` = `ESP` = `viajeros`; `pernoctaciones_esp` = `ESP` = `pernoctaciones`; `imp_esp` = `ESP` = `imputado`; y lo mismo con `ext`. El total desaparece: se usó para controlar, no se almacena |
+| `Ordenar para imputar` (Sort rows) | Por `codigo_ine`, `origen`, `anio` y `mes` ascendente: cada serie mensual (CCAA y origen) queda en orden cronológico, de modo que el paso siguiente puede consultar el mes anterior y el posterior |
+| `Vecinos` (Analytic Query) | Agrupación `codigo_ine` y `origen`. Cuatro campos nuevos con desplazamiento de una fila: `v_ant` (LAG de `viajeros`), `v_sig` (LEAD de `viajeros`), `p_ant` (LAG de `pernoctaciones`) y `p_sig` (LEAD de `pernoctaciones`) |
+| `Imputar con vecinos` (Modified JavaScript Value) | Completa un hueco **aislado** con la media de los dos meses vecinos, redondeada, y lo marca con `imputado = 1`. Los campos `viajeros`, `pernoctaciones` e `imputado` son Integer y se sobrescriben (*Replace value*). No se imputa entre marzo y junio de 2020: `var covid = (anio == 2020 && mes >= 3 && mes <= 6); if (!covid) { if (viajeros == null && v_ant != null && v_sig != null) { viajeros = Math.round((v_ant + v_sig) / 2); imputado = 1; } if (pernoctaciones == null && p_ant != null && p_sig != null) { pernoctaciones = Math.round((p_ant + p_sig) / 2); imputado = 1; } }` |
+| `Quitar vecinos` (Select values) | Pestaña *Remove*: `v_ant`, `v_sig`, `p_ant` y `p_sig`, que ya no hacen falta |
 | `Estancia media` (Modified JavaScript Value) | Campo `estancia_media`, tipo Number: `var estancia_media = null; if (viajeros != null && pernoctaciones != null && viajeros > 0) { estancia_media = Math.round(pernoctaciones / viajeros * 100) / 100; }`. Es NULL si no hay viajeros: así no hay división por cero |
 | `Nivel estancia` (Number range) | **Binning**: `estancia_media` a `nivel_key`. Menos de 2 = `1` (Corta); de 2 a menos de 4 = `2` (Media); 4 o más = `3` (Larga); sin dato = `4` (valor por defecto). Los cortes coinciden con `dim_nivel_estancia` |
 
@@ -710,6 +714,20 @@ El flujo se bifurca en `Faltantes y control` (el paso copia las filas a las dos 
 | `Columnas fact_ocupacion` (Select values) | Se conservan `tiempo_key, ccaa_key, tipo_key, origen_key, nivel_key, calidad_key, viajeros, pernoctaciones, estancia_media`. En *Meta-data*, solo `nivel_key` pasa a Integer (el *Number range* lo entrega como texto) |
 | `Carga fact_ocupacion` (Table output) | Conexión `turismo_dw`, tabla `fact_ocupacion`, *Commit size* 1000, sin *Truncate table* y sin *Specify database fields*. La restricción `UNIQUE` del grano impide cargar dos veces el mismo mes, CCAA, tipo y origen |
 
+#### Valores ausentes
+
+El INE marca los datos que no publica con `.` o `..` (según el fichero). `Nulos del INE` los convierte en NULL y el ETL los trata así, del caso más fiable al más débil:
+
+| Caso | Tratamiento | Filas | Marca |
+|---|---|---|---|
+| Falta un componente (ESP o EXT) y se conocen el total y el otro | Total menos el otro componente (fase 4) | 2 | `calidad_key` 2 |
+| Hueco aislado: falta un mes y existen el anterior y el posterior de la misma serie (CCAA y origen) | Media de los dos meses vecinos, redondeada (fase 5) | 98 | `calidad_key` 2 |
+| Hueco aislado entre marzo y junio de 2020 (apartamentos en mayo de 2020 y campings) | Se deja en NULL: con el confinamiento, la media de los vecinos no representa el mes | 68 | Sin marca |
+| Serie entera vacía: Ceuta y Melilla en apartamentos, campings y turismo rural | Se deja en NULL: el INE no publica datos de esas CCAA para esos tipos. No se inventan ceros | 1.440 | Sin marca |
+| Resto: huecos de dos o más meses seguidos (por ejemplo, campings de Baleares) o en los extremos de la serie | Se dejan en NULL: no hay dos vecinos con los que calcular | 318 | Sin marca |
+
+Un NULL que no se puede completar conserva `calidad_key` = 1: es el valor tal y como lo publica el INE y no ha recibido ningún tratamiento. Los valores completados quedan identificados (`calidad_key` 2 o 4) y se pueden excluir con `WHERE q.dato_imputado = 0` (véase el apartado 3). En SQL, los NULL no se suman ni se promedian: no distorsionan los totales, pero sí los subestiman en las series incompletas.
+
 #### Comprobación de la carga
 
 En el panel *Step Metrics* de Spoon, todos los pasos deben acabar en `Finished` con `Errors = 0`; `Medias por CCAA y origen` lee 4.598 filas (4.560 más las 38 de consulta) y `Carga fact_ocupacion` escribe 4.560. T10 tarda unos 2 segundos. En MySQL:
@@ -721,7 +739,7 @@ SELECT COUNT(*) AS filas, MIN(tiempo_key), MAX(tiempo_key),
        SUM(pernoctaciones IS NULL) AS sin_pernoctaciones
 FROM turismo_dw.fact_ocupacion;
 
--- Calidad del dato (EOH: 4549 originales y 11 atípicos)
+-- Calidad del dato (1 original, 2 imputado, 3 atípico, 4 imputado y atípico)
 SELECT calidad_key, COUNT(*) FROM turismo_dw.fact_ocupacion GROUP BY calidad_key;
 
 -- Reparto de los niveles de estancia
@@ -738,6 +756,20 @@ WHERE f.tiempo_key = 201601
 
 Para repetir una carga hay que vaciar primero la tabla de hechos (véase el apartado 5.5, *Vaciar las tablas para repetir una carga*).
 
+#### Resultado de la carga de las cuatro encuestas
+
+Con T10 a T13 ejecutadas, `fact_ocupacion` contiene **18.240 filas** (4 tipos de alojamiento × 19 CCAA × 120 meses × 2 orígenes), con meses de `201601` a `202512`. Cada transformación carga 4.560 filas.
+
+| Comprobación | Resultado |
+|---|---|
+| Filas cargadas | 18.240 (4.560 por tipo) |
+| Rango de meses | 201601 a 202512 |
+| Valores completados (`calidad_key` 2 o 4) | 100 (2 por diferencia y 98 con la media de los vecinos) |
+| Valores atípicos marcados (`calidad_key` 3 o 4) | 111 |
+| Filas sin viajeros tras el tratamiento | 1.826 (10,0 %) |
+
+**Caso de control** (Andalucía, enero de 2016, hoteles): ESP con 480.886 viajeros, 1.015.322 pernoctaciones y estancia media 2,11 (nivel 2, Media); EXT con 337.184 viajeros, 979.799 pernoctaciones y estancia media 2,91 (nivel 2, Media). Coinciden con el CSV del INE.
+
 #### T11 a T13
 
 Siguen exactamente el mismo flujo que T10, con estas diferencias:
@@ -746,7 +778,7 @@ Siguen exactamente el mismo flujo que T10, con estas diferencias:
 - Se cambian los parámetros por defecto (`ID_TABLA` y `COD_TIPO`); el job los pasa a cada ejecución.
 - Las cuatro cargas escriben en la misma tabla `fact_ocupacion`, cada una con su `tipo_key`, y cada una deja su informe de control (`control_totales_APT.csv`, `_CAM.csv` y `_RUR.csv`).
 - Las encuestas extrahoteleras llegan hasta agosto de 2026, pero el alcance 2016-2025 deja ese año fuera.
-- En estas encuestas puede haber valores ausentes por secreto estadístico (por ejemplo, en Ceuta y Melilla), y es donde se utiliza la reconstrucción por diferencia de la fase 4 y los NULL de la fase 5.
+- Las series de Ceuta y Melilla en apartamentos, campings y turismo rural están vacías en el INE y se dejan en NULL; los huecos aislados se completan igual que en T10 (véase «Valores ausentes»). Los pasos de la fase 5 se copian de T10 a las otras tres transformaciones.
 
 ### 5.7 T40_validacion
 
