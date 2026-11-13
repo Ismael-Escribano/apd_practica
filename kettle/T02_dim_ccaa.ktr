@@ -1639,7 +1639,7 @@
         <type>Number</type>
         <format/>
         <group/>
-        <decimal/>
+        <decimal>.</decimal>
         <currency/>
         <length>-1</length>
         <precision>-1</precision>
@@ -1654,7 +1654,7 @@
         <type>Number</type>
         <format/>
         <group/>
-        <decimal/>
+        <decimal>.</decimal>
         <currency/>
         <length>-1</length>
         <precision>-1</precision>
