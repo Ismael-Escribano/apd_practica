@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <transformation>
   <info>
-    <name>T40_validacion</name>
-    <description/>
+    <name>T40: validar, registrar, depurar y comprobar</name>
+    <description>Una sola transformación: validación fila a fila, CSV de descartes, eliminación y comprobaciones al terminar.</description>
     <extended_description/>
     <trans_version/>
     <trans_type>Normal</trans_type>
@@ -507,81 +507,17 @@
     </attributes>
   </connection>
   <order>
-    <hop>
-      <from>leer control_totales</from>
-      <to>Contar descuadres</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Log de validación</from>
-      <to>Informe validación</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Informe validación</from>
-      <to>¿Hay errores?</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>¿Hay errores?</from>
-      <to>Abortar si falla</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>¿Hay errores?</from>
-      <to>Validación OK</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>C1 Claves huérfanas</from>
-      <to>Juntar controles</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>C2 Sin negativos</from>
-      <to>Juntar controles</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>C3 Coherencia</from>
-      <to>Juntar controles</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>C4 Estancia razonable</from>
-      <to>Juntar controles</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>C5 Grano Único</from>
-      <to>Juntar controles</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>C6 Volumen esperado</from>
-      <to>Juntar controles</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Juntar controles</from>
-      <to>Sumar errores</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Contar descuadres</from>
-      <to>Juntar controles</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Sumar errores</from>
-      <to>Log de validación</to>
-      <enabled>Y</enabled>
-    </hop>
-  </order>
-  <step>
-    <name>C1 Claves huérfanas</name>
+    <hop><from>Leer hechos y calcular motivos</from><to>Filtrar registros incoherentes</to><enabled>Y</enabled></hop><hop><from>Filtrar registros incoherentes</from><to>Conservar registros válidos</to><enabled>Y</enabled></hop><hop><from>Filtrar registros incoherentes</from><to>Exportar filas eliminadas CSV</to><enabled>Y</enabled></hop><hop><from>Exportar filas eliminadas CSV</from><to>Eliminar inválidas de fact_ocupacion</to><enabled>Y</enabled></hop><hop><from>Eliminar inválidas de fact_ocupacion</from><to>Esperar fin del borrado y contar</to><enabled>Y</enabled></hop><hop><from>Esperar fin del borrado y contar</from><to>Comprobar BD después del borrado</to><enabled>Y</enabled></hop><hop><from>Leer control_totales</from><to>Contar descuadres INE</to><enabled>Y</enabled></hop><hop><from>Comprobar BD después del borrado</from><to>Juntar controles finales</to><enabled>Y</enabled></hop><hop><from>Contar descuadres INE</from><to>Juntar controles finales</to><enabled>Y</enabled></hop><hop><from>Juntar controles finales</from><to>Sumar errores residuales</to><enabled>Y</enabled></hop><hop><from>Sumar errores residuales</from><to>Log final T40</to><enabled>Y</enabled></hop><hop><from>Log final T40</from><to>Informe final CSV</to><enabled>Y</enabled></hop><hop><from>Informe final CSV</from><to>¿Quedan errores?</to><enabled>Y</enabled></hop><hop><from>¿Quedan errores?</from><to>Abortar si hay errores residuales</to><enabled>Y</enabled></hop><hop><from>¿Quedan errores?</from><to>Validación terminada</to><enabled>Y</enabled></hop></order>
+  <step_error_handling>
+  </step_error_handling>
+  <slave-step-copy-partition-distribution>
+  </slave-step-copy-partition-distribution>
+  <slave_transformation>N</slave_transformation>
+  <attributes/>
+<step>
+    <name>Leer hechos y calcular motivos</name>
     <type>TableInput</type>
-    <description/>
+    <description>Lee la tabla de hechos y concatena todos los motivos de invalidez de cada fila.</description>
     <distribute>Y</distribute>
     <custom_distribution/>
     <copies>1</copies>
@@ -590,80 +526,44 @@
       <schema_name/>
     </partitioning>
     <connection>turismo_dw</connection>
-    <sql>SELECT COUNT(*) AS n_huerfanas
-FROM turismo_dw.fact_ocupacion f
-LEFT JOIN turismo_dw.dim_tiempo t           ON t.tiempo_key  = f.tiempo_key
-LEFT JOIN turismo_dw.dim_ccaa c             ON c.ccaa_key    = f.ccaa_key
-LEFT JOIN turismo_dw.dim_tipo_alojamiento a ON a.tipo_key    = f.tipo_key
-LEFT JOIN turismo_dw.dim_origen o           ON o.origen_key  = f.origen_key
-LEFT JOIN turismo_dw.dim_nivel_estancia ne  ON ne.nivel_key  = f.nivel_key
-LEFT JOIN turismo_dw.dim_calidad_dato q     ON q.calidad_key = f.calidad_key
-WHERE t.tiempo_key IS NULL
-   OR c.ccaa_key IS NULL
-   OR a.tipo_key IS NULL
-   OR o.origen_key IS NULL
-   OR ne.nivel_key IS NULL
-   OR q.calidad_key IS NULL;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
-    <row-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>n_huerfanas</name>
-        <length>15</length>
-        <precision>0</precision>
-        <origin>C1 Claves huérfanas</origin>
-        <comments>n_huerfanas</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_US</date_format_locale>
-        <date_format_timezone>Europe/Madrid</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-    </row-meta>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>448</xloc>
-      <yloc>80</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>C2 Sin negativos</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>turismo_dw</connection>
-    <sql>SELECT COUNT(*) AS n_negativos
-FROM turismo_dw.fact_ocupacion
-WHERE viajeros &lt; 0 OR pernoctaciones &lt; 0;</sql>
+    <sql>-- T40: diagnóstico fila a fila sobre turismo_dw.fact_ocupacion.
+-- Las claves huérfanas y los duplicados están normalmente impedidos por las restricciones SQL.
+-- Las ausencias de viajeros/pernoctaciones se permiten; el nivel 4 representa Sin dato.
+-- Si una fila incumple varios criterios, conserva todos los motivos separados por |.
+-- El rango de 1 a 30 días es una regla configurable del proyecto, NO una ley universal.
+SELECT r.*,
+       CASE WHEN r.motivo_eliminacion &lt;&gt; '' THEN 1 ELSE 0 END AS descartar
+FROM (
+  SELECT
+    DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s') AS fecha_validacion,
+    f.tiempo_key, f.ccaa_key, f.tipo_key, f.origen_key,
+    f.nivel_key, f.calidad_key, f.viajeros,
+    f.pernoctaciones, f.estancia_media,
+    CONCAT_WS(' | ',
+    IF((t.tiempo_key IS NULL OR c.ccaa_key IS NULL OR a.tipo_key IS NULL OR o.origen_key IS NULL OR ne.nivel_key IS NULL OR q.calidad_key IS NULL), 'Falta una clave en alguna dimensión', NULL),
+    IF((f.viajeros &lt; 0 OR f.pernoctaciones &lt; 0), 'Viajeros o pernoctaciones negativos', NULL),
+    IF((f.viajeros IS NOT NULL AND f.pernoctaciones IS NOT NULL AND f.pernoctaciones &lt; f.viajeros), 'Pernoctaciones menores que viajeros', NULL),
+    IF((f.viajeros = 0 AND f.pernoctaciones &gt; 0), 'Pernoctaciones positivas con cero viajeros', NULL),
+    IF((f.estancia_media IS NOT NULL AND (f.estancia_media &lt; 1 OR f.estancia_media &gt; 30)), 'Estancia media fuera de 1 a 30 días', NULL),
+    IF(((f.estancia_media IS NULL AND f.nivel_key &lt;&gt; 4)
+      OR (f.estancia_media IS NOT NULL AND (
+           f.nivel_key = 4
+        OR (f.estancia_media &lt; 2 AND f.nivel_key &lt;&gt; 1)
+        OR (f.estancia_media &gt;= 2 AND f.estancia_media &lt; 4 AND f.nivel_key &lt;&gt; 2)
+        OR (f.estancia_media &gt;= 4 AND f.nivel_key &lt;&gt; 3)))), 'Nivel de estancia no coincide con la estancia media', NULL),
+    IF(((f.estancia_media IS NOT NULL AND (f.viajeros IS NULL OR f.viajeros = 0 OR f.pernoctaciones IS NULL))
+       OR (f.viajeros &gt; 0 AND f.pernoctaciones IS NOT NULL AND (
+            f.estancia_media IS NULL
+            OR ABS(f.estancia_media - ROUND(f.pernoctaciones / f.viajeros, 2)) &gt; 0.02))), 'Estancia media no coincide con pernoctaciones/viajeros', NULL)
+    ) AS motivo_eliminacion
+  FROM turismo_dw.fact_ocupacion AS f
+  LEFT JOIN turismo_dw.dim_tiempo AS t ON f.tiempo_key = t.tiempo_key
+  LEFT JOIN turismo_dw.dim_ccaa AS c ON f.ccaa_key = c.ccaa_key
+  LEFT JOIN turismo_dw.dim_tipo_alojamiento AS a ON f.tipo_key = a.tipo_key
+  LEFT JOIN turismo_dw.dim_origen AS o ON f.origen_key = o.origen_key
+  LEFT JOIN turismo_dw.dim_nivel_estancia AS ne ON f.nivel_key = ne.nivel_key
+  LEFT JOIN turismo_dw.dim_calidad_dato AS q ON f.calidad_key = q.calidad_key
+) AS r</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -704,15 +604,15 @@ WHERE viajeros &lt; 0 OR pernoctaciones &lt; 0;</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>320</xloc>
-      <yloc>80</yloc>
+      <xloc>180</xloc>
+      <yloc>190</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>C3 Coherencia</name>
-    <type>TableInput</type>
-    <description/>
+    <name>Filtrar registros incoherentes</name>
+    <type>FilterRows</type>
+    <description>Rama TRUE: descartar=1; rama FALSE: filas válidas sin modificación.</description>
     <distribute>Y</distribute>
     <custom_distribution/>
     <copies>1</copies>
@@ -720,43 +620,25 @@ WHERE viajeros &lt; 0 OR pernoctaciones &lt; 0;</sql>
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>turismo_dw</connection>
-    <sql>SELECT COUNT(*) AS n_coherencia
-FROM turismo_dw.fact_ocupacion
-WHERE viajeros IS NOT NULL
-  AND pernoctaciones IS NOT NULL
-  AND pernoctaciones &lt; viajeros;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
-    <row-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>n_coherencia</name>
-        <length>15</length>
-        <precision>0</precision>
-        <origin>C3 Coherencia</origin>
-        <comments>n_coherencia</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_US</date_format_locale>
-        <date_format_timezone>Europe/Madrid</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-    </row-meta>
+    <send_true_to>Exportar filas eliminadas CSV</send_true_to>
+    <send_false_to>Conservar registros válidos</send_false_to>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>descartar</leftvalue>
+        <function>=</function>
+        <rightvalue/>
+        <value>
+          <name>constant</name>
+          <type>Integer</type>
+          <text>1</text>
+          <length>-1</length>
+          <precision>0</precision>
+          <isnull>N</isnull>
+          <mask>####0;-####0</mask>
+        </value>
+      </condition>
+    </compare>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -766,14 +648,14 @@ WHERE viajeros IS NOT NULL
       </output>
     </remotesteps>
     <GUI>
-      <xloc>208</xloc>
-      <yloc>80</yloc>
+      <xloc>430</xloc>
+      <yloc>190</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>C4 Estancia razonable</name>
-    <type>TableInput</type>
+    <name>Conservar registros válidos</name>
+    <type>Dummy</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -782,42 +664,6 @@ WHERE viajeros IS NOT NULL
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>turismo_dw</connection>
-    <sql>SELECT COUNT(*) AS n_estancia
-FROM turismo_dw.fact_ocupacion
-WHERE (estancia_media IS NOT NULL AND (estancia_media &lt; 1 OR estancia_media > 30))
-   OR (estancia_media IS NULL AND nivel_key &lt;&gt; 4);</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
-    <row-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>n_estancia</name>
-        <length>15</length>
-        <precision>0</precision>
-        <origin>C4 Estancia razonable</origin>
-        <comments>n_estancia</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_US</date_format_locale>
-        <date_format_timezone>Europe/Madrid</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-    </row-meta>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -827,15 +673,134 @@ WHERE (estancia_media IS NOT NULL AND (estancia_media &lt; 1 OR estancia_media >
       </output>
     </remotesteps>
     <GUI>
-      <xloc>208</xloc>
-      <yloc>192</yloc>
+      <xloc>690</xloc>
+      <yloc>325</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>C5 Grano Único</name>
+    <name>Exportar filas eliminadas CSV</name>
+    <type>TextFileOutput</type>
+    <description>Copia auditada de filas y motivos ANTES de la operación DELETE.</description>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <separator>;</separator>
+    <enclosure>"</enclosure>
+    <enclosure_forced>N</enclosure_forced>
+    <enclosure_fix_disabled>N</enclosure_fix_disabled>
+    <header>Y</header>
+    <footer>N</footer>
+    <format>DOS</format>
+    <compression>None</compression>
+    <encoding>UTF-8</encoding>
+    <endedLine/>
+    <fileNameInField>N</fileNameInField>
+    <fileNameField/>
+    <create_parent_folder>Y</create_parent_folder>
+    <file>
+      <name>${Internal.Transformation.Filename.Directory}/../data/clean/t40_filas_eliminadas</name>
+      <servlet_output>N</servlet_output>
+      <do_not_open_new_file_init>N</do_not_open_new_file_init>
+      <extention>csv</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format/>
+      <add_to_result_filenames>Y</add_to_result_filenames>
+      <pad>N</pad>
+      <fast_dump>N</fast_dump>
+      <splitevery/>
+    </file>
+    <fields>
+      <field><name>fecha_validacion</name><type>String</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>tiempo_key</name><type>Integer</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>ccaa_key</name><type>Integer</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>tipo_key</name><type>Integer</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>origen_key</name><type>Integer</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>nivel_key</name><type>Integer</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>calidad_key</name><type>Integer</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>viajeros</name><type>Integer</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>pernoctaciones</name><type>Integer</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>estancia_media</name><type>Number</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field><field><name>motivo_eliminacion</name><type>String</type><format/><currency/><decimal>.</decimal><group/><nullif/><trim_type>none</trim_type><length>-1</length><precision>-1</precision></field></fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>700</xloc>
+      <yloc>120</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Eliminar inválidas de fact_ocupacion</name>
+    <type>Delete</type>
+    <description>Borra por las seis claves de la PK después del CSV. Commit por fila; su finalización habilita los controles posteriores.</description>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1030</xloc>
+      <yloc>120</yloc>
+      <draw>Y</draw>
+    </GUI>
+  <connection>turismo_dw</connection><commit>1</commit><lookup><schema>turismo_dw</schema><table>fact_ocupacion</table><key><name>tiempo_key</name><field>tiempo_key</field><condition>=</condition><name2/></key><key><name>ccaa_key</name><field>ccaa_key</field><condition>=</condition><name2/></key><key><name>tipo_key</name><field>tipo_key</field><condition>=</condition><name2/></key><key><name>origen_key</name><field>origen_key</field><condition>=</condition><name2/></key><key><name>nivel_key</name><field>nivel_key</field><condition>=</condition><name2/></key><key><name>calidad_key</name><field>calidad_key</field><condition>=</condition><name2/></key></lookup></step>
+  <step>
+    <name>Esperar fin del borrado y contar</name>
+    <type>GroupBy</type>
+    <description>Agrupa el flujo de Delete y produce un registro al finalizar, incluso si no hubo ningún borrado.</description>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <all_rows>N</all_rows>
+    <ignore_aggregate>N</ignore_aggregate>
+    <field_ignore/>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>grp</prefix>
+    <add_linenr>N</add_linenr>
+    <linenr_fieldname/>
+    <give_back_row>Y</give_back_row>
+    <group>
+      </group>
+    <fields>
+      <field><aggregate>n_eliminadas</aggregate><subject>tiempo_key</subject><type>COUNT_ANY</type><valuefield></valuefield></field></fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1280</xloc>
+      <yloc>170</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Comprobar BD después del borrado</name>
     <type>TableInput</type>
-    <description/>
+    <description>SELECT consolidado C1-C6, activado una sola vez al terminar los DELETE; incorpora contador de registros excluidos.</description>
     <distribute>Y</distribute>
     <custom_distribution/>
     <copies>1</copies>
@@ -844,104 +809,64 @@ WHERE (estancia_media IS NOT NULL AND (estancia_media &lt; 1 OR estancia_media >
       <schema_name/>
     </partitioning>
     <connection>turismo_dw</connection>
-    <sql>SELECT COUNT(*) AS n_grano
+    <sql>-- T40: estos controles se ejecutan DESPUÉS del flujo de DELETE.
+-- Se conserva la semántica de los controles de T40 (C1 a C6).
+-- La diferencia de volumen es informativa: depurar filas reduce el total.
+SELECT
+  (SELECT COUNT(*) 
+FROM turismo_dw.fact_ocupacion f
+LEFT JOIN turismo_dw.dim_tiempo t           ON t.tiempo_key  = f.tiempo_key
+LEFT JOIN turismo_dw.dim_ccaa c             ON c.ccaa_key    = f.ccaa_key
+LEFT JOIN turismo_dw.dim_tipo_alojamiento a ON a.tipo_key    = f.tipo_key
+LEFT JOIN turismo_dw.dim_origen o           ON o.origen_key  = f.origen_key
+LEFT JOIN turismo_dw.dim_nivel_estancia ne  ON ne.nivel_key  = f.nivel_key
+LEFT JOIN turismo_dw.dim_calidad_dato q     ON q.calidad_key = f.calidad_key
+WHERE t.tiempo_key IS NULL
+   OR c.ccaa_key IS NULL
+   OR a.tipo_key IS NULL
+   OR o.origen_key IS NULL
+   OR ne.nivel_key IS NULL
+   OR q.calidad_key IS NULL) AS n_huerfanas,
+  (SELECT COUNT(*) 
+FROM turismo_dw.fact_ocupacion
+WHERE viajeros &lt; 0 OR pernoctaciones &lt; 0) AS n_negativos,
+  (SELECT COUNT(*) 
+FROM turismo_dw.fact_ocupacion
+WHERE (viajeros IS NOT NULL AND pernoctaciones IS NOT NULL AND pernoctaciones &lt; viajeros)
+   OR (viajeros = 0 AND pernoctaciones &gt; 0)) AS n_coherencia,
+  (SELECT COUNT(*) 
+FROM turismo_dw.fact_ocupacion AS f
+WHERE (f.estancia_media IS NOT NULL AND (f.estancia_media &lt; 1 OR f.estancia_media &gt; 30))
+   OR (f.estancia_media IS NULL AND f.nivel_key &lt;&gt; 4)
+   OR (f.estancia_media IS NOT NULL AND (
+          f.nivel_key = 4
+       OR (f.estancia_media &lt; 2 AND f.nivel_key &lt;&gt; 1)
+       OR (f.estancia_media &gt;= 2 AND f.estancia_media &lt; 4 AND f.nivel_key &lt;&gt; 2)
+       OR (f.estancia_media &gt;= 4 AND f.nivel_key &lt;&gt; 3)))
+   OR (f.estancia_media IS NOT NULL AND (
+          f.viajeros IS NULL OR f.viajeros = 0 OR f.pernoctaciones IS NULL))
+   OR (f.viajeros &gt; 0 AND f.pernoctaciones IS NOT NULL AND (
+          f.estancia_media IS NULL
+       OR ABS(f.estancia_media - ROUND(f.pernoctaciones / f.viajeros, 2)) &gt; 0.02))) AS n_estancia,
+  (SELECT COUNT(*) 
 FROM (
     SELECT tiempo_key, ccaa_key, tipo_key, origen_key
     FROM turismo_dw.fact_ocupacion
     GROUP BY tiempo_key, ccaa_key, tipo_key, origen_key
-    HAVING COUNT(*) > 1
-) duplicados;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
-    <row-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>n_grano</name>
-        <length>15</length>
-        <precision>0</precision>
-        <origin>C5 Grano Único</origin>
-        <comments>n_grano</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_US</date_format_locale>
-        <date_format_timezone>Europe/Madrid</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-    </row-meta>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>208</xloc>
-      <yloc>304</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>C6 Volumen esperado</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>turismo_dw</connection>
-    <sql>SELECT ABS((SELECT COUNT(*) FROM turismo_dw.dim_tiempo) - 120) +
+    HAVING COUNT(*) &gt; 1
+) duplicados) AS n_grano,
+  (SELECT ABS((SELECT COUNT(*) FROM turismo_dw.dim_tiempo) - 120) +
        ABS((SELECT COUNT(*) FROM turismo_dw.dim_ccaa) - 19) +
-       ABS((SELECT COUNT(*) FROM turismo_dw.fact_ocupacion) - 18240) AS n_volumen;</sql>
+       ABS((SELECT COUNT(*) FROM turismo_dw.fact_ocupacion) - 18240) ) AS n_volumen,
+  CAST(COALESCE(?, 0) AS SIGNED) AS n_eliminadas;</sql>
     <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
+    <lookup>Esperar fin del borrado y contar</lookup>
+    <execute_each_row>Y</execute_each_row>
     <variables_active>N</variables_active>
     <lazy_conversion_active>N</lazy_conversion_active>
     <cached_row_meta_active>N</cached_row_meta_active>
     <row-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>n_volumen</name>
-        <length>15</length>
-        <precision>0</precision>
-        <origin>C6 Volumen esperado</origin>
-        <comments>n_volumen</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_US</date_format_locale>
-        <date_format_timezone>Europe/Madrid</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-    </row-meta>
+      <value-meta><type>Integer</type><storagetype>normal</storagetype><name>n_huerfanas</name><length>15</length><precision>0</precision><origin>Comprobar BD después del borrado</origin><comments>n_huerfanas</comments><conversion_Mask>####0;-####0</conversion_Mask><decimal_symbol>,</decimal_symbol><grouping_symbol>.</grouping_symbol><currency_symbol></currency_symbol><trim_type>none</trim_type><case_insensitive>N</case_insensitive><collator_disabled>Y</collator_disabled><collator_strength>0</collator_strength><sort_descending>N</sort_descending><output_padding>N</output_padding><date_format_lenient>N</date_format_lenient><date_format_locale>en_US</date_format_locale><date_format_timezone>Europe/Madrid</date_format_timezone><lenient_string_to_number>N</lenient_string_to_number></value-meta><value-meta><type>Integer</type><storagetype>normal</storagetype><name>n_negativos</name><length>15</length><precision>0</precision><origin>Comprobar BD después del borrado</origin><comments>n_negativos</comments><conversion_Mask>####0;-####0</conversion_Mask><decimal_symbol>,</decimal_symbol><grouping_symbol>.</grouping_symbol><currency_symbol></currency_symbol><trim_type>none</trim_type><case_insensitive>N</case_insensitive><collator_disabled>Y</collator_disabled><collator_strength>0</collator_strength><sort_descending>N</sort_descending><output_padding>N</output_padding><date_format_lenient>N</date_format_lenient><date_format_locale>en_US</date_format_locale><date_format_timezone>Europe/Madrid</date_format_timezone><lenient_string_to_number>N</lenient_string_to_number></value-meta><value-meta><type>Integer</type><storagetype>normal</storagetype><name>n_coherencia</name><length>15</length><precision>0</precision><origin>Comprobar BD después del borrado</origin><comments>n_coherencia</comments><conversion_Mask>####0;-####0</conversion_Mask><decimal_symbol>,</decimal_symbol><grouping_symbol>.</grouping_symbol><currency_symbol></currency_symbol><trim_type>none</trim_type><case_insensitive>N</case_insensitive><collator_disabled>Y</collator_disabled><collator_strength>0</collator_strength><sort_descending>N</sort_descending><output_padding>N</output_padding><date_format_lenient>N</date_format_lenient><date_format_locale>en_US</date_format_locale><date_format_timezone>Europe/Madrid</date_format_timezone><lenient_string_to_number>N</lenient_string_to_number></value-meta><value-meta><type>Integer</type><storagetype>normal</storagetype><name>n_estancia</name><length>15</length><precision>0</precision><origin>Comprobar BD después del borrado</origin><comments>n_estancia</comments><conversion_Mask>####0;-####0</conversion_Mask><decimal_symbol>,</decimal_symbol><grouping_symbol>.</grouping_symbol><currency_symbol></currency_symbol><trim_type>none</trim_type><case_insensitive>N</case_insensitive><collator_disabled>Y</collator_disabled><collator_strength>0</collator_strength><sort_descending>N</sort_descending><output_padding>N</output_padding><date_format_lenient>N</date_format_lenient><date_format_locale>en_US</date_format_locale><date_format_timezone>Europe/Madrid</date_format_timezone><lenient_string_to_number>N</lenient_string_to_number></value-meta><value-meta><type>Integer</type><storagetype>normal</storagetype><name>n_grano</name><length>15</length><precision>0</precision><origin>Comprobar BD después del borrado</origin><comments>n_grano</comments><conversion_Mask>####0;-####0</conversion_Mask><decimal_symbol>,</decimal_symbol><grouping_symbol>.</grouping_symbol><currency_symbol></currency_symbol><trim_type>none</trim_type><case_insensitive>N</case_insensitive><collator_disabled>Y</collator_disabled><collator_strength>0</collator_strength><sort_descending>N</sort_descending><output_padding>N</output_padding><date_format_lenient>N</date_format_lenient><date_format_locale>en_US</date_format_locale><date_format_timezone>Europe/Madrid</date_format_timezone><lenient_string_to_number>N</lenient_string_to_number></value-meta><value-meta><type>Integer</type><storagetype>normal</storagetype><name>n_volumen</name><length>15</length><precision>0</precision><origin>Comprobar BD después del borrado</origin><comments>n_volumen</comments><conversion_Mask>####0;-####0</conversion_Mask><decimal_symbol>,</decimal_symbol><grouping_symbol>.</grouping_symbol><currency_symbol></currency_symbol><trim_type>none</trim_type><case_insensitive>N</case_insensitive><collator_disabled>Y</collator_disabled><collator_strength>0</collator_strength><sort_descending>N</sort_descending><output_padding>N</output_padding><date_format_lenient>N</date_format_lenient><date_format_locale>en_US</date_format_locale><date_format_timezone>Europe/Madrid</date_format_timezone><lenient_string_to_number>N</lenient_string_to_number></value-meta><value-meta><type>Integer</type><storagetype>normal</storagetype><name>n_eliminadas</name><length>15</length><precision>0</precision><origin>Comprobar BD después del borrado</origin><comments>n_eliminadas</comments><conversion_Mask>####0;-####0</conversion_Mask><decimal_symbol>,</decimal_symbol><grouping_symbol>.</grouping_symbol><currency_symbol></currency_symbol><trim_type>none</trim_type><case_insensitive>N</case_insensitive><collator_disabled>Y</collator_disabled><collator_strength>0</collator_strength><sort_descending>N</sort_descending><output_padding>N</output_padding><date_format_lenient>N</date_format_lenient><date_format_locale>en_US</date_format_locale><date_format_timezone>Europe/Madrid</date_format_timezone><lenient_string_to_number>N</lenient_string_to_number></value-meta></row-meta>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -951,13 +876,13 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>208</xloc>
-      <yloc>416</yloc>
+      <xloc>1580</xloc>
+      <yloc>170</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>leer control_totales</name>
+    <name>Leer control_totales</name>
     <type>TextFileInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -995,7 +920,7 @@ FROM (
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>${Internal.Entry.Current.Directory}/data/clean</name>
+      <name>${Internal.Transformation.Filename.Directory}/../data/clean</name>
       <filemask>control_totales_.*\.csv</filemask>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -1056,13 +981,13 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>336</xloc>
-      <yloc>416</yloc>
+      <xloc>1340</xloc>
+      <yloc>470</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Contar descuadres</name>
+    <name>Contar descuadres INE</name>
     <type>GroupBy</type>
     <description/>
     <distribute>Y</distribute>
@@ -1099,13 +1024,83 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>448</xloc>
-      <yloc>416</yloc>
+      <xloc>1570</xloc>
+      <yloc>470</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Log de validación</name>
+    <name>Juntar controles finales</name>
+    <type>JoinRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <cache_size>500</cache_size>
+    <main>Comprobar BD después del borrado</main>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue/>
+        <function>=</function>
+        <rightvalue/>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1830</xloc>
+      <yloc>260</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Sumar errores residuales</name>
+    <type>Formula</type>
+    <description>Excluye n_volumen, que es informativo, y n_eliminadas, que son filas ya eliminadas.</description>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <formula>
+      <field_name>n</field_name>
+      <formula_string>[n_huerfanas] + [n_negativos] + [n_coherencia] + [n_estancia] + [n_grano] + [n_totales]</formula_string>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <replace_field/>
+    </formula>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>2090</xloc>
+      <yloc>260</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Log final T40</name>
     <type>WriteToLog</type>
     <description/>
     <distribute>Y</distribute>
@@ -1119,7 +1114,7 @@ FROM (
     <displayHeader>Y</displayHeader>
     <limitRows>N</limitRows>
     <limitRowsNumber>0</limitRowsNumber>
-    <logmessage>====== RESULTADO DE VALIDACIÓN T40 ======</logmessage>
+    <logmessage>====== RESULTADO FINAL T40 (TRAS DEPURACIÓN) ======</logmessage>
     <fields>
       <field>
         <name>n_huerfanas</name>
@@ -1145,7 +1140,7 @@ FROM (
       <field>
         <name>n</name>
       </field>
-    </fields>
+    <field><name>n_eliminadas</name></field></fields>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -1155,15 +1150,15 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>672</xloc>
-      <yloc>272</yloc>
+      <xloc>2320</xloc>
+      <yloc>260</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Informe validación</name>
+    <name>Informe final CSV</name>
     <type>TextFileOutput</type>
-    <description/>
+    <description>Guarda los controles finales y el número de filas borradas en informe_t40.csv.</description>
     <distribute>Y</distribute>
     <custom_distribution/>
     <copies>1</copies>
@@ -1185,7 +1180,7 @@ FROM (
     <fileNameField/>
     <create_parent_folder>Y</create_parent_folder>
     <file>
-      <name>${Internal.Entry.Current.Directory}/../data/clean/informe_t40</name>
+      <name>${Internal.Transformation.Filename.Directory}/../data/clean/informe_t40</name>
       <servlet_output>N</servlet_output>
       <do_not_open_new_file_init>Y</do_not_open_new_file_init>
       <extention>csv</extention>
@@ -1298,7 +1293,7 @@ FROM (
         <length>-1</length>
         <precision>-1</precision>
       </field>
-    </fields>
+    <field><name>n_eliminadas</name><type>Integer</type><format>####0;-####0</format><currency></currency><decimal>,</decimal><group>.</group><nullif></nullif><trim_type>none</trim_type><length>15</length><precision>0</precision></field></fields>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -1308,13 +1303,13 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>784</xloc>
-      <yloc>272</yloc>
+      <xloc>2550</xloc>
+      <yloc>260</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>¿Hay errores?</name>
+    <name>¿Quedan errores?</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -1324,8 +1319,8 @@ FROM (
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Abortar si falla</send_true_to>
-    <send_false_to>Validación OK</send_false_to>
+    <send_true_to>Abortar si hay errores residuales</send_true_to>
+    <send_false_to>Validación terminada</send_false_to>
     <compare>
       <condition>
         <negated>N</negated>
@@ -1352,13 +1347,13 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>880</xloc>
-      <yloc>272</yloc>
+      <xloc>2790</xloc>
+      <yloc>260</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Abortar si falla</name>
+    <name>Abortar si hay errores residuales</name>
     <type>Abort</type>
     <description/>
     <distribute>Y</distribute>
@@ -1369,7 +1364,7 @@ FROM (
       <schema_name/>
     </partitioning>
     <row_threshold>0</row_threshold>
-    <message>Fallo en control de calidad T40: existen registros inválidos.</message>
+    <message>La depuración T40 finalizó pero siguen fallando los controles de integridad o control_totales. Revise informe_t40.csv.</message>
     <always_log_rows>Y</always_log_rows>
     <abort_option>ABORT_WITH_ERROR</abort_option>
     <attributes/>
@@ -1381,13 +1376,13 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>208</yloc>
+      <xloc>3040</xloc>
+      <yloc>170</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Validación OK</name>
+    <name>Validación terminada</name>
     <type>Dummy</type>
     <description/>
     <distribute>Y</distribute>
@@ -1406,85 +1401,9 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>352</yloc>
+      <xloc>3040</xloc>
+      <yloc>370</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
-  <step>
-    <name>Juntar controles</name>
-    <type>JoinRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <cache_size>500</cache_size>
-    <main>C1 Claves huérfanas</main>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue/>
-        <function>=</function>
-        <rightvalue/>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>448</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Sumar errores</name>
-    <type>Formula</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <formula>
-      <field_name>n</field_name>
-      <formula_string>[n_huerfanas] + [n_negativos] + [n_coherencia] + [n_estancia] + [n_grano] + [n_volumen] + [n_totales]</formula_string>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <replace_field/>
-    </formula>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>568</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step_error_handling>
-  </step_error_handling>
-  <slave-step-copy-partition-distribution>
-  </slave-step-copy-partition-distribution>
-  <slave_transformation>N</slave_transformation>
-  <attributes/>
-</transformation>
+  </transformation>
