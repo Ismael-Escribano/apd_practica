@@ -268,13 +268,13 @@ Estas dos dimensiones no vienen del INE: las crea el ETL para describir cada fil
 
 **Nivel de estancia (`dim_nivel_estancia`).** Convierte la estancia media, que es un número, en una etiqueta. Los límites iniciales son: **Corta** (menos de 2 días), **Media** (de 2 a 4) y **Larga** (más de 4). Si la fila no tiene estancia media (por ejemplo, porque no hay viajeros), recibe **Sin dato**, que es el valor por defecto de la clave. Ejemplo: una fila con 1.000 viajeros y 2.500 pernoctaciones tiene una estancia media de 2,5 días, así que su nivel es *Media*. Los límites se guardan una sola vez en la dimensión (`min_dias`, `max_dias`) y se ajustarán cuando se vea la distribución real.
 
-**Calidad del dato (`dim_calidad_dato`).** Registra qué tratamiento ha recibido el valor durante la limpieza. Nunca se borra nada: se marca.
+**Calidad del dato (`dim_calidad_dato`).** Registra qué tratamiento ha recibido el valor durante la limpieza. Los valores imputados o atípicos nunca se borran: se marcan. La única depuración que elimina filas es T40, y solo para registros imposibles (véase 5.7).
 
 | Valor | Cuándo se asigna |
 |---|---|
 | Dato original | El valor es el que publicó el INE, sin cambios |
 | Dato imputado | Faltaba y lo ha calculado el ETL: o bien por diferencia (total − el otro componente), o bien como la media de los meses vecinos |
-| Valor atípico | Es el que publicó el INE, pero se aleja mucho de lo normal en esa CCAA y tipo de alojamiento (se detecta con la media y la desviación). No es un error: por ejemplo, los meses de 2020 y 2021 por la pandemia son datos reales |
+| Valor atípico | Es el que publicó el INE, pero se aleja mucho de lo normal: más de 3 desviaciones respecto a la media de esa CCAA, tipo de alojamiento y origen, o una estancia media superior a 30 días (véase 5.7). No es un error: por ejemplo, los meses de 2020 y 2021 por la pandemia son datos reales |
 | Imputado y atípico | Cumple las dos condiciones a la vez |
 
 Hay cuatro filas porque las dos marcas (imputado, atípico) se pueden combinar, y así la tabla de hechos guarda una sola clave en lugar de dos columnas de «sí/no». Para analizar solo con datos originales basta con filtrar por esta dimensión:
@@ -293,9 +293,11 @@ GROUP BY t.anio, c.nombre;
 Ambas se asignan en el ETL antes de cargar la fila (`nivel_key` con *Number range* y `calidad_key` según el control, la imputación y la detección de atípicos), por lo que no cambian después.
 
 ### Diseño físico
-Script de creación: [`sql/01_crear_almacen_turismo.sql`](sql/01_crear_almacen_turismo.sql). Modelo de MySQL Workbench (obtenido por ingeniería inversa del esquema creado): [`docs/almacen_turismo.mwb`](docs/almacen_turismo.mwb). Diagrama EER exportado: `docs/almacen_turismo_fisico.png` (también en `.svg` y `.pdf`).
+Script de creación: [`sql/01_crear_almacen_turismo.sql`](sql/01_crear_almacen_turismo.sql). Modelo de MySQL Workbench (obtenido por ingeniería inversa del esquema creado): [`docs/almacen_turismo.mwb`](docs/almacen_turismo.mwb). Diagrama EER exportado: `docs/almacen_turismo_fisico_completo.png` (también en `.svg` y `.pdf`).
 
-![Diseño físico (MySQL Workbench)](docs/almacen_turismo_fisico.png)
+![Diseño físico (MySQL Workbench)](docs/almacen_turismo_fisico_completo.png)
+
+El diseño conceptual y el lógico muestran solo el esquema en estrella (hechos y dimensiones); las vistas son consultas guardadas sobre ese esquema y solo aparecen en el diseño físico.
 
 **Verificación de la implementación** (MySQL 8, MySQL Workbench):
 - El script se ejecuta completo sin errores y crea 7 tablas (`fact_ocupacion` y 6 dimensiones) y 2 vistas. Solo emite avisos informativos: la base de datos no existía antes del `DROP` y la anchura de entero de `TINYINT(1)` está obsoleta en MySQL 8.
@@ -376,12 +378,87 @@ GROUP BY c.nombre, c.n_bic, c.nivel_patrimonio;
 - **Origen del viajero:** el INE da tres cifras de residencia: total, residentes en España y residentes en el extranjero. Guardamos solo las dos últimas, porque el total es su suma y guardarlo también haría que al sumar se contara todo dos veces. El total sirve para comprobar el ETL (total = España + extranjero) y para calcular por diferencia una cifra que falte.
 - **Patrimonio (BIC):** `n_bic` cuenta los elementos de Wikidata con código BIC que están dentro de cada CCAA. Depende de lo completo que esté Wikidata, así que no coincide con el registro oficial. Sirve para comparar territorios entre sí, no como cifra exacta.
 - **Clave primaria de la tabla de hechos:** incluye las seis claves de dimensión, como pide la convención de clase (toda clave ajena forma parte de la clave primaria). Lo que identifica de verdad cada fila son solo cuatro: mes, CCAA, tipo y origen. Por eso hay además una restricción `UNIQUE` sobre esas cuatro, que impide cargar dos veces el mismo mes, CCAA, tipo y origen. `nivel_key` y `calidad_key` se calculan a partir de la propia fila antes de cargarla y no cambian después.
-- **Marcar en lugar de borrar:** los datos imputados (rellenados por el ETL) o atípicos (muy distintos de lo normal) no se eliminan, se marcan en `dim_calidad_dato`. Así se sabe qué valores son originales y cuáles no.
+- **Marcar en lugar de borrar:** los datos imputados (rellenados por el ETL) o atípicos (muy distintos de lo normal) no se eliminan, se marcan en dim_calidad_dato. Así se sabe qué valores son originales y cuáles no. Solo se eliminan, en T40 y dejando un CSV de descartes, los registros imposibles (por ejemplo, menos noches que viajeros).
 - **Categorías a partir de números:** para facilitar el análisis, tres números se convierten en etiquetas. Los límites son iniciales y se ajustarán cuando veamos los datos reales.
   - `nivel_estancia`: Corta (menos de 2 días), Media (de 2 a 4) o Larga (más de 4).
   - `nivel_poblacion`: Muy grande (5 millones o más), Grande (de 2 a 5), Mediana (de 1 a 2) o Pequeña (menos de 1 millón).
   - `nivel_patrimonio`: Alto, Medio o Bajo. Se reparte las CCAA en tres grupos del mismo tamaño según su nº de BIC.
 - **Temporada** (criterio inicial, se puede cambiar): Alta de junio a septiembre, Media de marzo a mayo y octubre, y Baja el resto.
+
+### Uso de cada dimensión
+
+| Dimensión | Por qué existe | Dónde se usa |
+|---|---|---|
+| `dim_tiempo` | Permite agrupar por año, trimestre y temporada | Consultas P1 y P2; evolución temporal; vista `v_ocupacion_anual_ccaa` |
+| `dim_ccaa` | Describe el territorio: códigos, coordenadas, población y BIC | P1, P2 y P3; pernoctaciones por habitante; mapa (`codigo_ine` enlaza con `ccaa.geojson`) |
+| `dim_tipo_alojamiento` | Hotel, apartamento, camping o turismo rural | P1 (demanda por tipo) |
+| `dim_origen` | Residentes en España o en el extranjero | P2 (composición de la demanda) |
+| `dim_nivel_estancia` | Convierte la estancia media en etiqueta (corta, media, larga) | Comparar dónde predominan las estancias cortas o largas (ejemplo más abajo) |
+| `dim_calidad_dato` | Registra si el valor es original, imputado o atípico | Excluir imputados o atípicos de un análisis (`WHERE q.dato_imputado = 0`) |
+
+Reparto actual de `calidad_key` en `fact_ocupacion` (18.238 filas): 17.973 datos originales, 99 imputados, 165 atípicos y 1 imputado y atípico.
+
+```sql
+-- Ejemplo con dim_nivel_estancia: filas por tipo de alojamiento y nivel de estancia
+SELECT a.nombre AS tipo, ne.nombre AS nivel, COUNT(*) AS filas
+FROM fact_ocupacion f
+JOIN dim_tipo_alojamiento a ON a.tipo_key = f.tipo_key
+JOIN dim_nivel_estancia ne ON ne.nivel_key = f.nivel_key
+GROUP BY a.nombre, ne.nombre, ne.nivel_key
+ORDER BY a.nombre, ne.nivel_key;
+```
+
+### Cómo interpretar `estancia_media`
+
+`estancia_media` es una medida **derivada y no aditiva**: no se suma ni se promedia entre filas. Para agregar (por año, CCAA o tipo) se calcula siempre `SUM(pernoctaciones) / SUM(viajeros)`:
+
+```sql
+SELECT t.anio, c.nombre AS ccaa,
+       ROUND(SUM(f.pernoctaciones) / SUM(f.viajeros), 2) AS estancia_media
+FROM fact_ocupacion f
+JOIN dim_tiempo t ON t.tiempo_key = f.tiempo_key
+JOIN dim_ccaa c ON c.ccaa_key = f.ccaa_key
+WHERE f.viajeros > 0 AND f.pernoctaciones IS NOT NULL
+GROUP BY t.anio, c.nombre;
+```
+
+Además, el INE la presenta como una aproximación: es el cociente entre las noches de todos los alojados en el mes y los viajeros entrados en ese mes, por lo que en una fila puede superar los 30 días cuando hay estancias que cruzan meses. Esas filas se marcan como atípicas y se conservan (apartado 5.7).
+
+### Vistas de apoyo y cómo usarlas
+
+Una vista es una consulta guardada que se usa como si fuera una tabla. Sirven para no repetir uniones largas y para evitar errores de agregación.
+
+| Vista | Qué devuelve | Para qué sirve |
+|---|---|---|
+| `v_ocupacion_total` | Viajeros y pernoctaciones por mes, CCAA y tipo, sumando residentes en España y en el extranjero | P3 y totales mensuales sin separar el origen |
+| `v_ocupacion_anual_ccaa` | Viajeros, pernoctaciones y pernoctaciones por habitante por año y CCAA | Rankings y mapa por habitante |
+
+```sql
+-- Ranking de pernoctaciones por habitante en 2024
+SELECT nombre, pernoctaciones, pernoctaciones_por_habitante
+FROM v_ocupacion_anual_ccaa
+WHERE anio = 2024
+ORDER BY pernoctaciones_por_habitante DESC;
+
+-- Evolución anual de una CCAA (se identifica por codigo_ine, no por ccaa_key)
+SELECT anio, pernoctaciones
+FROM v_ocupacion_anual_ccaa
+WHERE codigo_ine = '10'
+ORDER BY anio;
+
+-- Totales mensuales de una CCAA por tipo de alojamiento
+SELECT t.anio, t.mes, a.nombre AS tipo, v.pernoctaciones
+FROM v_ocupacion_total v
+JOIN dim_tiempo t ON t.tiempo_key = v.tiempo_key
+JOIN dim_ccaa c ON c.ccaa_key = v.ccaa_key
+JOIN dim_tipo_alojamiento a ON a.tipo_key = v.tipo_key
+WHERE c.codigo_ine = '01'
+ORDER BY t.anio, t.mes, a.nombre;
+```
+
+Precauciones: las vistas incluyen todas las filas, también las imputadas y atípicas; los NULL no se suman, así que las series incompletas (por ejemplo, Ceuta y Melilla en apartamentos, campings y turismo rural) quedan infravaloradas o vacías; y la población por habitante usa siempre la cifra de referencia de `dim_ccaa`.
+
+`ccaa_key` es una clave sustituta autonumérica que cambia cada vez que se recarga `dim_ccaa`; para identificar una CCAA fuera de la base de datos (consultas, RDF, mapas) se usa siempre `codigo_ine`.
 
 ### Cumplimiento de las tareas del apartado
 
@@ -410,7 +487,7 @@ Herramienta: **Pentaho Data Integration (PDI, Kettle) 10.2 Community**. El ETL s
 | Descargas con `scripts/descargar_fuentes.py` y lectura local en PDI | INE y Wikidata son servicios web y se descargan con un script, porque Wikidata limita a una consulta por minuto y la consulta de BIC se hace por lotes reanudables. PDI lee los ficheros descargados (`data/raw/`), con lo que el ETL es reproducible sin depender de la red |
 | Rutas relativas (`${Internal.Entry.Current.Directory}/..`) | El repositorio funciona en cualquier ordenador y sistema operativo |
 | Credenciales de MySQL en variables | El repositorio es público; usuario y contraseña no se guardan en los `.ktr` |
-| Se marca, no se borra | Los valores imputados o atípicos se señalan en `dim_calidad_dato`; los datos de 2020 y 2021 son reales |
+| Se marca, no se borra (salvo lo imposible) | Los valores imputados o atípicos se señalan en dim_calidad_dato; los datos de 2020 y 2021 son reales. T40 solo elimina registros imposibles y los guarda antes en data/clean/t40_filas_eliminadas.csv |
 
 ### 5.2 Preparación del entorno (una sola vez)
 
@@ -450,11 +527,11 @@ flowchart LR
 | `T01_dim_tiempo.ktr` | `dim_tiempo` (120 meses, 2016-2025) | Hecho y verificado |
 | `T02_dim_ccaa.ktr` | `dim_ccaa` (19 filas) | Hecho y verificado |
 | `T10_eoh.ktr` | `fact_ocupacion`, hoteles | Hecho y verificado |
-| `T11_eoap.ktr`, `T12_eoac.ktr`, `T13_eotr.ktr` | `fact_ocupacion`, apartamentos, campings y turismo rural | Pendiente |
-| `T40_validacion.ktr` | Controles sobre el almacén cargado | Pendiente |
-| `J00_carga.kjb` | Orquesta todo | Pendiente |
+| `T11_eoap.ktr`, `T12_eoac.ktr`, `T13_eotr.ktr` | `fact_ocupacion`, apartamentos, campings y turismo rural | Hecho y verificado |
+| `T40_validacion.ktr` | Valida y depura `fact_ocupacion` (5.7) | Hecho y verificado |
+| `J00_carga.kjb` | Orquesta todo (5.8) | Hecho y verificado |
 
-**Orden de ejecución:** J00 limpia las tablas, ejecuta T01 y T02, después T10 a T13, y por último T40.
+**Orden de ejecución:** J00 limpia las tablas, ejecuta T01 y T02, después T10 a T13, y por último T40, que valida y depura. Si T40 detecta errores residuales, el job falla.
 
 ### 5.4 T01_dim_tiempo
 
@@ -699,10 +776,10 @@ El flujo se bifurca en `Faltantes y control` (el paso copia las filas a las dos 
 | `Ordenar para medias` (Sort rows) | Por `codigo_ine` y `origen` (requisito de *Group by*) |
 | `Media y desviación` (Group by) | Grupo `codigo_ine`, `origen`. Agregados sobre `pernoctaciones`: `media` (Average) y `desv` (Standard deviation, population). Devuelve 38 filas (19 CCAA × 2 orígenes) |
 | `Medias por CCAA y origen` (Stream lookup) | Une la media y la desviación a cada fila de la rama principal. Claves: `codigo_ine` y `origen`. Recupera `media` y `desv` |
-| `Marca atipico` (Formula, `atipico` Integer) | `IF(AND(NOT(ISBLANK([pernoctaciones]));NOT(ISBLANK([desv])));IF([desv]>0;IF(ABS(([pernoctaciones]-[media])/[desv])>3;1;0);0);0)`. Vale 1 si el valor se aleja más de 3 desviaciones. El umbral 3 es inicial y revisable |
+| `Marca atipico` (Formula, `atipico` Integer) | `IF(IF(ISBLANK([estancia_media]);0;[estancia_media])>30;1;IF(AND(NOT(ISBLANK([pernoctaciones]));NOT(ISBLANK([desv])));IF([desv]>0;IF(ABS(([pernoctaciones]-[media])/[desv])>3;1;0);0);0))`. Vale 1 si se cumple **uno** de dos criterios: la estancia media supera los 30 días, o las pernoctaciones se alejan más de 3 desviaciones de la media de su serie (se evita dividir por cero y operar con NULL). Los umbrales 30 y 3 son iniciales y revisables |
 | `Calidad del dato` (Formula, `calidad_key` Integer) | `IF(AND([imputado]=1;[atipico]=1);4;IF([imputado]=1;2;IF([atipico]=1;3;1)))`: 1 dato original, 2 imputado, 3 atípico, 4 imputado y atípico |
 
-**No se elimina ninguna fila**: los atípicos solo se marcan. En la EOH se marcan 11 de 4.560, que corresponden a valores muy alejados de lo normal en su CCAA y origen; los meses de 2020 y 2021 son datos reales y se conservan.
+**En T10 a T13 no se elimina ninguna fila**: los atípicos solo se marcan. En la EOH se marcan 11 de 4.560 (todos por z-score: en hoteles ninguna estancia supera los 30 días). En total hay 166 filas atípicas en el almacén: 111 por z-score y 55 por estancia media superior a 30 días (véase la justificación en 5.7). Los meses de 2020 y 2021 son datos reales y se conservan.
 
 #### Fase 6: claves y carga
 
@@ -762,13 +839,14 @@ Con T10 a T13 ejecutadas, `fact_ocupacion` contiene **18.240 filas** (4 tipos de
 
 | Comprobación | Resultado |
 |---|---|
-| Filas cargadas | 18.240 (4.560 por tipo) |
+| Filas cargadas por T10 a T13 | 18.240 (4.560 por tipo) |
+| Filas tras T40 | 18.238 (T40 elimina 2 registros imposibles, véase 5.7) |
 | Rango de meses | 201601 a 202512 |
 | Valores completados (`calidad_key` 2 o 4) | 100 (2 por diferencia y 98 con la media de los vecinos) |
-| Valores atípicos marcados (`calidad_key` 3 o 4) | 111 |
+| Valores atípicos marcados (`calidad_key` 3 o 4) | 166 (111 por z-score y 55 por estancia superior a 30 días) |
 | Filas sin viajeros tras el tratamiento | 1.826 (10,0 %) |
 
-**Caso de control** (Andalucía, enero de 2016, hoteles): ESP con 480.886 viajeros, 1.015.322 pernoctaciones y estancia media 2,11 (nivel 2, Media); EXT con 337.184 viajeros, 979.799 pernoctaciones y estancia media 2,91 (nivel 2, Media). Coinciden con el CSV del INE.
+**Caso de control** (Andalucía, enero de 2016, hoteles): sin cambios respecto a lo indicado en el apartado anterior.
 
 #### T11 a T13
 
@@ -782,27 +860,174 @@ Siguen exactamente el mismo flujo que T10, con estas diferencias:
 
 ### 5.7 T40_validacion
 
-Un *Table input* por control, que devuelve el número de filas incorrectas. Después, *Filter rows* (`n > 0`) y *Abort* detienen el job si algún control falla:
+**Fichero:** `kettle/T40_validacion.ktr` (nombre interno: «T40: validar, registrar, depurar y comprobar»). Trabaja sobre `fact_ocupacion` ya cargada por T10 a T13 y hace cuatro cosas, en este orden: **valida** cada fila, **registra** en un CSV las que no pasan, **depura** (las elimina) y **comprueba** que el almacén queda sin errores. Si queda algún error, aborta y el job falla.
 
-| Control | Consulta |
+**Criterio de depuración.** T40 elimina solo los registros **imposibles** según la definición de las variables del INE (por ejemplo, menos noches que viajeros). Los valores **extremos pero posibles**, como una estancia media superior a 30 días, no se eliminan: se marcan como atípicos en T10 a T13 (apartado 5.6) y se conservan. La justificación está al final de este apartado.
+
+![Transformación T40_validacion en Spoon, ejecutada](docs/T40_validacion.png)
+
+#### Rama de depuración
+
+| Paso | Tipo | Qué hace |
+|---|---|---|
+| `Leer hechos y calcular motivos` | Table input | Lee todas las filas de `fact_ocupacion` y las une (`LEFT JOIN`) con las seis dimensiones. Calcula `motivo_eliminacion` (los motivos incumplidos, separados por ` \| `) y `descartar` (1 si hay algún motivo) |
+| `Filtrar registros incoherentes` | Filter rows | `descartar = 1`: las filas van a `Exportar filas eliminadas CSV`; el resto, a `Conservar registros válidos` (Dummy) |
+| `Exportar filas eliminadas CSV` | Text file output | Escribe `data/clean/t40_filas_eliminadas.csv` (se sobrescribe en cada ejecución) con la fecha de validación, las seis claves, las tres medidas y el motivo |
+| `Eliminar inválidas de fact_ocupacion` | Delete | Borra cada fila por las seis claves de la clave primaria. Va **después** del CSV: primero se registra, luego se borra |
+| `Esperar fin del borrado y contar` | Group by | Sin campo de grupo; cuenta las filas borradas en `n_eliminadas`. Devuelve una fila aunque no se haya borrado nada y avisa de que el borrado ha terminado |
+| `Comprobar BD después del borrado` | Table input | Recibe `n_eliminadas` por el salto informativo (el icono «i» de la captura), que además le obliga a esperar al borrado. Recalcula los controles sobre la tabla ya depurada |
+
+**Reglas de descarte** (una fila se elimina si cumple al menos una):
+
+| Motivo | Condición |
 |---|---|
-| Sin claves huérfanas | filas de `fact_ocupacion` sin fila en alguna dimensión |
-| Sin negativos | `viajeros < 0` o `pernoctaciones < 0` |
-| Coherencia | `pernoctaciones < viajeros` |
-| Estancia razonable | `estancia_media` fuera de un rango (por ejemplo, de 1 a 30 días) |
-| Grano único | duplicados de `(tiempo_key, ccaa_key, tipo_key, origen_key)` |
-| Volumen | filas cargadas frente a las filas de origen filtradas (se registra) |
-| Total = ESP + EXT | resultado de la rama de control de T10 a T13 |
+| Falta una clave en alguna dimensión | Alguna de las seis dimensiones no tiene la fila a la que apunta la clave |
+| Negativos | `viajeros < 0` o `pernoctaciones < 0` |
+| Pernoctaciones menores que viajeros | Ambas informadas y `pernoctaciones < viajeros`. Un viajero entrado realiza una o más pernoctaciones, por lo que no puede haber menos noches que viajeros |
+| Pernoctaciones con cero viajeros | `viajeros = 0` y `pernoctaciones > 0` |
+| Estancia media inferior a 1 día | `estancia_media < 1`. Equivale a la regla de «pernoctaciones menores que viajeros» y se mantiene como control redundante |
+| Nivel de estancia incoherente | `nivel_key` no corresponde a la `estancia_media` (cortes 2 y 4 días; `Sin dato` solo si no hay estancia media) |
+| Estancia media incoherente | Informada sin viajeros o pernoctaciones válidos, o distinta de `pernoctaciones / viajeros` en más de 0,02 |
+
+Una estancia media superior a 30 días **no** es motivo de descarte. Los valores NULL tampoco incumplen ninguna regla por sí solos: una fila sin viajeros ni pernoctaciones se conserva (véase «Valores ausentes» en 5.6).
+
+#### Rama de control de totales
+
+`Leer control_totales` (Text file input) lee los ficheros `data/clean/control_totales_*.csv` que escriben T10 a T13 (fichero no obligatorio) y `Contar descuadres INE` (Group by) cuenta sus filas en `n_totales`. Cada fila de esos ficheros es un mes donde el total del INE no coincide con ESP + EXT, así que lo esperado es 0.
+
+#### Cierre
+
+| Paso | Qué hace |
+|---|---|
+| `Juntar controles finales` (Join rows) | Une en una fila los controles de la BD y `n_totales` |
+| `Sumar errores residuales` (Formula) | `n = n_huerfanas + n_negativos + n_coherencia + n_estancia + n_grano + n_totales`. No suma `n_volumen` (informativo) ni `n_eliminadas` (filas ya eliminadas) |
+| `Log final T40` (Write to log) | Escribe el resumen en el registro de ejecución |
+| `Informe final CSV` | Escribe `data/clean/informe_t40.csv` con los nueve contadores |
+| `¿Quedan errores?` (Filter rows) | `n > 0`: va a `Abortar si hay errores residuales` (Abort, el job falla y no llega a *Success*); si no, a `Validación terminada` |
+
+**Controles tras la depuración** (columnas de `informe_t40.csv`):
+
+| Campo | Qué cuenta | Esperado |
+|---|---|---|
+| `n_huerfanas` | Filas con alguna clave sin dimensión | 0 |
+| `n_negativos` | Filas con viajeros o pernoctaciones negativos | 0 |
+| `n_coherencia` | Pernoctaciones menores que viajeros, o positivas con cero viajeros | 0 |
+| `n_estancia` | Estancia media menor que 1; **mayor que 30 sin marca de atípico** (control cruzado con T10 a T13); nivel de estancia incoherente; o estancia que no cuadra con pernoctaciones/viajeros | 0 |
+| `n_grano` | Combinaciones (mes, CCAA, tipo, origen) repetidas | 0 |
+| `n_volumen` | `\|filas de dim_tiempo − 120\| + \|filas de dim_ccaa − 19\| + \|filas de fact_ocupacion − 18.240\|`: distancia al grano completo (4 tipos × 19 CCAA × 120 meses × 2 orígenes) | Informativo: coincide con las filas eliminadas |
+| `n_totales` | Meses donde total ≠ ESP + EXT | 0 |
+| `n` | Suma de errores residuales | 0 |
+| `n_eliminadas` | Filas eliminadas en esta ejecución | Informativo |
+
+El control `n_estancia` comprueba también que T10 a T13 han marcado todas las estancias de más de 30 días: si alguna quedara sin marcar, T40 abortaría.
+
+#### Resultado de la ejecución completa
+
+| Dato | Valor |
+|---|---|
+| Filas leídas de `fact_ocupacion` | 18.240 |
+| Filas eliminadas (registradas en `t40_filas_eliminadas.csv`) | 2 |
+| Filas que quedan | 18.238 |
+| `n_huerfanas`, `n_negativos`, `n_coherencia`, `n_estancia`, `n_grano`, `n_totales`, `n` | 0 |
+| `n_volumen`, `n_eliminadas` | 2 (informativos) |
+
+Las dos filas eliminadas son residentes en el extranjero y suman 320 viajeros y 185 pernoctaciones (el 0,011 % de las filas):
+
+| Alojamiento | Mes | Viajeros | Pernoctaciones |
+|---|---|---|---|
+| Hotel | enero de 2021 | 109 | 101 |
+| Camping | enero de 2023 | 211 | 84 |
+
+```sql
+-- Filas que quedan: esperado 18238
+SELECT COUNT(*) FROM turismo_dw.fact_ocupacion;
+
+-- Estancias de más de 30 días sin marcar como atípicas: esperado 0
+SELECT COUNT(*) FROM turismo_dw.fact_ocupacion
+WHERE estancia_media > 30 AND calidad_key NOT IN (3, 4);
+```
+
+#### Por qué las estancias de más de 30 días se marcan y no se eliminan
+
+**1. Qué mide `estancia_media`.** Es el cociente `pernoctaciones / viajeros` de cada fila, es decir, de un mes, una CCAA, un tipo de alojamiento y un origen. Según la metodología del INE, las pernoctaciones cuentan las noches de **todos** los alojados en el mes, mientras que los viajeros son los **entrados** en ese mes; el propio INE presenta la estancia media como una aproximación. Si un viajero entra en diciembre y se queda hasta febrero, sus noches de enero cuentan como pernoctaciones de enero, pero no como viajero de enero. Por eso el cociente puede superar los 30 días sin que ningún dato sea erróneo: lo que se distorsiona es el indicador derivado, no `viajeros` ni `pernoctaciones`.
+
+**2. Lo que muestran los datos.**
+
+- *Aritmética.* Canarias, camping, julio de 2020, residentes en el extranjero: 4 viajeros y 4.150 pernoctaciones. Cuatro personas generan como mucho unas 124 noches en un mes; el resto son de huéspedes que entraron antes.
+- *Estacionalidad* (interpretación, no comprobada con otra fuente). Las estancias largas se concentran en los meses de invierno en la Región de Murcia y la Comunitat Valenciana, lo que encaja con estancias largas que cruzan de un mes a otro.
+- *No son outliers.* De las 55 filas con estancia superior a 30 días, 47 son de camping de residentes en el extranjero en tres CCAA. Su z-score (desviaciones respecto a la media de su serie) es:
+
+| CCAA | Filas | z mínimo | z máximo |
+|---|---|---|---|
+| Canarias | 27 | −1,30 | 0,45 |
+| Comunitat Valenciana | 7 | −2,74 | −1,37 |
+| Región de Murcia | 13 | −1,40 | 1,56 |
+
+Ninguna supera \|z\| = 3 y solo una supera 2: son meses normales de sus series, en muchos casos por debajo de la media. Las 8 filas restantes (apartamentos y turismo rural) no se han evaluado de este modo.
+
+- *Peso de cada fila.* Cada fila es una CCAA concreta en un mes concreto, no el total de España. Pesa mucho porque esas series son grandes: en los meses de invierno afectados, el camping de la Comunitat Valenciana con residentes en el extranjero suma entre 190.000 y 263.000 pernoctaciones al mes. Y en las CCAA pequeñas, pocas filas bastan para alterar el total anual.
+
+**3. Alternativa descartada: eliminar las filas con estancia media superior a 30 días.** Afectaría a 55 filas, con 62.766 viajeros y 2.620.965 pernoctaciones. Al ser datos válidos del INE, se infravaloraría la demanda, sobre todo la de residentes en el extranjero (56 de las 57 filas que se eliminaban en esa versión eran de ese origen y 48 eran de camping). Estas son las pernoctaciones de camping (todos los orígenes) que se perderían, calculadas sobre `fact_ocupacion`:
+
+| Año | CCAA | Pernoctaciones | Sin las filas > 30 días | % perdido |
+|---|---|---|---|---|
+| 2025 | Canarias | 100.426 | 66.687 | 33,6 |
+| 2016 | Región de Murcia | 1.144.824 | 816.430 | 28,7 |
+| 2021 | Canarias | 86.118 | 63.862 | 25,8 |
+| 2017 | Región de Murcia | 1.173.170 | 966.560 | 17,6 |
+| 2021 | Comunitat Valenciana | 7.492.907 | 6.579.202 | 12,2 |
+| 2020 | Comunitat Valenciana | 5.157.451 | 4.580.158 | 11,2 |
+
+```sql
+SELECT t.anio, c.codigo_ine, c.nombre,
+       SUM(f.pernoctaciones) AS pern_con_todas,
+       SUM(CASE WHEN f.estancia_media > 30 THEN 0 ELSE f.pernoctaciones END) AS pern_sin_largas,
+       ROUND(100 * (1 - SUM(CASE WHEN f.estancia_media > 30 THEN 0 ELSE f.pernoctaciones END)
+                        / SUM(f.pernoctaciones)), 1) AS pct_perdido
+FROM fact_ocupacion f
+JOIN dim_tiempo t ON t.tiempo_key = f.tiempo_key
+JOIN dim_ccaa c ON c.ccaa_key = f.ccaa_key
+JOIN dim_tipo_alojamiento a ON a.tipo_key = f.tipo_key
+WHERE a.codigo = 'CAM'
+GROUP BY t.anio, c.codigo_ine, c.nombre
+HAVING pct_perdido > 0
+ORDER BY pct_perdido DESC;
+```
+
+**Decisión.** Las estancias de más de 30 días se **marcan** (`calidad_key` 3 o 4) y se conservan; T40 elimina solo lo imposible. Así los análisis pueden incluirlas o excluirlas con `WHERE q.es_atipico = 0`, y las pernoctaciones y los viajeros del INE se mantienen íntegros. Limitación: `dim_calidad_dato` no distingue qué criterio ha marcado un valor como atípico (z-score o estancia superior a 30 días); se puede recuperar con `estancia_media > 30`.
 
 ### 5.8 J00_carga.kjb
 
+**Fichero:** `kettle/J00_carga.kjb`. Orquesta todo el ETL: deja el almacén vacío, carga las dimensiones, carga las cuatro encuestas y valida. Como borra antes de cargar, se puede repetir tantas veces como haga falta.
+
 ```
-Start → SQL (limpieza) → T01 → T02 → T10 → T11 → T12 → T13 → T40 → Success
+START → SQL (limpieza) → T01 → T02 → T10 → T11 → T12 → T13 → T40 → Success
 ```
 
-- **SQL** (entrada de job, conexión `turismo_dw`): `DELETE FROM fact_ocupacion; DELETE FROM dim_ccaa; DELETE FROM dim_tiempo;` (primero los hechos y después las dimensiones, por las claves ajenas). Así el job se puede repetir.
-- **Transformation** (una entrada por `.ktr`; en T10 a T13 se rellenan los parámetros `ID_TABLA` y `COD_TIPO` de la tabla del apartado 5.6).
-- Cada salto del job se marca *Follow when result is true*: si algo falla, no continúa.
+![Job J00_carga en Spoon, ejecutado](docs/J00_carga.png)
+
+| Entrada | Qué hace |
+|---|---|
+| `START` | Inicio manual (sin planificación) |
+| `SQL (limpieza)` | Sobre `turismo_dw`: `DELETE FROM fact_ocupacion; DELETE FROM dim_ccaa; DELETE FROM dim_tiempo;`. Primero los hechos y luego las dimensiones, por las claves ajenas. Sin `WHERE`: el modo seguro es un ajuste de MySQL Workbench y no afecta a PDI. Las cuatro dimensiones pequeñas no se vacían |
+| `T01_dim_tiempo`, `T02_dim_ccaa` | Cargan las dimensiones. Van antes que los hechos porque estos llevan claves ajenas |
+| `T10_eoh` a `T13_eotr` | Cargan los hechos. Reciben `ID_TABLA` y `COD_TIPO` desde el job (67190/HOT, 67191/APT, 67192/CAM, 67193/RUR) |
+| `T40_validacion` | Valida y depura (5.7). Si quedan errores, aborta |
+| `Success` | Fin correcto |
+
+**Parámetros:** T10 a T13 reciben `COD_TIPO` e `ID_TABLA`; T01 y T02 no tienen. Todas las transformaciones se localizan con `${Internal.Job.Filename.Directory}/<nombre>.ktr`, de modo que el repositorio funciona en cualquier ordenador. Nivel de registro: *Basic*.
+
+**Control de errores:** `START → SQL` es incondicional; el resto de saltos son *Follow when result is true*. Si una transformación falla (o T40 aborta), el job se detiene en ese punto y no llega a *Success*, con lo que nunca se da por buena una carga incompleta.
+
+**Resultado de la ejecución completa:**
+
+| Entrada | Resultado |
+|---|---|
+| `T01_dim_tiempo` | 120 filas |
+| `T02_dim_ccaa` | 19 filas |
+| `T10_eoh`, `T11_eoap`, `T12_eoac`, `T13_eotr` | 4.560 filas cada una (18.240 en total), sin errores |
+| `T40_validacion` | 2 filas eliminadas, 0 errores residuales (18.238 filas en `fact_ocupacion`) |
+| `Success` | Alcanzado |
 
 Ejecución:
 
@@ -820,12 +1045,12 @@ data-integration\Kitchen.bat /file:kettle\J00_carga.kjb /level:Basic   # Windows
 | Seleccionar, filtrar, ordenar | *Select values*, *Filter rows*, *Sort rows* |
 | Corregir errores | Eliminación del BOM, conciliación de nombres de CCAA con su código, `..` convertido en NULL, tipos y formatos numéricos |
 | Valores que faltan | Componente ausente recuperado por diferencia; hueco aislado imputado con la media de los vecinos; huecos largos en NULL; siempre marcado |
-| Reducir redundancia | Se descartan `Total Nacional`, las provincias y el total de residencia (se usa solo como control); *Unique rows* y claves únicas |
+| Reducir redundancia | Se descartan `Total Nacional`, las provincias y el total de residencia (se usa solo como control); *Unique rows*, claves únicas y eliminación en T40 de registros imposibles |
 | Ingeniería de características | **Splitting** (periodo a año y mes), variable derivada `estancia_media`, `temporada` y **Binning** (`nivel_estancia`, `nivel_poblacion`, `nivel_patrimonio`) |
 | Enriquecer | Wikidata (QID, coordenadas, BIC), población INE y shapefile del CNIG |
-| Outliers | z-score por CCAA, tipo y origen; se marca el registro y se conserva |
-| Validar | T40 y la rama de control de T10 a T13 |
-| Flujo de trabajo completo | `J00_carga.kjb` |
+| Outliers | Dos criterios: z-score por CCAA, tipo y origen, y estancia media superior a 30 días. El registro se marca (`calidad_key` 3 o 4) y se conserva |
+| Validar | T40 (siete reglas de coherencia con CSV de descartes, controles finales, informe `informe_t40.csv` y aborto si quedan errores) y la rama de control de totales de T10 a T13 |
+| Flujo de trabajo completo | `J00_carga.kjb`: limpieza, dimensiones, cuatro encuestas y validación, con control de errores en cada salto |
 
 ### 5.10 Reglas de PDI que condicionan el diseño
 
@@ -851,7 +1076,7 @@ data-integration\Kitchen.bat /file:kettle\J00_carga.kjb /level:Basic   # Windows
 │   ├── diseno_conceptual.drawio · .drawio.svg · .drawio.png
 │   ├── diseno_logico.drawio · .drawio.svg · .drawio.png
 │   ├── almacen_turismo.mwb                       # modelo de MySQL Workbench
-│   ├── almacen_turismo_fisico.png · .svg · .pdf  # diagrama EER exportado
+│   ├── almacen_turismo_fisico_completo.png · .svg · .pdf  # diagrama EER exportado
 │   └── memoria.pdf
 ├── scripts/
 │   ├── descargar_fuentes.py   # descarga INE y Wikidata
@@ -907,7 +1132,7 @@ ORDER BY t.anio, pernoctaciones DESC;
 - [x] **Apartado 1:** temática, problema, 4W, objetivos, casos de uso y métricas
 - [x] **Apartado 2:** necesidades de datos, selección y descarga de todos los datasets
 - [x] **Apartado 3:** diseño conceptual, lógico (draw.io) y físico (MySQL Workbench), script SQL ejecutado en MySQL 8 y justificación
-- [ ] **Apartado 4:** transformaciones y job de Pentaho _(diseño definido, implementación en curso)_
+- [x] **Apartado 4:** transformaciones T01 a T40 y job J00 de Pentaho, ejecutados y verificados
 - [ ] **Apartado 5:** transformación a tripletas schema.org y enlace con Wikidata
 - [ ] **Apartado 6:** dos visualizaciones (mapa coroplético y evolución temporal)
 - [ ] **Apartado 7:** memoria (máximo 10 páginas)
@@ -923,6 +1148,7 @@ ORDER BY t.anio, pernoctaciones DESC;
 - INE, [Encuesta de Ocupación Hotelera](https://www.ine.es/jaxiT3/Tabla.htm?t=67190) · [Apartamentos](https://www.ine.es/jaxiT3/Tabla.htm?t=67191) · [Campings](https://www.ine.es/jaxiT3/Tabla.htm?t=67192) · [Turismo rural](https://www.ine.es/jaxiT3/Tabla.htm?t=67193)
 - INE, [Estadística Continua de Población](https://ine.es/dynt3/metadatos/es/RespuestaDatos.html?oe=30282)
 - [datos.gob.es](https://datos.gob.es/): catálogo nacional de datos abiertos
+- INE, [Metodología de la Encuesta de Ocupación en Campings](https://ine.es/dynt3/metadatos/es/RespuestaDatos.html?oper=240)
 
 **Cartografía**
 - CNIG/IGN, [Centro de Descargas](https://centrodedescargas.cnig.es/CentroDescargas/index.jsp)

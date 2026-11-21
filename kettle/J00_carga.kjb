@@ -50,6 +50,10 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -372,8 +376,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>80</xloc>
-      <yloc>200</yloc>
+      <xloc>160</xloc>
+      <yloc>192</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -392,8 +396,8 @@ DELETE FROM dim_tiempo;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>250</xloc>
-      <yloc>200</yloc>
+      <xloc>256</xloc>
+      <yloc>192</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -431,8 +435,8 @@ DELETE FROM dim_tiempo;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>440</xloc>
-      <yloc>200</yloc>
+      <xloc>368</xloc>
+      <yloc>192</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -470,8 +474,8 @@ DELETE FROM dim_tiempo;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>630</xloc>
-      <yloc>200</yloc>
+      <xloc>480</xloc>
+      <yloc>192</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -519,8 +523,8 @@ DELETE FROM dim_tiempo;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>820</xloc>
-      <yloc>200</yloc>
+      <xloc>576</xloc>
+      <yloc>192</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -568,8 +572,8 @@ DELETE FROM dim_tiempo;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1010</xloc>
-      <yloc>200</yloc>
+      <xloc>576</xloc>
+      <yloc>320</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -617,8 +621,8 @@ DELETE FROM dim_tiempo;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1200</xloc>
-      <yloc>200</yloc>
+      <xloc>480</xloc>
+      <yloc>320</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -666,8 +670,8 @@ DELETE FROM dim_tiempo;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1390</xloc>
-      <yloc>200</yloc>
+      <xloc>368</xloc>
+      <yloc>320</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -705,8 +709,8 @@ DELETE FROM dim_tiempo;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1580</xloc>
-      <yloc>200</yloc>
+      <xloc>256</xloc>
+      <yloc>320</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -717,8 +721,8 @@ DELETE FROM dim_tiempo;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1770</xloc>
-      <yloc>200</yloc>
+      <xloc>160</xloc>
+      <yloc>320</yloc>
       <attributes_kjc/>
     </entry>
   </entries>

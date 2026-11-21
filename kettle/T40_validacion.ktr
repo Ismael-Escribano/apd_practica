@@ -430,7 +430,7 @@
     <created_date>2026/11/09 18:57:31.338</created_date>
     <modified_user>-</modified_user>
     <modified_date>2026/11/09 18:57:31.338</modified_date>
-    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
+    <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -607,8 +607,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>3040</xloc>
-      <yloc>170</yloc>
+      <xloc>368</xloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -648,7 +648,9 @@ WHERE (viajeros IS NOT NULL AND pernoctaciones IS NOT NULL AND pernoctaciones &l
    OR (viajeros = 0 AND pernoctaciones > 0)) AS n_coherencia,
   (SELECT COUNT(*) 
 FROM turismo_dw.fact_ocupacion AS f
-WHERE (f.estancia_media IS NOT NULL AND (f.estancia_media &lt; 1 OR f.estancia_media > 30))
+-- WHERE (f.estancia_media IS NOT NULL AND (f.estancia_media &lt; 1 OR f.estancia_media > 30))
+WHERE (f.estancia_media IS NOT NULL AND f.estancia_media &lt; 1) -- NEW
+   OR (f.estancia_media > 30 AND f.calidad_key NOT IN (3, 4)) -- NEW
    OR (f.estancia_media IS NULL AND f.nivel_key &lt;&gt; 4)
    OR (f.estancia_media IS NOT NULL AND (
           f.nivel_key = 4
@@ -687,8 +689,8 @@ FROM (
         <origin>Comprobar BD después del borrado</origin>
         <comments>n_huerfanas</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -697,7 +699,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -710,8 +712,8 @@ FROM (
         <origin>Comprobar BD después del borrado</origin>
         <comments>n_negativos</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -720,7 +722,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -733,8 +735,8 @@ FROM (
         <origin>Comprobar BD después del borrado</origin>
         <comments>n_coherencia</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -743,7 +745,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -756,8 +758,8 @@ FROM (
         <origin>Comprobar BD después del borrado</origin>
         <comments>n_estancia</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -766,7 +768,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -779,8 +781,8 @@ FROM (
         <origin>Comprobar BD después del borrado</origin>
         <comments>n_grano</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -789,7 +791,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -802,8 +804,8 @@ FROM (
         <origin>Comprobar BD después del borrado</origin>
         <comments>n_volumen</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -812,7 +814,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -820,13 +822,13 @@ FROM (
         <type>Integer</type>
         <storagetype>normal</storagetype>
         <name>n_eliminadas</name>
-        <length>9</length>
+        <length>15</length>
         <precision>0</precision>
         <origin>Comprobar BD después del borrado</origin>
         <comments>n_eliminadas</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -835,7 +837,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -849,8 +851,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1616</xloc>
-      <yloc>240</yloc>
+      <xloc>1120</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -874,8 +876,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>496</xloc>
-      <yloc>384</yloc>
+      <xloc>368</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -917,8 +919,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1776</xloc>
-      <yloc>352</yloc>
+      <xloc>1264</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -984,8 +986,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>992</xloc>
-      <yloc>240</yloc>
+      <xloc>736</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1027,8 +1029,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1328</xloc>
-      <yloc>288</yloc>
+      <xloc>928</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1216,8 +1218,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>704</xloc>
-      <yloc>192</yloc>
+      <xloc>544</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1260,7 +1262,7 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>416</xloc>
+      <xloc>368</xloc>
       <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1425,8 +1427,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>2480</xloc>
-      <yloc>208</yloc>
+      <xloc>752</xloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1462,8 +1464,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1830</xloc>
-      <yloc>260</yloc>
+      <xloc>1120</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1567,8 +1569,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1680</xloc>
-      <yloc>432</yloc>
+      <xloc>1264</xloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1597,7 +1599,8 @@ FROM (
     IF((f.viajeros &lt; 0 OR f.pernoctaciones &lt; 0), 'Viajeros o pernoctaciones negativos', NULL),
     IF((f.viajeros IS NOT NULL AND f.pernoctaciones IS NOT NULL AND f.pernoctaciones &lt; f.viajeros), 'Pernoctaciones menores que viajeros', NULL),
     IF((f.viajeros = 0 AND f.pernoctaciones > 0), 'Pernoctaciones positivas con cero viajeros', NULL),
-    IF((f.estancia_media IS NOT NULL AND (f.estancia_media &lt; 1 OR f.estancia_media > 30)), 'Estancia media fuera de 1 a 30 días', NULL),
+    -- IF((f.estancia_media IS NOT NULL AND (f.estancia_media &lt; 1 OR f.estancia_media > 30)), 'Estancia media fuera de 1 a 30 días', NULL),
+	IF((f.estancia_media IS NOT NULL AND f.estancia_media &lt; 1), 'Estancia media inferior a 1 día', NULL), -- NEW
     IF(((f.estancia_media IS NULL AND f.nivel_key &lt;&gt; 4)
       OR (f.estancia_media IS NOT NULL AND (
            f.nivel_key = 4
@@ -1633,8 +1636,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>fecha_validacion</comments>
         <conversion_Mask/>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1643,7 +1646,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1656,8 +1659,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>tiempo_key</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1666,7 +1669,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1679,8 +1682,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>ccaa_key</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1689,7 +1692,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1702,8 +1705,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>tipo_key</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1712,7 +1715,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1725,8 +1728,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>origen_key</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1735,7 +1738,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1748,8 +1751,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>nivel_key</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1758,7 +1761,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1771,8 +1774,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>calidad_key</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1781,7 +1784,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1794,8 +1797,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>viajeros</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1804,7 +1807,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1817,8 +1820,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>pernoctaciones</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1827,7 +1830,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1840,8 +1843,8 @@ FROM (
         <origin>Leer hechos y calcular motivos</origin>
         <comments>estancia_media</comments>
         <conversion_Mask>####0.0#########;-####0.0#########</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1850,7 +1853,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1858,13 +1861,13 @@ FROM (
         <type>String</type>
         <storagetype>normal</storagetype>
         <name>motivo_eliminacion</name>
-        <length>305</length>
+        <length>301</length>
         <precision>-1</precision>
         <origin>Leer hechos y calcular motivos</origin>
         <comments>motivo_eliminacion</comments>
         <conversion_Mask/>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1873,7 +1876,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1881,13 +1884,13 @@ FROM (
         <type>Integer</type>
         <storagetype>normal</storagetype>
         <name>descartar</name>
-        <length>9</length>
+        <length>15</length>
         <precision>0</precision>
         <origin>Leer hechos y calcular motivos</origin>
         <comments>descartar</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>,</decimal_symbol>
-        <grouping_symbol>.</grouping_symbol>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
         <trim_type>none</trim_type>
         <case_insensitive>N</case_insensitive>
@@ -1896,7 +1899,7 @@ FROM (
         <sort_descending>N</sort_descending>
         <output_padding>N</output_padding>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>es_ES</date_format_locale>
+        <date_format_locale>en_GB</date_format_locale>
         <date_format_timezone>Europe/Madrid</date_format_timezone>
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
@@ -1910,8 +1913,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>160</xloc>
-      <yloc>192</yloc>
+      <xloc>192</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1969,8 +1972,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>2256</xloc>
-      <yloc>208</yloc>
+      <xloc>944</xloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -2002,8 +2005,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>2016</xloc>
-      <yloc>240</yloc>
+      <xloc>1120</xloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -2027,8 +2030,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>3040</xloc>
-      <yloc>370</yloc>
+      <xloc>544</xloc>
+      <yloc>576</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -2071,8 +2074,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>2704</xloc>
-      <yloc>208</yloc>
+      <xloc>544</xloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
