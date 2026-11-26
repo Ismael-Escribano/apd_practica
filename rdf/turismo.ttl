@@ -1,0 +1,461 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix schema: <https://schema.org/> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://example.org/turismo/observacion/ES-AN/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 76867312 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 25460297 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8708917 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3972378 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AS/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6356361 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2699121 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6105019 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2210717 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CE/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 144453 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 75973 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12658262 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6927088 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CM/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6095904 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3162580 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 102159677 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 15160407 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CT/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 88858899 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 28390119 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3978348 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2073553 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-GA/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12468074 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6276812 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 73281492 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 14616993 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MC/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5813514 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1902832 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 31879908 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 14674254 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-ML/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 137582 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 64444 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3739921 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1637381 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-PV/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 10115701 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4709377 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-RI/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1803364 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 888302 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2025/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 54274745 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2025/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2025-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13956921 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/geo/ES-AN> a schema:GeoCoordinates ;
+    schema:latitude 3.7405e+01 ;
+    schema:longitude -5.9875e+00 .
+
+<https://example.org/turismo/geo/ES-AR> a schema:GeoCoordinates ;
+    schema:latitude 4.1e+01 ;
+    schema:longitude -1e+00 .
+
+<https://example.org/turismo/geo/ES-AS> a schema:GeoCoordinates ;
+    schema:latitude 4.336139e+01 ;
+    schema:longitude -5.847778e+00 .
+
+<https://example.org/turismo/geo/ES-CB> a schema:GeoCoordinates ;
+    schema:latitude 4.333333e+01 ;
+    schema:longitude -4e+00 .
+
+<https://example.org/turismo/geo/ES-CE> a schema:GeoCoordinates ;
+    schema:latitude 3.588667e+01 ;
+    schema:longitude -5.3e+00 .
+
+<https://example.org/turismo/geo/ES-CL> a schema:GeoCoordinates ;
+    schema:latitude 4.175444e+01 ;
+    schema:longitude -4.781944e+00 .
+
+<https://example.org/turismo/geo/ES-CM> a schema:GeoCoordinates ;
+    schema:latitude 3.950001e+01 ;
+    schema:longitude -3.000033e+00 .
+
+<https://example.org/turismo/geo/ES-CN> a schema:GeoCoordinates ;
+    schema:latitude 2.8e+01 ;
+    schema:longitude -1.575e+01 .
+
+<https://example.org/turismo/geo/ES-CT> a schema:GeoCoordinates ;
+    schema:latitude 4.185e+01 ;
+    schema:longitude 1.566667e+00 .
+
+<https://example.org/turismo/geo/ES-EX> a schema:GeoCoordinates ;
+    schema:latitude 3.92e+01 ;
+    schema:longitude -6.15e+00 .
+
+<https://example.org/turismo/geo/ES-GA> a schema:GeoCoordinates ;
+    schema:latitude 4.28e+01 ;
+    schema:longitude -7.9e+00 .
+
+<https://example.org/turismo/geo/ES-IB> a schema:GeoCoordinates ;
+    schema:latitude 3.95e+01 ;
+    schema:longitude 3e+00 .
+
+<https://example.org/turismo/geo/ES-MC> a schema:GeoCoordinates ;
+    schema:latitude 3.8e+01 ;
+    schema:longitude -1.833333e+00 .
+
+<https://example.org/turismo/geo/ES-MD> a schema:GeoCoordinates ;
+    schema:latitude 4.042526e+01 ;
+    schema:longitude -3.69063e+00 .
+
+<https://example.org/turismo/geo/ES-ML> a schema:GeoCoordinates ;
+    schema:latitude 3.52825e+01 ;
+    schema:longitude -2.9475e+00 .
+
+<https://example.org/turismo/geo/ES-NC> a schema:GeoCoordinates ;
+    schema:latitude 4.281667e+01 ;
+    schema:longitude -1.65e+00 .
+
+<https://example.org/turismo/geo/ES-PV> a schema:GeoCoordinates ;
+    schema:latitude 4.3e+01 ;
+    schema:longitude -2.75e+00 .
+
+<https://example.org/turismo/geo/ES-RI> a schema:GeoCoordinates ;
+    schema:latitude 4.225e+01 ;
+    schema:longitude -2.5e+00 .
+
+<https://example.org/turismo/geo/ES-VC> a schema:GeoCoordinates ;
+    schema:latitude 3.95e+01 ;
+    schema:longitude -7.5e-01 .
+
+<https://example.org/turismo/ccaa/ES-AN> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5783 ;
+    schema:geo <https://example.org/turismo/geo/ES-AN> ;
+    schema:identifier "ES-AN" ;
+    schema:name "Andalucía" .
+
+<https://example.org/turismo/ccaa/ES-AR> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q4040 ;
+    schema:geo <https://example.org/turismo/geo/ES-AR> ;
+    schema:identifier "ES-AR" ;
+    schema:name "Aragón" .
+
+<https://example.org/turismo/ccaa/ES-AS> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q3934 ;
+    schema:geo <https://example.org/turismo/geo/ES-AS> ;
+    schema:identifier "ES-AS" ;
+    schema:name "Principado de Asturias" .
+
+<https://example.org/turismo/ccaa/ES-CB> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q3946 ;
+    schema:geo <https://example.org/turismo/geo/ES-CB> ;
+    schema:identifier "ES-CB" ;
+    schema:name "Cantabria" .
+
+<https://example.org/turismo/ccaa/ES-CE> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5823 ;
+    schema:geo <https://example.org/turismo/geo/ES-CE> ;
+    schema:identifier "ES-CE" ;
+    schema:name "Ceuta" .
+
+<https://example.org/turismo/ccaa/ES-CL> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5739 ;
+    schema:geo <https://example.org/turismo/geo/ES-CL> ;
+    schema:identifier "ES-CL" ;
+    schema:name "Castilla y León" .
+
+<https://example.org/turismo/ccaa/ES-CM> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5748 ;
+    schema:geo <https://example.org/turismo/geo/ES-CM> ;
+    schema:identifier "ES-CM" ;
+    schema:name "Castilla-La Mancha" .
+
+<https://example.org/turismo/ccaa/ES-CN> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5813 ;
+    schema:geo <https://example.org/turismo/geo/ES-CN> ;
+    schema:identifier "ES-CN" ;
+    schema:name "Canarias" .
+
+<https://example.org/turismo/ccaa/ES-CT> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5705 ;
+    schema:geo <https://example.org/turismo/geo/ES-CT> ;
+    schema:identifier "ES-CT" ;
+    schema:name "Cataluña" .
+
+<https://example.org/turismo/ccaa/ES-EX> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5777 ;
+    schema:geo <https://example.org/turismo/geo/ES-EX> ;
+    schema:identifier "ES-EX" ;
+    schema:name "Extremadura" .
+
+<https://example.org/turismo/ccaa/ES-GA> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q3908 ;
+    schema:geo <https://example.org/turismo/geo/ES-GA> ;
+    schema:identifier "ES-GA" ;
+    schema:name "Galicia" .
+
+<https://example.org/turismo/ccaa/ES-IB> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q107356467 ;
+    schema:geo <https://example.org/turismo/geo/ES-IB> ;
+    schema:identifier "ES-IB" ;
+    schema:name "Illes Balears" .
+
+<https://example.org/turismo/ccaa/ES-MC> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5772 ;
+    schema:geo <https://example.org/turismo/geo/ES-MC> ;
+    schema:identifier "ES-MC" ;
+    schema:name "Región de Murcia" .
+
+<https://example.org/turismo/ccaa/ES-MD> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5756 ;
+    schema:geo <https://example.org/turismo/geo/ES-MD> ;
+    schema:identifier "ES-MD" ;
+    schema:name "Comunidad de Madrid" .
+
+<https://example.org/turismo/ccaa/ES-ML> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5831 ;
+    schema:geo <https://example.org/turismo/geo/ES-ML> ;
+    schema:identifier "ES-ML" ;
+    schema:name "Melilla" .
+
+<https://example.org/turismo/ccaa/ES-NC> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q4018 ;
+    schema:geo <https://example.org/turismo/geo/ES-NC> ;
+    schema:identifier "ES-NC" ;
+    schema:name "Comunidad Foral de Navarra" .
+
+<https://example.org/turismo/ccaa/ES-PV> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q3995 ;
+    schema:geo <https://example.org/turismo/geo/ES-PV> ;
+    schema:identifier "ES-PV" ;
+    schema:name "País Vasco" .
+
+<https://example.org/turismo/ccaa/ES-RI> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5727 ;
+    schema:geo <https://example.org/turismo/geo/ES-RI> ;
+    schema:identifier "ES-RI" ;
+    schema:name "La Rioja" .
+
+<https://example.org/turismo/ccaa/ES-VC> a schema:AdministrativeArea ;
+    owl:sameAs wd:Q5720 ;
+    schema:geo <https://example.org/turismo/geo/ES-VC> ;
+    schema:identifier "ES-VC" ;
+    schema:name "Comunitat Valenciana" .
+
