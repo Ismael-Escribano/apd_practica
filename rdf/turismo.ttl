@@ -3,6 +3,132 @@
 @prefix wd: <http://www.wikidata.org/entity/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+<https://example.org/turismo/observacion/ES-AN/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 65878086 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 21182420 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AN/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 68351904 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 22154747 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AN/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 69094618 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 22660180 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AN/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 71546175 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 24043131 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AN/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 23884824 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8634567 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AN/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 41850321 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 14249114 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AN/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 66920647 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 22537287 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AN/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 72663780 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 24714382 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AN/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 76124845 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AN/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 25245729 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-AN/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-AN> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -15,6 +141,132 @@
     schema:observationDate "2025-01-01"^^xsd:date ;
     schema:observationPeriod "P1Y" ;
     schema:value 25460297 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 7301283 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3370919 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 7837286 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3631917 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 7968175 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3685701 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8171726 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3766310 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4043059 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1696404 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6012236 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2609404 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8148046 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3571859 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8257584 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3720386 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AR/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8485068 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AR/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AR> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3934258 ;
     schema:variableMeasured "viajeros" .
 
 <https://example.org/turismo/observacion/ES-AR/2025/pernoctaciones> a schema:Observation ;
@@ -31,6 +283,132 @@
     schema:value 3972378 ;
     schema:variableMeasured "viajeros" .
 
+<https://example.org/turismo/observacion/ES-AS/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5305132 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2204594 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AS/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5658445 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2331583 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AS/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5539326 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2308600 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AS/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5761881 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2355658 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AS/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3541809 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1269696 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AS/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4874237 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1805229 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AS/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5939188 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2345160 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AS/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6433492 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2614311 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-AS/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6473914 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-AS/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2687312 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-AS/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-AS> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -43,6 +421,132 @@
     schema:observationDate "2025-01-01"^^xsd:date ;
     schema:observationPeriod "P1Y" ;
     schema:value 2699121 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5061782 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1793213 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5269562 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1916004 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5475173 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2013307 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5530564 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2013153 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3088705 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1051957 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4121469 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1471051 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5560422 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2046884 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5754460 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2127888 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CB/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6063108 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CB/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CB> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2149577 ;
     schema:variableMeasured "viajeros" .
 
 <https://example.org/turismo/observacion/ES-CB/2025/pernoctaciones> a schema:Observation ;
@@ -59,6 +563,132 @@
     schema:value 2210717 ;
     schema:variableMeasured "viajeros" .
 
+<https://example.org/turismo/observacion/ES-CE/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 185237 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 75328 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CE/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 182117 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 77511 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CE/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 180258 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 76247 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CE/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 167990 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 76339 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CE/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 66596 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 25750 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CE/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 97248 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 39124 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CE/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 137181 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 61770 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CE/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 144426 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 68343 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CE/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 134584 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CE/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 67015 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-CE/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-CE> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -71,6 +701,132 @@
     schema:observationDate "2025-01-01"^^xsd:date ;
     schema:observationPeriod "P1Y" ;
     schema:value 75973 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 10570742 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5933098 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 11137572 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6179790 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 11256905 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6265836 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 11601709 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6444133 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4802096 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2375500 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 7957867 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4133577 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 11318159 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6141469 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12144227 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6578478 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CL/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12391950 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CL/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CL> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6755547 ;
     schema:variableMeasured "viajeros" .
 
 <https://example.org/turismo/observacion/ES-CL/2025/pernoctaciones> a schema:Observation ;
@@ -87,6 +843,132 @@
     schema:value 6927088 ;
     schema:variableMeasured "viajeros" .
 
+<https://example.org/turismo/observacion/ES-CM/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4716838 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2588802 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CM/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4939807 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2688011 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CM/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5154894 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2772170 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CM/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5237540 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2839813 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CM/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2413209 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1182368 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CM/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3933155 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1967128 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CM/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5477884 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2778207 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CM/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5694149 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2890956 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CM/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5808754 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CM/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3003799 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-CM/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-CM> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -99,6 +981,132 @@
     schema:observationDate "2025-01-01"^^xsd:date ;
     schema:observationPeriod "P1Y" ;
     schema:value 3162580 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 102656234 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13344007 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 104307405 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13851310 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 99733809 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13591646 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 96003356 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13439322 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 29050499 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4419973 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 41945966 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6875964 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 89152425 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13280348 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 95430987 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 14174684 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CN/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 99277426 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CN/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CN> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 14674141 ;
     schema:variableMeasured "viajeros" .
 
 <https://example.org/turismo/observacion/ES-CN/2025/pernoctaciones> a schema:Observation ;
@@ -115,6 +1123,132 @@
     schema:value 15160407 ;
     schema:variableMeasured "viajeros" .
 
+<https://example.org/turismo/observacion/ES-CT/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 78854967 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 23582311 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CT/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 82036431 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 24628498 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CT/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 80855986 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 24821547 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CT/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 83150637 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 25782802 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CT/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 24109293 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8357996 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CT/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 44356266 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 14324066 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CT/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 79038434 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 24477029 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CT/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 84700286 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 26740454 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-CT/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 87516321 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-CT/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 27147377 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-CT/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-CT> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -127,6 +1261,132 @@
     schema:observationDate "2025-01-01"^^xsd:date ;
     schema:observationPeriod "P1Y" ;
     schema:value 28390119 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3146225 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1695250 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3283027 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1756670 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3399599 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1843177 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3546928 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1924136 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1603327 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 838589 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2606102 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1355933 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3576128 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1862920 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3758039 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1916391 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-EX/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4058368 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-EX/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-EX> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2104314 ;
     schema:variableMeasured "viajeros" .
 
 <https://example.org/turismo/observacion/ES-EX/2025/pernoctaciones> a schema:Observation ;
@@ -143,6 +1403,132 @@
     schema:value 2073553 ;
     schema:variableMeasured "viajeros" .
 
+<https://example.org/turismo/observacion/ES-GA/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 10064713 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4937517 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-GA/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 10668539 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5120642 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-GA/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 10295868 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4819539 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-GA/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 10900732 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5095682 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-GA/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4776275 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2009947 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-GA/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8377638 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3742642 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-GA/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 11313506 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5449490 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-GA/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 11948988 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5796897 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-GA/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12185407 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-GA/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6107765 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-GA/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-GA> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -155,6 +1541,132 @@
     schema:observationDate "2025-01-01"^^xsd:date ;
     schema:observationPeriod "P1Y" ;
     schema:value 6276812 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 69893837 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 11624227 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 70663015 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12038035 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 70184088 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12179705 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 68306884 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12402631 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 7672721 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1776918 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 30824354 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6122964 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 65308682 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12742577 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 68645526 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13409293 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-IB/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 73691580 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-IB/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-IB> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 14757609 ;
     schema:variableMeasured "viajeros" .
 
 <https://example.org/turismo/observacion/ES-IB/2025/pernoctaciones> a schema:Observation ;
@@ -171,6 +1683,132 @@
     schema:value 14616993 ;
     schema:variableMeasured "viajeros" .
 
+<https://example.org/turismo/observacion/ES-MC/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5152528 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1505362 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MC/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5298928 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1607457 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MC/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5476601 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1625392 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MC/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5370730 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1664356 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MC/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2229523 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 707794 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MC/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3672142 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1179320 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MC/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5134934 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1661458 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MC/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5431657 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1745778 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MC/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5654342 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MC/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1837967 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-MC/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-MC> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -183,6 +1821,132 @@
     schema:observationDate "2025-01-01"^^xsd:date ;
     schema:observationPeriod "P1Y" ;
     schema:value 1902832 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 25063925 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12335488 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 27043339 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13008689 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 27505149 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13347700 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 28864746 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13722071 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 9020976 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4010488 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 15257794 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 7014020 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 25740620 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12149156 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 29017311 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13887155 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-MD/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 30949038 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-MD/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-MD> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 14578045 ;
     schema:variableMeasured "viajeros" .
 
 <https://example.org/turismo/observacion/ES-MD/2025/pernoctaciones> a schema:Observation ;
@@ -199,6 +1963,132 @@
     schema:value 14674254 ;
     schema:variableMeasured "viajeros" .
 
+<https://example.org/turismo/observacion/ES-ML/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 159268 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 58479 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-ML/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 154713 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 61580 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-ML/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 146307 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 66267 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-ML/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 140182 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 67310 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-ML/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 55636 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 23182 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-ML/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 88319 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 33093 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-ML/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 114088 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 50327 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-ML/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 126455 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 52504 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-ML/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 129204 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-ML/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 57093 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-ML/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-ML> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -211,6 +2101,132 @@
     schema:observationDate "2025-01-01"^^xsd:date ;
     schema:observationPeriod "P1Y" ;
     schema:value 64444 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2893676 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1363244 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3049714 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1418676 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3020380 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1371864 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3203846 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1452397 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1525552 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 607986 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2602551 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1036660 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3283862 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1414617 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3544467 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1564908 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-NC/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3620979 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-NC/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-NC> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1602159 ;
     schema:variableMeasured "viajeros" .
 
 <https://example.org/turismo/observacion/ES-NC/2025/pernoctaciones> a schema:Observation ;
@@ -227,6 +2243,132 @@
     schema:value 1637381 ;
     schema:variableMeasured "viajeros" .
 
+<https://example.org/turismo/observacion/ES-PV/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 6866895 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3333483 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-PV/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 7314925 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3532135 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-PV/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 7607279 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3638153 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-PV/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 7923169 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3765678 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-PV/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3257637 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1511510 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-PV/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 5563666 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 2604528 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-PV/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8301315 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 3889481 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-PV/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 9193459 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4273924 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-PV/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 9598704 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-PV/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4514457 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-PV/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-PV> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -241,6 +2383,132 @@
     schema:value 4709377 ;
     schema:variableMeasured "viajeros" .
 
+<https://example.org/turismo/observacion/ES-RI/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1554240 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 779996 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-RI/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1631881 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 815482 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-RI/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1567748 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 777086 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-RI/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1615053 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 805435 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-RI/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 630405 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 280101 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-RI/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1131874 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 504656 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-RI/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1508974 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 717732 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-RI/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1634545 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 774220 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-RI/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 1565023 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-RI/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 780466 ;
+    schema:variableMeasured "viajeros" .
+
 <https://example.org/turismo/observacion/ES-RI/2025/pernoctaciones> a schema:Observation ;
     schema:observationAbout <https://example.org/turismo/ccaa/ES-RI> ;
     schema:observationDate "2025-01-01"^^xsd:date ;
@@ -253,6 +2521,132 @@
     schema:observationDate "2025-01-01"^^xsd:date ;
     schema:observationPeriod "P1Y" ;
     schema:value 888302 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2016/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 47185425 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2016/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2016-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 10866476 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2017/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 49590494 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2017/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2017-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 11545938 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2018/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 49470223 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2018/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2018-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 11832795 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2019/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 49767835 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2019/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2019-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12258712 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2020/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 18164778 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2020/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2020-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 4690180 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2021/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 31296704 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2021/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2021-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 8179648 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2022/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 48681392 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2022/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2022-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 12147149 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2023/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 51772041 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2023/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2023-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13002369 ;
+    schema:variableMeasured "viajeros" .
+
+<https://example.org/turismo/observacion/ES-VC/2024/pernoctaciones> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 53126354 ;
+    schema:variableMeasured "pernoctaciones" .
+
+<https://example.org/turismo/observacion/ES-VC/2024/viajeros> a schema:Observation ;
+    schema:observationAbout <https://example.org/turismo/ccaa/ES-VC> ;
+    schema:observationDate "2024-01-01"^^xsd:date ;
+    schema:observationPeriod "P1Y" ;
+    schema:value 13296455 ;
     schema:variableMeasured "viajeros" .
 
 <https://example.org/turismo/observacion/ES-VC/2025/pernoctaciones> a schema:Observation ;

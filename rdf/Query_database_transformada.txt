@@ -10,5 +10,4 @@ SELECT
 FROM turismo_dw.v_ocupacion_anual_ccaa v
 JOIN turismo_dw.dim_ccaa c
     ON v.ccaa_key = c.ccaa_key
-WHERE v.anio = 2025
-ORDER BY c.nombre;
+ORDER BY c.nombre, v.anio;
